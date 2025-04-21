@@ -1,119 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-
-<meta charset="UTF-8" />
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>SEEFLIX-MOVIE</title>
-
-<link rel="stylesheet" href="css/home.css">
-
-<link rel="preload" href="css/home.css" as="style">
-
-<link rel="preload" href="js/home.js" as="script">
-
-<link rel="manifest" href="manifest.json">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<script defer src="js/home.js"></script>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SEEFLIX-MOVIE</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script defer src="js/home.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #141414;
+      color: white;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background-color: #111;
+    }
+    .navbar img {
+      height: 50px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+    .nav-links a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+    }
+    .search-bar {
+      padding: 5px;
+      border-radius: 3px;
+      border: none;
+    }
+    .banner {
+      position: relative;
+      background-image: url('banner-image-url.jpg'); /* Replace with your banner image */
+      background-size: cover;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .banner h1 {
+      font-size: 48px;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    }
+    .row {
+      margin: 20px;
+    }
+    .row h2 {
+      margin-bottom: 10px;
+    }
+    .list {
+      display: flex;
+      overflow-x: auto;
+      gap: 15px;
+    }
+    .movie {
+      min-width: 150px;
+      background-color: #222;
+      border-radius: 5px;
+      padding: 10px;
+    }
+    .movie img {
+      width: 100%;
+      border-radius: 5px;
+    }
+    .modal, .search-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content, .search-modal-content {
+      background-color: #333;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 700px;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      color: white;
+      cursor: pointer;
+      font-size: 24px;
+    }
+    .modal img {
+      max-width: 100%;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .server-selector {
+      margin-top: 10px;
+    }
+    .server-selector select {
+      padding: 5px;
+      border-radius: 3px;
+      border: none;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="navbar">
+    <img src="logo.png" alt="LOGO HERE" />
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="#">Disclaimer</a>
+      <a href="#">About Us</a>
+      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
+    </div>
+  </div>
 
-<div class="navbar">
+  <div class="banner" id="banner">
+    <h1 id="banner-title">Featured Movie Title</h1>
+  </div>
 
-<img src="logo.png" alt="LOGO HERE" />
+  <div class="row">
+    <h2>Trending Movies</h2>
+    <div class="list" id="movies-list">
+      <div class="movie"><img src="movie1.jpg" alt="Movie 1"><p>Movie Title 1</p></div>
+      <div class="movie"><img src="movie2.jpg" alt="Movie 2"><p>Movie Title 2</p></div>
+      <div class="movie"><img src="movie3.jpg" alt="Movie 3"><p>Movie Title 3</p></div>
+    </div>
+  </div>
 
-<div class="nav-links">
+  <div class="row">
+    <h2>Trending TV Shows</h2>
+    <div class="list" id="tvshows-list">
+      <div class="movie"><img src="show1.jpg" alt="Show 1"><p>Show Title 1</p></div>
+      <div class="movie"><img src="show2.jpg" alt="Show 2"><p>Show Title 2</p></div>
+      <div class="movie"><img src="show3.jpg" alt="Show 3"><p>Show Title 3</p></div>
+    </div>
+  </div>
 
-<a href="index.html">Home</a>
+  <div class="row">
+    <h2>Trending Anime</h2>
+    <div class="list" id="anime-list">
+      <div class="movie"><img src="anime1.jpg" alt="Anime 1"><p>Anime Title 1</p></div>
+      <div class="movie"><img src="anime2.jpg" alt="Anime 2"><p>Anime Title 2</p></div>
+      <div class="movie"><img src="anime3.jpg" alt="Anime 3"><p>Anime Title 3</p></div>
+    </div>
+  </div>
 
-<a href="#">Disclaimer</a>
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2 id="modal-title">Movie Title</h2>
+      <div class="stars" id="modal-rating">★★★★☆</div>
+      <p id="modal-description">Movie description goes here.</p>
+      <img id="modal-image" src="" alt="Movie Poster" />
+      <iframe id="modal-video" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
+      <div class="server-selector">
+        <label for="server">Change Server:</label>
+        <select id="server" onchange="changeServer()">
+          <option value="vidsrc.cc">Vidsrc.cc</option>
+          <option value="vidsrc.me">Vidsrc.me</option>
+          <option value="player.videasy.net">Player.Videasy.net</option>
+        </select>
+      </div>
+    </div>
+  </div>
 
-<a href="#">About Us</a>
-
-<input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
-
-</div>
-
-</div>
-
-<div class="banner" id="banner">
-
-<h1 id="banner-title"></h1>
-
-</div>
-
-<div class="row">
-
-<h2>Trending Movies</h2>
-
-<div class="list" id="movies-list"></div>
-
-</div>
-
-<div class="row">
-
-<h2>Trending TV Shows</h2>
-
-<div class="list" id="tvshows-list"></div>
-
-</div>
-
-<div class="row">
-
-<h2>Trending Anime</h2>
-
-<div class="list" id="anime-list"></div>
-
-</div>
-
-<div class="modal" id="modal">
-
-<div class="modal-content">
-
-<span class="close" onclick="closeModal()">&times;</span>
-
-<h2 id="modal-title"></h2>
-
-<div class="stars" id="modal-rating"></div>
-
-<p id="modal-description"></p>
-
-<img id="modal-image" src="" alt="" />
-
-<iframe id="modal-video" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
-
-<div class="server-selector">
-
-<label for="server">Change Server:</label>
-
-<select id="server" onchange="changeServer()">
-
-<option value="vidsrc.cc">Vidsrc.cc</option>
-
-<option value="vidsrc.me">Vidsrc.me</option>
-
-<option value="player.videasy.net">Player.Videasy.net</option>
-
-</select>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="search-modal" id="search-modal">
-
-<span class="close" onclick="closeSearchModal()">&times;</span>
-
-<input type="text" id="search-input" placeholder="Search for a movie or show..." oninput="searchTMDB()" />
-
-<div class="results" id="search-results"></div>
-
-</div>
-
+  <div class="search-modal" id="search-modal">
+    <span class="close" onclick="closeSearchModal()">&times;</span>
+    <input type="text" id="search-input" placeholder="Search for a movie or show..." oninput="searchTMDB()" />
+    <div class="results" id="search-results"></div>
+  </div>
 </body>
+</html>
