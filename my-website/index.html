@@ -1,399 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SeeFLix-Movie</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Streaming</title>
     <style>
-        /* Base styles */
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             background-color: #141414;
             color: white;
         }
-        a {
-            color: white;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-
-        /* Navbar */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
+            padding: 1rem;
             background-color: #000;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
         }
         .logo {
-            font-size: 28px;
-            font-weight: 900;
-            color: #e50914;
-            cursor: default;
-            user-select: none;
+            font-size: 24px;
+            font-weight: bold;
+            color: red;
         }
-        .navbar-links a {
-            margin: 0 15px;
-            font-weight: 600;
-            font-size: 16px;
-        }
-        .navbar-links a:hover {
-            color: #e50914;
-        }
-
-        /* Banner */
         .banner {
-            position: relative;
-            height: 450px;
-            background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80');
-            background-position: center;
+            background-image: url('banner-image.jpg');
+            height: 400px;
             background-size: cover;
             display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 3rem 4rem;
-            color: white;
+            align-items: center;
+            padding: 20px;
         }
         .banner h1 {
-            font-size: 3.5rem;
-            font-weight: 900;
-            margin: 0 0 1rem 0;
-            text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+            font-size: 3rem;
         }
-        .banner p {
-            max-width: 600px;
-            font-size: 1.1rem;
-            opacity: 0.85;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.9);
-        }
-
-        /* Movie Grid */
         .movie-grid {
-            padding: 2rem 4rem;
             display: grid;
-            grid-template-columns: repeat(auto-fill,minmax(180px,1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
         }
         .movie-item {
-            background-color: transparent;
-            border-radius: 6px;
+            background-color: #333;
+            border-radius: 5px;
             overflow: hidden;
-            cursor: pointer;
-            position: relative;
-            transition: transform 0.3s ease;
-        }
-        .movie-item:hover {
-            transform: scale(1.1);
-            z-index: 5;
-            box-shadow: 0 0 15px #e50914;
+            transition: transform 0.2s;
         }
         .movie-item img {
             width: 100%;
-            border-radius: 6px;
-            display: block;
         }
-
-        /* Modal Styles */
+        .movie-item:hover {
+            transform: scale(1.05);
+        }
         .modal {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(20,20,20,0.95);
             display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            overflow-y: auto;
-            padding: 2rem;
-        }
-        .modal.active {
-            display: flex;
-            animation: fadeIn 0.3s ease forwards;
-        }
-        @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
         }
         .modal-content {
-            background-color: #222;
-            border-radius: 12px;
-            max-width: 900px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            color: white;
-            box-shadow: 0 0 30px rgba(229, 9, 20, 0.7);
-            animation: slideUp 0.3s ease forwards;
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
         }
-        @keyframes slideUp {
-            from {transform: translateY(50px); opacity: 0;}
-            to {transform: translateY(0); opacity: 1;}
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
         }
-        .modal-header {
-            position: relative;
-            padding: 1.5rem 2rem;
-            font-size: 2rem;
-            font-weight: 900;
-            color: #e50914;
-        }
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1.5rem;
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: #666;
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
             cursor: pointer;
-            transition: color 0.2s ease;
-        }
-        .modal-close:hover {
-            color: #e50914;
-        }
-        .modal-body {
-            padding: 0 2rem 2rem 2rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-        }
-        .modal-poster {
-            flex: 1 1 300px;
-            max-width: 300px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(229, 9, 20, 0.5);
-        }
-        .modal-poster img {
-            width: 100%;
-            display: block;
-        }
-        .modal-details {
-            flex: 2 1 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .modal-description {
-            font-size: 1.1rem;
-            line-height: 1.5;
-            margin-bottom: 1rem;
-            opacity: 0.85;
-        }
-        .modal-info {
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            color: #bbb;
-        }
-        .modal-actions {
-            display: flex;
-            gap: 1rem;
-        }
-        .btn {
-            background-color: #e50914;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 700;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .btn:hover {
-            background-color: #f40612;
-        }
-        .btn-secondary {
-            background-color: #333;
-        }
-        .btn-secondary:hover {
-            background-color: #555;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .banner {
-                height: 300px;
-                padding: 2rem;
-            }
-            .banner h1 {
-                font-size: 2rem;
-            }
-            .banner p {
-                font-size: 0.9rem;
-                max-width: 100%;
-            }
-            .movie-grid {
-                padding: 1rem 1.5rem;
-                grid-template-columns: repeat(auto-fill,minmax(140px,1fr));
-            }
-            .modal-body {
-                flex-direction: column;
-                padding: 1rem 1rem 2rem 1rem;
-            }
-            .modal-poster, .modal-details {
-                max-width: 100%;
-                flex: 1 1 100%;
-            }
-            .modal-header {
-                font-size: 1.5rem;
-                padding: 1rem 1rem;
-            }
-            .modal-close {
-                top: 0.5rem;
-                right: 1rem;
-                font-size: 2rem;
-            }
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
+    <div class="navbar">
         <div class="logo">SeeFLix-Movie</div>
-        <div class="navbar-links">
+        <div>
             <a href="#">Home</a>
             <a href="#">Movies</a>
             <a href="#">TV Shows</a>
             <a href="#">My List</a>
         </div>
-    </nav>
+    </div>
 
-    <section class="banner" aria-label="Featured Movie">
-        <h1>Welcome to SeeFLix-Movie</h1>
-        <p>Discover the best movies and shows streamed instantly. Dive into your favorites or explore something new.</p>
-    </section>
+    <div class="banner">
+        <h1>Welcome to MovieStream</h1>
+    </div>
 
-    <section class="movie-grid" aria-label="Movie List">
-        <div class="movie-item" tabindex="0" data-title="Inception" data-description="A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO." data-rating="8.8" data-poster="https://image.tmdb.org/t/p/w500/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg">
-            <img src="https://image.tmdb.org/t/p/w200/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg" alt="Inception Poster" />
-        </div>
-        <div class="movie-item" tabindex="0" data-title="The Dark Knight" data-description="When the menace known as the Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham." data-rating="9.0" data-poster="https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg">
-            <img src="https://image.tmdb.org/t/p/w200/qJ2tW6WMUDux911r6m7haRef0WH.jpg" alt="The Dark Knight Poster" />
-        </div>
-        <div class="movie-item" tabindex="0" data-title="Interstellar" data-description="A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival." data-rating="8.6" data-poster="https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg">
-            <img src="https://image.tmdb.org/t/p/w200/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg" alt="Interstellar Poster" />
-        </div>
-        <div class="movie-item" tabindex="0" data-title="Parasite" data-description="Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan." data-rating="8.6" data-poster="https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg">
-            <img src="https://image.tmdb.org/t/p/w200/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg" alt="Parasite Poster" />
-        </div>
-        <div class="movie-item" tabindex="0" data-title="Avengers: Endgame" data-description="After the devastating events of Avengers: Infinity War, the universe is in ruins. The remaining Avengers assemble for one final battle." data-rating="8.4" data-poster="https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg">
-            <img src="https://image.tmdb.org/t/p/w200/or06FN3Dka5tukK1e9sl16pB3iy.jpg" alt="Avengers: Endgame Poster" />
-        </div>
-        <div class="movie-item" tabindex="0" data-title="Joker" data-description="In Gotham City, mentally troubled comedian Arthur Fleck embarks on a downward spiral that leads to the birth of the Joker." data-rating="8.5" data-poster="https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg">
-            <img src="https://image.tmdb.org/t/p/w200/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg" alt="Joker Poster" />
-        </div>
-    </section>
+    <div class="movie-grid">
+        <div class="movie-item"><img src="movie1.jpg" alt="Movie 1"></div>
+        <div class="movie-item"><img src="movie2.jpg" alt="Movie 2"></div>
+        <div class="movie-item"><img src="movie3.jpg" alt="Movie 3"></div>
+        <div class="movie-item"><img src="movie4.jpg" alt="Movie 4"></div>
+        <div class="movie-item"><img src="movie5.jpg" alt="Movie 5"></div>
+        <div class="movie-item"><img src="movie6.jpg" alt="Movie 6"></div>
+    </div>
 
-    <!-- Modal -->
-    <div id="movieModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+    <!-- Modal Structure -->
+    <div id="myModal" class="modal">
         <div class="modal-content">
-            <button class="modal-close" aria-label="Close modal">&times;</button>
-            <header class="modal-header" id="modalTitle">Movie Title</header>
-            <div class="modal-body">
-                <div class="modal-poster">
-                    <img src="" alt="Movie Poster" id="modalPoster" />
-                </div>
-                <div class="modal-details">
-                    <p class="modal-description" id="modalDesc">Movie description goes here...</p>
-                    <p class="modal-info"><strong>Rating:</strong> <span id="modalRating">0.0</span>/10</p>
-                    <div class="modal-actions">
-                        <button class="btn btn-primary" id="playBtn" aria-label="Play movie">▶ Play</button>
-                        <button class="btn btn-secondary" id="myListBtn" aria-label="Add to My List">+ My List</button>
-                    </div>
-                </div>
-            </div>
+            <span class="close">&times;</span>
+            <h2>Modal Title</h2>
+            <p>This is the content of the modal. You can add more information here.</p>
+            <button onclick="alert('Action performed!')">Perform Action</button>
         </div>
     </div>
 
+    <button onclick="openModal()">Open Modal</button>
+
     <script>
-        const modal = document.getElementById('movieModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalDesc = document.getElementById('modalDesc');
-        const modalRating = document.getElementById('modalRating');
-        const modalPoster = document.getElementById('modalPoster');
-        const modalClose = modal.querySelector('.modal-close');
-        const playBtn = document.getElementById('playBtn');
-        const myListBtn = document.getElementById('myListBtn');
+        var modal = document.getElementById("myModal");
+        var span = document.getElementsByClassName("close")[0];
 
-        // Open modal and populate content
-        function openModal(movieData) {
-            modalTitle.textContent = movieData.title;
-            modalDesc.textContent = movieData.description;
-            modalRating.textContent = movieData.rating;
-            modalPoster.src = movieData.poster;
-            modalPoster.alt = `${movieData.title} Poster`;
-            modal.classList.add('active');
-
-            // Focus modal close button for accessibility
-            modalClose.focus();
+        function openModal() {
+            modal.style.display = "block";
         }
 
-        // Close modal function
-        function closeModal() {
-            modal.classList.remove('active');
+        span.onclick = function() {
+            modal.style.display = "none";
         }
 
-        // Event delegation for movie items
-        document.querySelector('.movie-grid').addEventListener('click', (e) => {
-            const movieItem = e.target.closest('.movie-item');
-            if (!movieItem) return;
-
-            const movieData = {
-                title: movieItem.dataset.title,
-                description: movieItem.dataset.description,
-                rating: movieItem.dataset.rating,
-                poster: movieItem.dataset.poster
-            };
-            openModal(movieData);
-        });
-
-        // Keyboard accessibility: open modal on Enter key when movie-item is focused
-        document.querySelectorAll('.movie-item').forEach(item => {
-            item.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    const movieData = {
-                        title: item.dataset.title,
-                        description: item.dataset.description,
-                        rating: item.dataset.rating,
-                        poster: item.dataset.poster
-                    };
-                    openModal(movieData);
-                }
-            });
-        });
-
-        // Close modal on close button click
-        modalClose.addEventListener('click', closeModal);
-
-        // Close modal on clicking outside modal-content
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
-        });
-
-        // Close modal on ESC key press
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('active')) {
-                closeModal();
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
             }
-        });
-
-        // Placeholder for Play and My List buttons
-        playBtn.addEventListener('click', () => {
-            alert(`Playing "${modalTitle.textContent}"...`);
-        });
-        myListBtn.addEventListener('click', () => {
-            alert(`Added "${modalTitle.textContent}" to My List.`);
-        });
+        }
     </script>
+
 </body>
 </html>
