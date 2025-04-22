@@ -226,27 +226,32 @@
   </section>
 
   <!-- Modal -->
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()" aria-label="Close modal">×</span>
-      <h2 id="modal-title">Movie Title</h2>
-      <div class="stars" id="modal-rating">★★★★☆</div>
-      <p id="modal-description">Movie description goes here.</p>
-      <img id="modal-image" src="" alt="Movie Poster" class="w-full h-auto rounded-lg mb-4" />
-      <iframe id="modal-video" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-      <div class="server-selector mt-4">
-        <label for="server" class="mr-2">Change Server:</label>
-        <select id="server" onchange="changeServer()" class="bg-gray-700 text-white p-2 rounded">
-          <option value="placeholder-stream.net">Placeholder-Stream.net</option>
-          <option value="stream-service.com">Stream-Service.com</option>
-        </select>
-      </div>
-      <div class="button-container mt-4">
-        <button class="watch-now bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="watchNow()">Watch Now</button>
-        <button class="add-to-favorites bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700" onclick="addToFavorites()">Add to Favorites</button>
+<div class="modal" id="modal">
+  <div class="modal-content bg-gray-900 rounded-lg shadow-lg p-6">
+    <span class="close text-white cursor-pointer text-2xl absolute top-4 right-4" onclick="closeModal()">×</span>
+    <div class="flex">
+      <img id="modal-image" src="" alt="Movie Poster" class="w-48 h-auto rounded-lg mr-4">
+      <div class="flex-1">
+        <h2 id="modal-title" class="text-3xl font-bold text-white mb-2">Movie Title</h2>
+        <div class="stars" id="modal-rating">★★★★☆</div>
+        <p id="modal-description" class="text-gray-300 mt-2">Movie description goes here.</p>
+        <div class="mt-4">
+          <button class="watch-now bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="watchNow()">Watch Now</button>
+          <button class="add-to-favorites bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700" onclick="addToFavorites()">Add to Favorites</button>
+        </div>
+        <div class="server-selector mt-4">
+          <label for="server" class="mr-2 text-gray-400">Change Server:</label>
+          <select id="server" onchange="changeServer()" class="bg-gray-700 text-white p-2 rounded">
+            <option value="vidsrc.cc">Vidsrc.cc</option>
+            <option value="vidsrc.me">Vidsrc.me</option>
+            <option value="player.videasy.net">Player.Videasy.net</option>
+          </select>
+        </div>
       </div>
     </div>
+    <iframe id="modal-video" width="100%" height="400" frameborder="0" allowfullscreen class="mt-4 rounded-lg"></iframe>
   </div>
+</div>
 
   <!-- Footer -->
   <footer class="bg-gray-800 py-6">
