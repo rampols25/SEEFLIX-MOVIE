@@ -452,40 +452,39 @@
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
   <div class="modal-content">
     <span class="close" onclick="closeModal()" aria-label="Close modal">×</span>
-    
-    <!-- Poster Image -->
-    <img id="modal-image" src="" alt="Movie Poster" class="w-full h-auto rounded-lg mb-4 shadow-lg" />
-    
+    <img id="modal-image" src="https://via.placeholder.com/360x540.png?text=Movie+Poster" alt="Movie Poster" />
     <div class="modal-details">
-      <h2 id="modal-title" class="text-2xl font-bold mb-2">Movie Title</h2>
-      <div class="stars text-yellow-500" id="modal-rating" aria-label="Rating: 4 stars">★★★★☆</div>
-      <p id="modal-description" class="text-gray-700 mb-4">Movie description goes here.</p>
+      <h2 id="modal-title">Movie Title</h2>
+      <div class="stars" id="modal-rating" aria-label="Rating: 4 out of 5 stars" role="img" title="4 out of 5 stars">
+        ★★★★☆
+      </div>
+      <p id="modal-description">Movie description goes here. This is an engaging synopsis that tells the viewer what the movie is about and entices them to watch.</p>
 
-      <div class="video-container relative mb-4">
+      <div class="video-container">
         <iframe 
           id="modal-video" 
-          class="w-full h-64 rounded-lg" 
-          frameborder="0" 
-          allowfullscreen
-          src=""
+          src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen 
+          title="Movie trailer video"
         ></iframe>
-        <div class="controls absolute bottom-2 left-2 right-2 flex justify-between">
-          <button class="bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-700" onclick="togglePlay()">Play/Pause</button>
-          <button class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700" onclick="toggleFullscreen()">Fullscreen</button>
+        <div class="controls">
+          <button type="button" onclick="togglePlay()">Play/Pause</button>
+          <button type="button" onclick="toggleFullscreen()">Fullscreen</button>
         </div>
       </div>
 
-      <div class="server-selector mt-4">
-        <label for="server" class="mr-2">Change Server:</label>
-        <select id="server" onchange="changeServer()" class="bg-gray-700 text-white p-2 rounded">
-          <option value="placeholder-stream.net">Placeholder-Stream.net</option>
-          <option value="stream-service.com">Stream-Service.com</option>
+      <div class="server-selector">
+        <label for="server">Change Server:</label>
+        <select id="server" onchange="changeServer()">
+          <option value="https://placeholder-stream.net/embed/movie123">Placeholder-Stream.net</option>
+          <option value="https://stream-service.com/embed/movie123">Stream-Service.com</option>
         </select>
       </div>
 
-      <div class="button-container mt-4 flex space-x-2">
-        <button class="watch-now bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="watchNow()">Watch Now</button>
-        <button class="add-to-favorites bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700" onclick="addToFavorites()">Add to Favorites</button>
+      <div class="button-container">
+        <button class="watch-now" onclick="watchNow()">Watch Now</button>
+        <button class="add-to-favorites" onclick="addToFavorites()">Add to Favorites</button>
       </div>
     </div>
   </div>
@@ -494,79 +493,67 @@
 <script>
   const modal = document.getElementById('modal');
   const video = document.getElementById('modal-video');
-  const image = document.getElementById('modal-image');
-  const serverSelect = document.getElementById('server');
 
-  // Example movie data (you can replace this with dynamic data)
-  const movieData = {
-    title: 'Movie Title',
-    rating: '★★★★☆',
-    description: 'Movie description goes here.',
-    poster: 'https://via.placeholder.com/360x540.png?text=Movie+Poster',
-    videoSrc: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    servers: {
-      'placeholder-stream.net': 'placeholder-stream.net',
-      'stream-service.com': 'stream-service.com'
-    }
+  // Open modal function (for demo, open on page load)
+  window.onload = () => {
+    openModal();
   };
 
   function openModal() {
     modal.classList.add('active');
-    // Set initial content
-    image.src = movieData.poster;
-    video.src = movieData.videoSrc;
-    serverSelect.value = 'placeholder-stream.net';
-    document.getElementById('modal-title').textContent = movieData.title;
-    document.getElementById('modal-rating').textContent = movieData.rating;
-    document.getElementById('modal-description').textContent = movieData.description;
   }
 
   function closeModal() {
     modal.classList.remove('active');
-    // Stop video by resetting src
-    video.src = '';
+    // Pause video when modal closed (if possible)
+    // If iframe is YouTube, postMessage API needed, so just reload src to stop
+    video.src = video.src;
   }
 
+  // Play/Pause toggle - for iframe YouTube, limited control, so just toggling mute/unmute for demo
   function togglePlay() {
+    // No easy play/pause on iframe without YouTube API, so just alert for demo
     alert('Play/Pause controls require YouTube Player API integration.');
   }
 
+  // Fullscreen toggle
   function toggleFullscreen() {
     if (!document.fullscreenElement) {
-      modal.requestFullscreen().catch(err => alert(`Error: ${err.message}`));
+      modal.requestFullscreen().catch(err => {
+        alert(`Error attempting to enable fullscreen mode: ${err.message}`);
+      });
     } else {
       document.exitFullscreen();
     }
   }
 
+  // Change video server
   function changeServer() {
-    const selectedServer = serverSelect.value;
-    // Use the exact server value from the select options as video src (do NOT change it)
-    video.src = selectedServer;
+    const select = document.getElementById('server');
+    video.src = select.value;
   }
 
+  // Placeholder watch now
   function watchNow() {
     alert('Starting to watch the movie!');
   }
 
+  // Placeholder add to favorites
   function addToFavorites() {
     alert('Added to your favorites!');
   }
 
-  // Close on overlay click
-  modal.addEventListener('click', e => {
-    if (e.target === modal) closeModal();
+  // Close modal on outside click
+  modal.addEventListener('click', (e) => {
+    if(e.target === modal) closeModal();
   });
 
-  // Close on ESC
+  // Close modal on ESC key press
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && modal.classList.contains('active')) {
+    if (e.key === "Escape" && modal.classList.contains('active')) {
       closeModal();
     }
   });
-
-  // Open modal when page loads (demo)
-  window.onload = openModal;
 </script>
 
 </body>
