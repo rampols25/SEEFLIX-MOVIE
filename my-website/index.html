@@ -20,13 +20,13 @@
 
     /* Modal styles */
     .modal {
-      display: none;
+      display: none; /* Hidden by default */
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.8);
+      background-color: rgba(0, 0, 0, 0.8); /* Dark background */
       justify-content: center;
       align-items: center;
       z-index: 1000;
@@ -147,6 +147,7 @@
           <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 3', 'Movie description goes here.', 'movie3.jpg')">View Details</button>
         </div>
       </div>
+      <!-- Add more movie cards as needed -->
     </div>
   </section>
 
@@ -258,12 +259,11 @@
   </footer>
 
   <!-- Popunder Ad Script -->
-  <script> 
+  <script>
     // Popunder ad logic (fires once per session to avoid annoyance)
     let hasPopunderFired = sessionStorage.getItem('popunderFired');
     if (!hasPopunderFired) {
       window.addEventListener('click', function triggerPopunder() {
-        // Replace with your actual popunder ad link
         const popunderUrl = 'https://discusscompetencecallous.com/ssupau51vt?key=1f468110f178b2281b03e43da5bc0010'; // Placeholder
         const newWindow = window.open(popunderUrl, '_blank');
         if (newWindow) {
@@ -295,7 +295,6 @@
 
     function getVideoSource() {
       const server = document.getElementById('server').value;
-      // Placeholder video sources; replace with your actual streaming service URLs
       const sources = {
         'placeholder-stream.net': 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Example
         'stream-service.com': 'https://www.youtube.com/embed/9bZkp7q19f0' // Example
@@ -313,7 +312,6 @@
     }
 
     function watchNow() {
-      // Trigger video playback or redirect to streaming page
       const videoFrame = document.getElementById('modal-video');
       if (videoFrame.src) {
         videoFrame.focus();
@@ -325,7 +323,6 @@
     function addToFavorites() {
       const title = document.getElementById('modal-title').innerText;
       alert(`${title} has been added to your favorites!`);
-      // Add logic to save to localStorage or backend if needed
     }
   </script>
 </body>
