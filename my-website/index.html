@@ -242,44 +242,9 @@
         console.error('Error opening modal:', error);
         alert('Failed to load movie details. Please try again.');
       }
-    }
+    
 
-    function closeModal() {
-      document.getElementById('modal').style.display = 'none';
-      document.getElementById('modal-video').src = ''; // Reset video
-    }
-
-    function getVideoSource() {
-      const server = document.getElementById('server').value;
-      const sources = {
-        'placeholder-stream.net': 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Example
-        'stream-service.com': 'https://www.youtube.com/embed/9bZkp7q19f0' // Example
-      };
-      return sources[server] || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
-    }
-
-    function changeServer() {
-      try {
-        document.getElementById('modal-video').src = getVideoSource();
-      } catch (error) {
-        console.error('Error changing server:', error);
-        alert('Failed to change server. Please try again.');
-      }
-    }
-
-    function watchNow() {
-      const videoFrame = document.getElementById('modal-video');
-      if (videoFrame.src) {
-        videoFrame.focus();
-      } else {
-        alert('No video source available.');
-      }
-    }
-
-    function addToFavorites() {
-      const title = document.getElementById('modal-title').innerText;
-      alert(`${title} has been added to your favorites!`);
-    }
+ }
   </script>
 </body>
 </html>
