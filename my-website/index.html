@@ -150,98 +150,16 @@
     </div>
   </section>
 
-  <!-- Anime Grid -->
-  <section class="container mx-auto py-10">
-    <h2 class="text-3xl font-bold mb-6">Popular Anime</h2>
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="anime-list">
-      <div class="movie-card">
-        <img src="anime1.jpg" alt="Anime 1 Poster" class="w-full h-64 object-cover rounded-lg">
-        <div class="movie-overlay">
-          <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Anime Title 1', 'Anime description goes here.', 'anime1.jpg')">View Details</button>
-        </div>
-      </div>
-      <div class="movie-card">
-        <img src="anime2.jpg" alt="Anime 2 Poster" class="w-full h-64 object-cover rounded-lg">
-        <div class="movie-overlay">
-          <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Anime Title 2', 'Anime description goes here.', 'anime2.jpg')">View Details</button>
-        </div>
-      </div>
-      <div class="movie-card">
-        <img src="anime3.jpg" alt="Anime 3 Poster" class="w-full h-64 object-cover rounded-lg">
-        <div class="movie-overlay">
-          <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Anime Title 3', 'Anime description goes here.', 'anime3.jpg')">View Details</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TV Series Grid -->
-  <section class="container mx-auto py-10">
-    <h2 class="text-3xl font-bold mb-6">Top TV Series</h2>
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="series-list">
-      <div class="movie-card">
-        <img src="series1.jpg" alt="Series 1 Poster" class="w-full h-64 object-cover rounded-lg">
-        <div class="movie-overlay">
-          <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Series Title 1', 'Series description goes here.', 'series1.jpg')">View Details</button>
-        </div>
-      </div>
-      <div class="movie-card">
-        <img src="series2.jpg" alt="Series 2 Poster" class="w-full h-64 object-cover rounded-lg">
-        <div class="movie-overlay">
-          <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Series Title 2', 'Series description goes here.', 'series2.jpg')">View Details</button>
-        </div>
-      </div>
-      <div class="movie-card">
-        <img src="series3.jpg" alt="Series 3 Poster" class="w-full h-64 object-cover rounded-lg">
-        <div class="movie-overlay">
-          <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Series Title 3', 'Series description goes here.', 'series3.jpg')">View Details</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Ads Section -->
-  <section class="container mx-auto py-10">
-    <h2 class="text-3xl font-bold mb-6">Sponsored</h2>
-    <div class="flex flex-wrap justify-center gap-4">
-      <div class="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition duration-300">
-        <!-- Placeholder ad script; replace with your actual ad network script -->
-        <script type="text/javascript">
-          atOptions = {
-            'key': '08fc3d096554d5ab37c68a508443c4d6',
-            'format': 'iframe',
-            'height': 250,
-            'width': 300,
-            'params': {}
-          };
-        </script>
-        <script type="text/javascript" src="//discusscompetencecallous.com/08fc3d096554d5ab37c68a508443c4d6/invoke.js"></script>
-      </div>
-      <div class="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition duration-300">
-        <img src="https://via.placeholder.com/300x150?text=Ad+2" alt="Advertisement 2" class="w-full h-auto object-cover rounded-lg">
-      </div>
-    </div>
-  </section>
-
   <!-- Modal -->
   <div class="modal" id="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()" aria-label="Close modal">×</span>
       <h2 id="modal-title">Movie Title</h2>
-      <div class="stars" id="modal-rating">★★★★☆</div>
       <p id="modal-description">Movie description goes here.</p>
       <img id="modal-image" src="" alt="Movie Poster" class="w-full h-auto rounded-lg mb-4" />
-      <iframe id="modal-video" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-      <div class="server-selector mt-4">
-        <label for="server" class="mr-2">Change Server:</label>
-        <select id="server" onchange="changeServer()" class="bg-gray-700 text-white p-2 rounded">
-          <option value="placeholder-stream.net">Placeholder-Stream.net</option>
-          <option value="stream-service.com">Stream-Service.com</option>
-        </select>
-      </div>
       <div class="button-container mt-4">
-        <button class="watch-now bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="watchNow()">Watch Now</button>
-        <button class="add-to-favorites bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700" onclick="addToFavorites()">Add to Favorites</button>
+        <button class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="watchNow()">Watch Now</button>
+        <button class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700" onclick="addToFavorites()">Add to Favorites</button>
       </div>
     </div>
   </div>
@@ -257,75 +175,25 @@
     </div>
   </footer>
 
-  <!-- Popunder Ad Script -->
-  <script type='text/javascript' src='//discusscompetencecallous.com/df/0b/4a/df0b4a19718f3f005a1c03778f244d5e.js'></script>
-    // Popunder ad logic (fires once per session to avoid annoyance)
-    let hasPopunderFired = sessionStorage.getItem('popunderFired');
-    if (!hasPopunderFired) {
-      window.addEventListener('click', function triggerPopunder() {
-        // Replace with your actual popunder ad link
-        const popunderUrl = 'https://discusscompetencecallous.com/ssupau51vt?key=1f468110f178b2281b03e43da5bc0010'; // Placeholder
-        const newWindow = window.open(popunderUrl, '_blank');
-        if (newWindow) {
-          newWindow.blur();
-          window.focus();
-        }
-        sessionStorage.setItem('popunderFired', 'true');
-        window.removeEventListener('click', triggerPopunder);
-      });
-    }
-
+  <!-- JavaScript -->
+  <script>
     function openModal(title, description, image) {
-      try {
-        document.getElementById('modal-title').innerText = title || 'Unknown Title';
-        document.getElementById('modal-description').innerText = description || 'No description available.';
-        document.getElementById('modal-image').src = image || 'https://via.placeholder.com/150';
-        document.getElementById('modal-video').src = getVideoSource();
-        document.getElementById('modal').style.display = 'flex';
-      } catch (error) {
-        console.error('Error opening modal:', error);
-        alert('Failed to load movie details. Please try again.');
-      }
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-description').innerText = description;
+      document.getElementById('modal-image').src = image;
+      document.getElementById('modal').style.display = 'flex';
     }
 
     function closeModal() {
       document.getElementById('modal').style.display = 'none';
-      document.getElementById('modal-video').src = ''; // Reset video
-    }
-
-    function getVideoSource() {
-      const server = document.getElementById('server').value;
-      // Placeholder video sources; replace with your actual streaming service URLs
-      const sources = {
-        'placeholder-stream.net': 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Example
-        'stream-service.com': 'https://www.youtube.com/embed/9bZkp7q19f0' // Example
-      };
-      return sources[server] || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
-    }
-
-    function changeServer() {
-      try {
-        document.getElementById('modal-video').src = getVideoSource();
-      } catch (error) {
-        console.error('Error changing server:', error);
-        alert('Failed to change server. Please try again.');
-      }
     }
 
     function watchNow() {
-      // Trigger video playback or redirect to streaming page
-      const videoFrame = document.getElementById('modal-video');
-      if (videoFrame.src) {
-        videoFrame.focus();
-      } else {
-        alert('No video source available.');
-      }
+      alert('Watch now functionality will be implemented!');
     }
 
     function addToFavorites() {
-      const title = document.getElementById('modal-title').innerText;
-      alert(`${title} has been added to your favorites!`);
-      // Add logic to save to localStorage or backend if needed
+      alert('Added to favorites!');
     }
   </script>
 </body>
