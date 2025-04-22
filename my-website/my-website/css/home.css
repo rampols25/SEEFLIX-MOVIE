@@ -1,3 +1,21 @@
+<body>
+  <div class="navbar">
+    <img src="my-website/my-website/image.jpg" alt="Logo" />
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="#">Disclaimer</a>
+      <a href="#">About Us</a>
+      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
+    </div>
+  </div>
+
+  <!-- Banner Image -->
+  <div class="banner" style="background-image: url('path/to/your/banner.jpg');">
+    <h1>See-Flix Movie</h1>
+  </div>
+
+  <!-- Rest of your content -->
+</body>
 * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: Arial, sans-serif; background: #111; color: #fff; }
 
