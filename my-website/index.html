@@ -116,14 +116,19 @@
   </nav>
 
 <!-- Hero Section -->
-<section class="relative bg-cover bg-center h-96" id="banner" style="background-image: url('my-website/my-website/image.jpg');" onclick="openModal('Featured Movie Title', 'This is a brief description of the movie.', 'path/to/featured-movie-poster.jpg')">
-  <div class="absolute inset-0 bg-black opacity-50"></div>
-  <div class="container mx-auto h-full flex items-center justify-center text-center relative z-10">
-    <div>
-      <h1 id="banner-title" class="text-4xl md:text-5xl font-bold mb-4 text-shadow">Banner Title</h1>
+  <section class="relative h-96 overflow-hidden" id="banner" onclick="openModal('Featured Movie Title', 'This is a brief description of the movie.', 'path/to/featured-movie-poster.jpg')">
+    <video class="hero-video" autoplay loop muted playsinline poster="my-website/my-website/image.jpg">
+      <source src="YOUR_MOVIE_SOURCE_URL" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="container mx-auto h-full flex items-center justify-center text-center relative z-10">
+      <div>
+        <h1 id="banner-title" class="text-4xl md:text-5xl font-bold mb-4 text-shadow">Featured Movie Title</h1>
+        <button class="play-pause-btn" onclick="toggleHeroVideo(event)">Pause</button>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
   <!-- Movies Grid -->
   <section class="container mx-auto py-10">
