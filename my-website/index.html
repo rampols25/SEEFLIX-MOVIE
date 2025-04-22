@@ -224,28 +224,37 @@
     </div>
   </section>
 
-  <!-- Modal -->
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()" aria-label="Close modal">×</span>
-      <h2 id="modal-title">Movie Title</h2>
-      <div class="stars" id="modal-rating">★★★★☆</div>
-      <p id="modal-description">Movie description goes here.</p>
-      <img id="modal-image" src="" alt="Movie Poster" class="w-full h-auto rounded-lg mb-4" />
-      <iframe id="modal-video" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-      <div class="server-selector mt-4">
-        <label for="server" class="mr-2">Change Server:</label>
-        <select id="server" onchange="changeServer()" class="bg-gray-700 text-white p-2 rounded">
-          <option value="placeholder-stream.net">Placeholder-Stream.net</option>
-          <option value="stream-service.com">Stream-Service.com</option>
-        </select>
-      </div>
-      <div class="button-container mt-4">
-        <button class="watch-now bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="watchNow()">Watch Now</button>
-        <button class="add-to-favorites bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700" onclick="addToFavorites()">Add to Favorites</button>
+ <!-- Modal -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()" aria-label="Close modal">×</span>
+    <h2 id="modal-title" class="text-2xl font-bold mb-2">Movie Title</h2>
+    <div class="stars text-yellow-500" id="modal-rating">★★★★☆</div>
+    <p id="modal-description" class="text-gray-700 mb-4">Movie description goes here.</p>
+    <img id="modal-image" src="" alt="Movie Poster" class="w-full h-auto rounded-lg mb-4 shadow-lg" />
+    
+    <div class="video-container relative mb-4">
+      <iframe id="modal-video" class="w-full h-64 rounded-lg" frameborder="0" allowfullscreen></iframe>
+      <div class="controls absolute bottom-2 left-2 right-2 flex justify-between">
+        <button class="bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-700" onclick="togglePlay()">Play/Pause</button>
+        <button class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700" onclick="toggleFullscreen()">Fullscreen</button>
       </div>
     </div>
+
+    <div class="server-selector mt-4">
+      <label for="server" class="mr-2">Change Server:</label>
+      <select id="server" onchange="changeServer()" class="bg-gray-700 text-white p-2 rounded">
+        <option value="placeholder-stream.net">Placeholder-Stream.net</option>
+        <option value="stream-service.com">Stream-Service.com</option>
+      </select>
+    </div>
+
+    <div class="button-container mt-4 flex space-x-2">
+      <button class="watch-now bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="watchNow()">Watch Now</button>
+      <button class="add-to-favorites bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700" onclick="addToFavorites()">Add to Favorites</button>
+    </div>
   </div>
+</div>
 
   <!-- Footer -->
   <footer class="bg-gray-800 py-6">
