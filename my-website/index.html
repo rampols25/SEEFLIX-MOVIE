@@ -12,7 +12,7 @@
   <style>
     /* Custom styles to complement Tailwind */
     body {
-      margin: 0;
+      margin: 0	SET;
       font-family: Arial, sans-serif;
       background-color: #141414;
       color: white;
@@ -31,8 +31,8 @@
       background: #e50914;
       border-radius: 4px;
     }
-    /* Modal and Search Modal */
-    .modal, .search-modal {
+    /* Modal, Search Modal, and Ad Pop-Up */
+    .modal, .search-modal, .ad-popup {
       display: none;
       position: fixed;
       top: 0;
@@ -44,12 +44,12 @@
       align-items: center;
       z-index: 1000;
     }
-    .modal-content {
+    .modal-content, .ad-popup-content {
       background-color: #333;
       padding: 30px;
       border-radius: 10px;
       width: 90%;
-      max-width: 800px;
+      max-width: 600px;
       position: relative;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
       display: flex;
@@ -64,13 +64,20 @@
       cursor: pointer;
       font-size: 24px;
     }
-    .modal img {
+    .modal img, .ad-popup img {
       max-width: 100%;
       border-radius: 5px;
       margin-top: 10px;
     }
-    .button-container button:hover {
+    .button-container button:hover, .ad-popup button:hover {
       opacity: 0.9;
+    }
+    /* Social bar animation */
+    #social-bar {
+      transition: transform 0.3s ease;
+    }
+    #social-bar.hidden {
+      transform: translateX(100%);
     }
   </style>
 </head>
@@ -110,7 +117,6 @@
   <section class="container mx-auto py-10">
     <h2 class="text-3xl font-bold mb-6">Trending Movies</h2>
     <div class="list" id="movies-list">
-      <!-- Populated by js/home.js -->
       <div class="movie min-w-[150px] bg-gray-800 rounded-lg p-3 hover:scale-105 transition-transform duration-300">
         <img src="movie1.jpg" alt="Movie 1" class="w-full h-48 object-cover rounded-lg">
         <p class="text-center mt-2">Movie Title 1</p>
@@ -195,6 +201,40 @@
     <div class="results" id="search-results"></div>
   </div>
 
+  <!-- Social Bar with Ads -->
+  <div id="social-bar" class="fixed top-1/2 right-0 transform -translate-y-1/2 bg-gray-800 p-4 rounded-l-lg shadow-lg hidden md:block z-20">
+    <button id="toggle-social-bar" class="absolute top-2 left-2 text-white hover:text-red-600">
+      <i class="fas fa-times"></i>
+    </button>
+    <h3 class="text-lg font-semibold mb-4 text-center">Explore More</h3>
+    <div class="flex flex-col space-y-4">
+      <!-- Ad Slot 1: Image Banner with Pop-Up -->
+      <a href="#" class="block ad-link" data-ad-type="image" data-ad-content="https://via.placeholder.com/468x60?text=Ad+1">
+        <img src="https://via.placeholder.com/120x240?text=Ad+1" alt="Ad 1" class="w-32 h-48 object-cover rounded-lg hover:opacity-90" loading="lazy">
+      </a>
+      <!-- Ad Slot 2: Social Media Promo with Pop-Up -->
+      <a href="#" class="flex items-center space-x-2 text-white hover:text-red-600 ad-link" data-ad-type="text" data-ad-content="Follow us on Twitter for exclusive movie updates!">
+        <i class="fab fa-twitter"></i>
+        <span>Follow us on Twitter</span>
+      </a>
+      <!-- Ad Slot 3: Affiliate Link with Pop-Up -->
+      <a href="#" class="block bg-red-600 text-white text-center py-2 rounded-lg hover:bg-red-700 ad-link" data-ad-type="iframe" data-ad-content="https://your-affiliate-link.com">
+        Shop Movies Now
+      </a>
+    </div>
+  </div>
+
+  <!-- Ad Pop-Up -->
+  <div class="ad-popup" id="ad-popup">
+    <div class="ad-popup-content">
+      <span class="close" onclick="closeAdPopup()">×</span>
+      <div id="ad-content" class="w-full">
+        <!-- Dynamic ad content will be injected here -->
+      </div>
+      <a id="ad-visit-link" href="#" target="_blank" class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Visit Ad</a>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="bg-gray-800 py-6">
     <div class="container mx-auto text-center">
@@ -205,5 +245,51 @@
       </div>
     </div>
   </footer>
+
+  <!-- JavaScript for Social Bar and Pop-Up -->
+  <script>
+    const socialBar = document.getElementById('social-bar');
+    const toggleButton = document.getElementById('toggle-social-bar');
+    const adPopup = document.getElementById('ad-popup');
+    const adContent = document.getElementById('ad-content');
+    const adVisitLink = document.getElementById('ad-visit-link');
+    const adLinks = document.querySelectorAll('.ad-link');
+
+    // Toggle social bar
+    toggleButton.addEventListener('click', () => {
+      socialBar.classList.toggle('hidden');
+    });
+
+    // Open ad pop-up
+    function openAdPopup(content, type, link) {
+      adContent.innerHTML = '';
+      if (type === 'image') {
+        adContent.innerHTML = `<img src="${content}" alt="Ad" class="w-full rounded-lg" loading="lazy">`;
+      } else if (type === 'text') {
+        adContent.innerHTML = `<p class="text-center">${content}</p>`;
+      } else if (type === 'iframe') {
+        adContent.innerHTML = `<iframe src="${content}" width="100%" height="300" frameborder="0" allowfullscreen></iframe>`;
+      }
+      adVisitLink.href = link || '#';
+      adPopup.style.display = 'flex';
+    }
+
+    // Close ad pop-up
+    function closeAdPopup() {
+      adPopup.style.display = 'none';
+      adContent.innerHTML = '';
+    }
+
+    // Attach click handlers to ad links
+    adLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const adType = link.dataset.adType;
+        const adContent = link.dataset.adContent;
+        const adLink = link.href !== '#' ? link.href : adContent;
+        openAdPopup(adContent, adType, adLink);
+      });
+    });
+  </script>
 </body>
 </html>
