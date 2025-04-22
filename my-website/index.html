@@ -20,13 +20,13 @@
 
     /* Modal styles */
     .modal {
-      display: none; /* Hidden by default */
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.8); /* Dark background */
+      background-color: rgba(0, 0, 0, 0.8);
       justify-content: center;
       align-items: center;
       z-index: 1000;
@@ -82,6 +82,15 @@
     .button-container button:hover {
       opacity: 0.9;
     }
+
+    /* Accessibility improvements */
+    button, a {
+      outline: none;
+    }
+
+    button:focus, a:focus {
+      outline: 2px solid #ff0000;
+    }
   </style>
 </head>
 
@@ -89,17 +98,17 @@
   <!-- Navigation Bar -->
   <nav class="bg-gray-800 p-4 sticky top-0 z-10">
     <div class="container mx-auto flex justify-between items-center">
-      <img src="" alt="SEEFLIX-MOVIE" class="h-12" />
+      <img src="" alt="SEEFLIX-MOVIE" class="h-12" aria-label="SEEFLIX-MOVIE Logo" />
       <div class="hidden md:flex space-x-6 items-center">
         <a href="index.html" class="text-white hover:text-red-600">Home</a>
         <a href="#" class="text-white hover:text-red-600">Disclaimer</a>
         <a href="#" class="text-white hover:text-red-600">About Us</a>
         <div class="relative">
-          <input type="text" id="search-bar" class="search-bar bg-gray-700 text-white p-2 rounded-full pl-10 focus:outline-none" placeholder="Search..." onfocus="openSearchModal()" />
+          <input type="text" id="search-bar" class="search-bar bg-gray-700 text-white p-2 rounded-full pl-10 focus:outline-none" placeholder="Search movies..." aria-label="Search movies" onfocus="openSearchModal()" />
           <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
         </div>
       </div>
-      <button class="md:hidden text-2xl text-white">
+      <button class="md:hidden text-2xl text-white" aria-label="Toggle menu">
         <i class="fas fa-bars"></i>
       </button>
     </div>
@@ -121,24 +130,73 @@
     <h2 class="text-3xl font-bold mb-6">Trending Movies</h2>
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="movies-list">
       <div class="movie-card">
-        <img src="movie1.jpg" alt="Movie 1" class="w-full h-64 object-cover rounded-lg">
+        <img src="movie1.jpg" alt="Movie 1 Poster" class="w-full h-64 object-cover rounded-lg">
         <div class="movie-overlay">
           <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 1', 'Movie description goes here.', 'movie1.jpg')">View Details</button>
         </div>
       </div>
       <div class="movie-card">
-        <img src="movie2.jpg" alt="Movie 2" class="w-full h-64 object-cover rounded-lg">
+        <img src="movie2.jpg" alt="Movie 2 Poster" class="w-full h-64 object-cover rounded-lg">
         <div class="movie-overlay">
           <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 2', 'Movie description goes here.', 'movie2.jpg')">View Details</button>
         </div>
       </div>
       <div class="movie-card">
-        <img src="movie3.jpg" alt="Movie 3" class="w-full h-64 object-cover rounded-lg">
+        <img src="movie3.jpg" alt="Movie 3 Poster" class="w-full h-64 object-cover rounded-lg">
         <div class="movie-overlay">
           <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 3', 'Movie description goes here.', 'movie3.jpg')">View Details</button>
         </div>
       </div>
-      <!-- Add more movie cards as needed -->
+    </div>
+  </section>
+
+  <!-- Anime Grid -->
+  <section class="container mx-auto py-10">
+    <h2 class="text-3xl font-bold mb-6">Popular Anime</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="anime-list">
+      <div class="movie-card">
+        <img src="anime1.jpg" alt="Anime 1 Poster" class="w-full h-64 object-cover rounded-lg">
+        <div class="movie-overlay">
+          <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Anime Title 1', 'Anime description goes here.', 'anime1.jpg')">View Details</button>
+        </div>
+      </div>
+      <div class="movie-card">
+        <img src="anime2.jpg" alt="Anime 2 Poster" class="w-full h-64 object-cover rounded-lg">
+        <div class="movie-overlay">
+          <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Anime Title 2', 'Anime description goes here.', 'anime2.jpg')">View Details</button>
+        </div>
+      </div>
+      <div class="movie-card">
+        <img src="anime3.jpg" alt="Anime 3 Poster" class="w-full h-64 object-cover rounded-lg">
+        <div class="movie-overlay">
+          <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Anime Title 3', 'Anime description goes here.', 'anime3.jpg')">View Details</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TV Series Grid -->
+  <section class="container mx-auto py-10">
+    <h2 class="text-3xl font-bold mb-6">Top TV Series</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="series-list">
+      <div class="movie-card">
+        <img src="series1.jpg" alt="Series 1 Poster" class="w-full h-64 object-cover rounded-lg">
+        <div class="movie-overlay">
+          <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Series Title 1', 'Series description goes here.', 'series1.jpg')">View Details</button>
+        </div>
+      </div>
+      <div class="movie-card">
+        <img src="series2.jpg" alt="Series 2 Poster" class="w-full h-64 object-cover rounded-lg">
+        <div class="movie-overlay">
+          <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Series Title 2', 'Series description goes here.', 'series2.jpg')">View Details</button>
+        </div>
+      </div>
+      <div class="movie-card">
+        <img src="series3.jpg" alt="Series 3 Poster" class="w-full h-64 object-cover rounded-lg">
+        <div class="movie-overlay">
+          <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Series Title 3', 'Series description goes here.', 'series3.jpg')">View Details</button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -147,19 +205,20 @@
     <h2 class="text-3xl font-bold mb-6">Sponsored</h2>
     <div class="flex flex-wrap justify-center gap-4">
       <div class="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition duration-300">
+        <!-- Placeholder ad script; replace with your actual ad network script -->
         <script type="text/javascript">
           atOptions = {
-            'key' : '08fc3d096554d5ab37c68a508443c4d6',
-            'format' : 'iframe',
-            'height' : 250,
-            'width' : 300,
-            'params' : {}
+            'key': '08fc3d096554d5ab37c68a508443c4d6',
+            'format': 'iframe',
+            'height': 250,
+            'width': 300,
+            'params': {}
           };
         </script>
         <script type="text/javascript" src="//discusscompetencecallous.com/08fc3d096554d5ab37c68a508443c4d6/invoke.js"></script>
       </div>
       <div class="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition duration-300">
-        <img src="https://via.placeholder.com/300x150?text=Ad+2" alt="Ad 2" class="w-full h-auto object-cover rounded-lg">
+        <img src="https://via.placeholder.com/300x150?text=Ad+2" alt="Advertisement 2" class="w-full h-auto object-cover rounded-lg">
       </div>
     </div>
   </section>
@@ -167,18 +226,17 @@
   <!-- Modal -->
   <div class="modal" id="modal">
     <div class="modal-content">
-      <span class="close" onclick="closeModal()">×</span>
+      <span class="close" onclick="closeModal()" aria-label="Close modal">×</span>
       <h2 id="modal-title">Movie Title</h2>
       <div class="stars" id="modal-rating">★★★★☆</div>
       <p id="modal-description">Movie description goes here.</p>
-      <img id="modal-image" src="" alt="Movie Poster" />
+      <img id="modal-image" src="" alt="Movie Poster" class="w-full h-auto rounded-lg mb-4" />
       <iframe id="modal-video" width="100%" height="400" frameborder="0" allowfullscreen></iframe>
       <div class="server-selector mt-4">
         <label for="server" class="mr-2">Change Server:</label>
         <select id="server" onchange="changeServer()" class="bg-gray-700 text-white p-2 rounded">
-          <option value="vidsrc.cc">Vidsrc.cc</option>
-          <option value="vidsrc.me">Vidsrc.me</option>
-          <option value="player.videasy.net">Player.Videasy.net</option>
+          <option value="placeholder-stream.net">Placeholder-Stream.net</option>
+          <option value="stream-service.com">Stream-Service.com</option>
         </select>
       </div>
       <div class="button-container mt-4">
@@ -199,20 +257,76 @@
     </div>
   </footer>
 
-  <!-- JavaScript -->
+  <!-- Popunder Ad Script -->
   <script>
+    // Popunder ad logic (fires once per session to avoid annoyance)
+    let hasPopunderFired = sessionStorage.getItem('popunderFired');
+    if (!hasPopunderFired) {
+      window.addEventListener('click', function triggerPopunder() {
+        // Replace with your actual popunder ad link
+        const popunderUrl = 'https://your-ad-network.com/popunder-ad'; // Placeholder
+        const newWindow = window.open(popunderUrl, '_blank');
+        if (newWindow) {
+          newWindow.blur();
+          window.focus();
+        }
+        sessionStorage.setItem('popunderFired', 'true');
+        window.removeEventListener('click', triggerPopunder);
+      });
+    }
+
     function openModal(title, description, image) {
-      document.getElementById('modal-title').innerText = title;
-      document.getElementById('modal-description').innerText = description;
-      document.getElementById('modal-image').src = image;
-      document.getElementById('modal').style.display = 'flex';
+      try {
+        document.getElementById('modal-title').innerText = title || 'Unknown Title';
+        document.getElementById('modal-description').innerText = description || 'No description available.';
+        document.getElementById('modal-image').src = image || 'https://via.placeholder.com/150';
+        document.getElementById('modal-video').src = getVideoSource();
+        document.getElementById('modal').style.display = 'flex';
+      } catch (error) {
+        console.error('Error opening modal:', error);
+        alert('Failed to load movie details. Please try again.');
+      }
     }
 
     function closeModal() {
       document.getElementById('modal').style.display = 'none';
+      document.getElementById('modal-video').src = ''; // Reset video
     }
 
-    // Further JavaScript functions can be added here
+    function getVideoSource() {
+      const server = document.getElementById('server').value;
+      // Placeholder video sources; replace with your actual streaming service URLs
+      const sources = {
+        'placeholder-stream.net': 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Example
+        'stream-service.com': 'https://www.youtube.com/embed/9bZkp7q19f0' // Example
+      };
+      return sources[server] || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+    }
+
+    function changeServer() {
+      try {
+        document.getElementById('modal-video').src = getVideoSource();
+      } catch (error) {
+        console.error('Error changing server:', error);
+        alert('Failed to change server. Please try again.');
+      }
+    }
+
+    function watchNow() {
+      // Trigger video playback or redirect to streaming page
+      const videoFrame = document.getElementById('modal-video');
+      if (videoFrame.src) {
+        videoFrame.focus();
+      } else {
+        alert('No video source available.');
+      }
+    }
+
+    function addToFavorites() {
+      const title = document.getElementById('modal-title').innerText;
+      alert(`${title} has been added to your favorites!`);
+      // Add logic to save to localStorage or backend if needed
+    }
   </script>
 </body>
 </html>
