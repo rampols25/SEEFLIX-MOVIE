@@ -232,17 +232,12 @@
     }
 
     function openModal(title, description, image) {
-      try {
-        document.getElementById('modal-title').innerText = title || 'Unknown Title';
-        document.getElementById('modal-description').innerText = description || 'No description available.';
-        document.getElementById('modal-image').src = image || 'https://via.placeholder.com/150';
-        document.getElementById('modal-video').src = getVideoSource();
-        document.getElementById('modal').style.display = 'flex';
-      } catch (error) {
-        console.error('Error opening modal:', error);
-        alert('Failed to load movie details. Please try again.');
-      }
-    
+  document.getElementById('modal-title').innerText = title || 'Unknown Title';
+  document.getElementById('modal-description').innerText = description || 'No description available.';
+  document.getElementById('modal-image').src = image || 'https://via.placeholder.com/150';
+  document.getElementById('modal-video').src = getVideoSource(); // Adjust as needed
+  document.getElementById('modal').style.display = 'flex';
+}
 
  }
   </script>
