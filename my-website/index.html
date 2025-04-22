@@ -121,7 +121,7 @@
   <div class="container mx-auto h-full flex items-center justify-center text-center relative z-10">
     <div>
       <h1 id="banner-title" class="text-4xl md:text-5xl font-bold mb-4 text-shadow">Featured Movie Title</h1>
-      <button class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full" onclick="openModal('Featured Movie Title', 'Description of the featured movie goes here.', 'path/to/featured-movie.mp4')">Watch Now</button>
+      <button class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full" onclick="fetchMovieVideo('Featured Movie Title')">Watch Now</button>
     </div>
   </div>
 </section>
@@ -138,6 +138,60 @@
     </div>
   </div>
 </div>
+
+<script>
+  const apiKey = '169689830f09449f1d23896257d507db'; // Your API key
+
+  async function fetchMovieVideo(title) {
+    const apiUrl = `YOUR_MOVIE_API_ENDPOINT?api_key=${apiKey}&title=${encodeURIComponent(title)}`; // Replace with your API endpoint
+
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const movieData = await response.json();
+
+      // Assuming the API returns a video URL in movieData.videoUrl
+      const videoSrc = movieData.videoUrl; // Adjust based on your API's structure
+
+      // Open the modal with the video source
+      openModal(title, 'Description of the featured movie goes here.', videoSrc);
+    } catch (error) {
+      console.error('Error fetching movie video:', error);
+      alert('Failed to load video. Please try again.');
+    }
+  }
+
+  function openModal(title, description, videoSrc) {
+    document.getElementById('banner-title').innerText = title;
+    document.getElementById('modal').style.display = 'flex';
+    document.getElementById('video-source').src = videoSrc;
+    document.getElementById('modal-video').load();
+    document.getElementById('modal-video').play();
+  }
+
+  function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+    document.getElementById('modal-video').pause();
+    document.getElementById('modal-video').src = ''; // Reset video source
+  }
+</script>
+
+<style>
+  .modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Dark background */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+</style>
 
 <script>
   function openModal(title, description, videoSrc) {
