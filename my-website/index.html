@@ -96,6 +96,54 @@
 </head>
 
 <body class="bg-gray-900">
+
+	/* Social ad bar styles */
+    .social-ad-bar {
+      position: fixed;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      background: #212121;
+      padding: 10px;
+      border-radius: 0 10px 10px 0;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+      z-index: 100;
+      max-width: 300px;
+    }
+
+    .social-ad-bar .ad-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .social-ad-bar .ad-fallback {
+      color: #ff0000;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    /* Hide social ad bar on small screens */
+    @media (max-width: 640px) {
+      .social-ad-bar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-900">
+  <!-- Social Ad Bar -->
+  <aside class="social-ad-bar" aria-label="Social advertisements">
+    <div class="ad-content">
+      <script type='text/javascript' src='//discusscompetencecallous.com/df/0b/4a/df0b4a19718f3f005a1c03778f244d5e.js'></script>
+      <div class="ad-fallback" style="display: none;">
+        Follow us on social media!
+      </div>
+    </div>
+  </aside>
+	
   <!-- Navigation Bar -->
   <nav class="bg-gray-800 p-4 sticky top-0 z-10">
     <div class="container mx-auto flex justify-between items-center">
