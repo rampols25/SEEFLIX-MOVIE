@@ -224,340 +224,37 @@
     </div>
   </section>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Movie Box Modal</title>
-<style>
-  /* Base reset */
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #121212;
-    color: #eee;
-    margin: 0;
-    padding: 0;
-  }
-
-  /* Overlay */
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.85);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-    z-index: 9999;
-  }
-  .modal.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  /* Modal content container */
-  .modal-content {
-    background: #1e1e1e;
-    max-width: 900px;
-    width: 90%;
-    border-radius: 12px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.8);
-    display: flex;
-    flex-direction: row;
-    overflow: hidden;
-    position: relative;
-  }
-
-  /* Close button */
-  .close {
-    position: absolute;
-    top: 16px;
-    right: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    color: #bbb;
-    cursor: pointer;
-    transition: color 0.2s ease;
-    user-select: none;
-  }
-  .close:hover {
-    color: #fff;
-  }
-
-  /* Left side - poster */
-  #modal-image {
-    width: 40%;
-    object-fit: cover;
-    border-right: 1px solid #333;
-    transition: transform 0.3s ease;
-  }
-  #modal-image:hover {
-    transform: scale(1.05);
-  }
-
-  /* Right side - details */
-  .modal-details {
-    padding: 24px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  #modal-title {
-    margin: 0 0 8px 0;
-    font-size: 2rem;
-    font-weight: 700;
-    color: #f44336; /* red accent */
-  }
-
-  /* Stars rating */
-  .stars {
-    color: #ffb400;
-    font-size: 1.4rem;
-    margin-bottom: 12px;
-  }
-  .stars svg {
-    vertical-align: middle;
-    margin-right: 2px;
-  }
-
-  /* Description */
-  #modal-description {
-    flex-grow: 1;
-    font-size: 1rem;
-    color: #ccc;
-    margin-bottom: 20px;
-    line-height: 1.5;
-  }
-
-  /* Video container */
-  .video-container {
-    position: relative;
-    margin-bottom: 20px;
-  }
-
-  iframe#modal-video {
-    width: 100%;
-    height: 260px;
-    border-radius: 10px;
-    border: none;
-    background: black;
-  }
-
-  .controls {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .controls button {
-    background: rgba(244, 67, 54, 0.85);
-    border: none;
-    padding: 8px 14px;
-    color: white;
-    font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-  .controls button:hover {
-    background: #d32f2f;
-  }
-
-  /* Server selector */
-  .server-selector {
-    margin-bottom: 20px;
-    color: #ccc;
-  }
-  .server-selector label {
-    margin-right: 10px;
-    font-weight: 600;
-  }
-  .server-selector select {
-    background: #333;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-  }
-  .server-selector select:hover {
-    background: #444;
-  }
-
-  /* Buttons container */
-  .button-container {
-    display: flex;
-    gap: 12px;
-  }
-  .button-container button {
-    flex: 1;
-    padding: 12px 0;
-    font-size: 1rem;
-    font-weight: 700;
-    border-radius: 8px;
-    cursor: pointer;
-    border: none;
-    transition: background 0.3s ease;
-  }
-  .watch-now {
-    background: #f44336;
-    color: white;
-  }
-  .watch-now:hover {
-    background: #d32f2f;
-  }
-  .add-to-favorites {
-    background: #555;
-    color: white;
-  }
-  .add-to-favorites:hover {
-    background: #777;
-  }
-
-  /* Responsive */
-  @media (max-width: 700px) {
-    .modal-content {
-      flex-direction: column;
-      max-width: 95%;
-    }
-    #modal-image {
-      width: 100%;
-      height: 300px;
-      border-right: none;
-      border-bottom: 1px solid #333;
-    }
-    .modal-details {
-      padding: 16px 20px 24px;
-    }
-    iframe#modal-video {
-      height: 200px;
-    }
-  }
-</style>
-</head>
-<body>
-
 <!-- Modal -->
-<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
+<div class="modal" id="modal">
   <div class="modal-content">
     <span class="close" onclick="closeModal()" aria-label="Close modal">×</span>
-    <img id="modal-image" src="https://via.placeholder.com/360x540.png?text=Movie+Poster" alt="Movie Poster" />
-    <div class="modal-details">
-      <h2 id="modal-title">Movie Title</h2>
-      <div class="stars" id="modal-rating" aria-label="Rating: 4 out of 5 stars" role="img" title="4 out of 5 stars">
-        ★★★★☆
+    <h2 id="modal-title" class="text-2xl font-bold mb-2">Movie Title</h2>
+    <div class="stars text-yellow-500" id="modal-rating">★★★★☆</div>
+    <p id="modal-description" class="text-gray-700 mb-4">Movie description goes here.</p>
+    <img id="modal-image" src="" alt="Movie Poster" class="w-full h-auto rounded-lg mb-4 shadow-lg" />
+    
+    <div class="video-container relative mb-4">
+      <iframe id="modal-video" class="w-full h-64 rounded-lg" frameborder="0" allowfullscreen></iframe>
+      <div class="controls absolute bottom-2 left-2 right-2 flex justify-between">
+        <button class="bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-700" onclick="togglePlay()">Play/Pause</button>
+        <button class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700" onclick="toggleFullscreen()">Fullscreen</button>
       </div>
-      <p id="modal-description">Movie description goes here. This is an engaging synopsis that tells the viewer what the movie is about and entices them to watch.</p>
+    </div>
 
-      <div class="video-container">
-        <iframe 
-          id="modal-video" 
-          src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen 
-          title="Movie trailer video"
-        ></iframe>
-        <div class="controls">
-          <button type="button" onclick="togglePlay()">Play/Pause</button>
-          <button type="button" onclick="toggleFullscreen()">Fullscreen</button>
-        </div>
-      </div>
+    <div class="server-selector mt-4">
+      <label for="server" class="mr-2">Change Server:</label>
+      <select id="server" onchange="changeServer()" class="bg-gray-700 text-white p-2 rounded">
+        <option value="placeholder-stream.net">Placeholder-Stream.net</option>
+        <option value="stream-service.com">Stream-Service.com</option>
+      </select>
+    </div>
 
-      <div class="server-selector">
-        <label for="server">Change Server:</label>
-        <select id="server" onchange="changeServer()">
-          <option value="https://placeholder-stream.net/embed/movie123">Placeholder-Stream.net</option>
-          <option value="https://stream-service.com/embed/movie123">Stream-Service.com</option>
-        </select>
-      </div>
-
-      <div class="button-container">
-        <button class="watch-now" onclick="watchNow()">Watch Now</button>
-        <button class="add-to-favorites" onclick="addToFavorites()">Add to Favorites</button>
-      </div>
+    <div class="button-container mt-4 flex space-x-2">
+      <button class="watch-now bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="watchNow()">Watch Now</button>
+      <button class="add-to-favorites bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700" onclick="addToFavorites()">Add to Favorites</button>
     </div>
   </div>
 </div>
-
-<script>
-  const modal = document.getElementById('modal');
-  const video = document.getElementById('modal-video');
-
-  // Open modal function (for demo, open on page load)
-  window.onload = () => {
-    openModal();
-  };
-
-  function openModal() {
-    modal.classList.add('active');
-  }
-
-  function closeModal() {
-    modal.classList.remove('active');
-    // Pause video when modal closed (if possible)
-    // If iframe is YouTube, postMessage API needed, so just reload src to stop
-    video.src = video.src;
-  }
-
-  // Play/Pause toggle - for iframe YouTube, limited control, so just toggling mute/unmute for demo
-  function togglePlay() {
-    // No easy play/pause on iframe without YouTube API, so just alert for demo
-    alert('Play/Pause controls require YouTube Player API integration.');
-  }
-
-  // Fullscreen toggle
-  function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-      modal.requestFullscreen().catch(err => {
-        alert(`Error attempting to enable fullscreen mode: ${err.message}`);
-      });
-    } else {
-      document.exitFullscreen();
-    }
-  }
-
-  // Change video server
-  function changeServer() {
-    const select = document.getElementById('server');
-    video.src = select.value;
-  }
-
-  // Placeholder watch now
-  function watchNow() {
-    alert('Starting to watch the movie!');
-  }
-
-  // Placeholder add to favorites
-  function addToFavorites() {
-    alert('Added to your favorites!');
-  }
-
-  // Close modal on outside click
-  modal.addEventListener('click', (e) => {
-    if(e.target === modal) closeModal();
-  });
-
-  // Close modal on ESC key press
-  document.addEventListener('keydown', e => {
-    if (e.key === "Escape" && modal.classList.contains('active')) {
-      closeModal();
-    }
-  });
-</script>
-
-</body>
-</html>
   <!-- Footer -->
   <footer class="bg-gray-800 py-6">
     <div class="container mx-auto text-center">
