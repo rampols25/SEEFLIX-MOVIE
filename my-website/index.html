@@ -258,22 +258,23 @@
   </footer>
 
   <!-- Popunder Ad Script -->
-  <script type='text/javascript' src='//discusscompetencecallous.com/df/0b/4a/df0b4a19718f3f005a1c03778f244d5e.js'></script>
-  <script>
-    // Popunder ad logic (fires once per session to avoid annoyance)
-    let hasPopunderFired = sessionStorage.getItem('popunderFired');
-    if (!hasPopunderFired) {
-      window.addEventListener('click', function triggerPopunder() {
-        const popunderUrl = 'https://discusscompetencecallous.com/ssupau51vt?key=1f468110f178b2281b03e43da5bc0010'; // Placeholder
-        const newWindow = window.open(popunderUrl, 'https://discusscompetencecallous.com/ssupau51vt?key=1f468110f178b2281b03e43da5bc0010');
-        if (newWindow) {
-          newWindow.blur();
-          window.focus();
-        }
-        sessionStorage.setItem('popunderFired', 'true');
-        window.removeEventListener('click', triggerPopunder);
-      });
-    }
+<script type='text/javascript' src='//discusscompetencecallous.com/df/0b/4a/df0b4a19718f3f005a1c03778f244d5e.js'></script>
+<script>
+  // Popunder ad logic (fires once per session to avoid annoyance)
+  let hasPopunderFired = sessionStorage.getItem('popunderFired');
+  if (!hasPopunderFired) {
+    window.addEventListener('click', function triggerPopunder() {
+      const popunderUrl = 'https://discusscompetencecallous.com/ssupau51vt?key=1f468110f178b2281b03e43da5bc0010'; // Placeholder
+      const newWindow = window.open(popunderUrl, '_blank'); // Use '_blank' for a new tab/window
+      if (newWindow) {
+        newWindow.blur();
+        window.focus();
+      }
+      sessionStorage.setItem('popunderFired', 'true');
+      window.removeEventListener('click', triggerPopunder);
+    });
+  }
+</script>
 
     function openModal(title, description, image) {
       document.getElementById('modal-title').innerText = title || 'Unknown Title';
