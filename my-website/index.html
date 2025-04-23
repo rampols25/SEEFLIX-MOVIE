@@ -118,7 +118,7 @@
         </div>
     </aside>
 
-     <!-- Navigation Bar -->
+    <!-- Navigation Bar -->
     <nav class="bg-gray-800 p-4 sticky top-0 z-10">
         <div class="container mx-auto flex justify-between items-center">
             <img src="" alt="SEEFLIX-MOVIE" class="h-12" aria-label="SEEFLIX-MOVIE Logo" />
@@ -127,7 +127,7 @@
                 <a href="#" class="text-white hover:text-red-600">Disclaimer</a>
                 <a href="#" class="text-white hover:text-red-600">About Us</a>
                 <div class="relative">
-                    <input type="text" id="search-bar" class="search-bar bg-gray-700 text-white p-2 rounded-full pl-10 focus:outline-none" placeholder="Search movies..." aria-label="Search movies" oninput="searchMovies()" />
+                    <input type="text" id="search-bar" class="search-bar bg-gray-700 text-white p-2 rounded-full pl-10 focus:outline-none" placeholder="Search movies..." aria-label="Search movies" onfocus="openSearchModal()" />
                     <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                 </div>
             </div>
@@ -136,7 +136,6 @@
             </button>
         </div>
     </nav>
-
 
     <!-- Hero Section -->
     <section class="relative h-96 overflow-hidden" id="banner" onclick="openModal('Featured Movie Title', 'This is a brief description of the movie.', 'path/to/featured-movie-poster.jpg')">
@@ -153,65 +152,31 @@
         </div>
     </section>
 
-  <!-- Movies Grid -->
-<section class="container mx-auto py-10">
-    <h2 class="text-3xl font-bold mb-6">Trending Movies</h2>
-    <input type="text" id="search-bar" placeholder="Search Movies..." class="mb-6 p-2 rounded border">
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="movies-list">
-        <div class="movie-card">
-            <img src="movie1.jpg" alt="Movie 1 Poster" class="w-full h-64 object-cover rounded-lg">
-            <div class="movie-overlay">
-                <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 1', 'Movie description goes here.', 'movie1.jpg')">View Details</button>
-            </div>
-        </div>
-        <div class="movie-card">
-            <img src="movie2.jpg" alt="Movie 2 Poster" class="w-full h-64 object-cover rounded-lg">
-            <div class="movie-overlay">
-                <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 2', 'Movie description goes here.', 'movie2.jpg')">View Details</button>
-            </div>
-        </div>
-        <div class="movie-card">
-            <img src="movie3.jpg" alt="Movie 3 Poster" class="w-full h-64 object-cover rounded-lg">
-            <div class="movie-overlay">
-                <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 3', 'Movie description goes here.', 'movie3.jpg')">View Details</button>
-            </div>
-        </div>
-        <!-- Add more movie cards as needed -->
-    </div>
-</section>
-
-<script>
-    // Function to display movies
-    function displayMovies(moviesToDisplay) {
-        const moviesList = document.getElementById('movies-list');
-        moviesList.innerHTML = ''; // Clear existing content
-        moviesToDisplay.forEach(movie => {
-            const movieCard = document.createElement('div');
-            movieCard.className = 'movie-card bg-gray-800 rounded-lg overflow-hidden';
-            movieCard.innerHTML = `
-                <img src="${movie.poster}" alt="${movie.title} Poster" class="w-full h-64 object-cover rounded-lg">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold text-white">${movie.title}</h3>
-                    <p class="text-gray-400">${movie.description}</p>
+    <!-- Movies Grid -->
+    <section class="container mx-auto py-10">
+        <h2 class="text-3xl font-bold mb-6">Trending Movies</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="movies-list">
+            <div class="movie-card">
+                <img src="movie1.jpg" alt="Movie 1 Poster" class="w-full h-64 object-cover rounded-lg">
+                <div class="movie-overlay">
+                    <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 1', 'Movie description goes here.', 'movie1.jpg')">View Details</button>
                 </div>
-            `;
-            moviesList.appendChild(movieCard);
-        });
-    }
-
-    // Function to search movies
-    function searchMovies() {
-        const searchInput = document.getElementById('search-bar').value.toLowerCase();
-        const filteredMovies = movies.filter(movie => movie.title.toLowerCase().includes(searchInput));
-        displayMovies(filteredMovies);
-    }
-
-    // Event listener for search input
-    document.getElementById('search-bar').addEventListener('input', searchMovies);
-
-    // Display all movies on initial load
-    displayMovies(movies);
-</script>
+            </div>
+            <div class="movie-card">
+                <img src="movie2.jpg" alt="Movie 2 Poster" class="w-full h-64 object-cover rounded-lg">
+                <div class="movie-overlay">
+                    <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 2', 'Movie description goes here.', 'movie2.jpg')">View Details</button>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="movie3.jpg" alt="Movie 3 Poster" class="w-full h-64 object-cover rounded-lg">
+                <div class="movie-overlay">
+                    <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 3', 'Movie description goes here.', 'movie3.jpg')">View Details</button>
+                </div>
+            </div>
+            <!-- Add more movie cards as needed -->
+        </div>
+    </section>
 
     <!-- Ads Section -->
     <section class="container mx-auto py-10">
