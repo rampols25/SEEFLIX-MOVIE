@@ -111,6 +111,486 @@
     <!-- Social Ad Bar -->
     <aside class="social-ad-bar" aria-label="Social advertisements">
         <div class="ad-content">
+            <script type='text/javascript' src='//your-affiliate-link.js'></script>
+            <div class="ad-fallback" style="display: none;">
+                Follow us on social media!
+            </div>
+        </div>
+    </aside>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-800 p-4 sticky top-0 z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <img src="" alt="SEEFLIX-MOVIE" class="h-12" aria-label="SEEFLIX-MOVIE Logo" />
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="index.html" class="text-white hover:text-red-600">Home</a>
+                <a href="#" class="text-white hover:text-red-600">Disclaimer</a>
+                <a href="#" class="text-white hover:text-red-600">About Us</a>
+                <div class="relative">
+                    <input type="text" id="search-bar" class="search-bar bg-gray-700 text-white p-2 rounded-full pl-10 focus:outline-none" placeholder="Search movies..." aria-label="Search movies" onfocus="openSearchModal()" />
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
+            <button class="md:hidden text-2xl text-white" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-96 overflow-hidden" id="banner" onclick="openModal('Featured Movie Title', 'This is a brief description of the movie.', 'path/to/featured-movie-poster.jpg')">
+        <video class="hero-video" autoplay loop muted playsinline poster="my-website/my-website/image.jpg">
+            <source src="YOUR_MOVIE_SOURCE_URL" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="container mx-auto h-full flex items-center justify-center text-center relative z-10">
+            <div>
+                <h1 id="banner-title" class="text-4xl md:text-5xl font-bold mb-4 text-shadow">Featured Movie Title</h1>
+                <button class="play-pause-btn" onclick="toggleHeroVideo(event)">Pause</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Movies Grid -->
+    <section class="container mx-auto py-10">
+        <h2 class="text-3xl font-bold mb-6">Trending Movies</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="movies-list">
+            <div class="movie-card">
+                <img src="movie1.jpg" alt="Movie 1 Poster" class="w-full h-64 object-cover rounded-lg">
+                <div class="movie-overlay">
+                    <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 1', 'Movie description goes here.', 'movie1.jpg')">View Details</button>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="movie2.jpg" alt="Movie 2 Poster" class="w-full h-64 object-cover rounded-lg">
+                <div class="movie-overlay">
+                    <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 2', 'Movie description goes here.', 'movie2.jpg')">View Details</button>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="movie3.jpg" alt="Movie 3 Poster" class="w-full h-64 object-cover rounded-lg">
+                <div class="movie-overlay">
+                    <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 3', 'Movie description goes here.', 'movie3.jpg')">View Details</button>
+                </div>
+            </div>
+            <!-- Add more movie cards as needed -->
+        </div>
+    </section>
+
+    <!-- Ads Section -->
+    <section class="container mx-auto py-10">
+        <h2 class="text-3xl font-bold mb-6">Sponsored</h2>
+        <div class="flex flex-wrap justify-center gap-4">
+            <div class="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition duration-300">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key': 'YOUR_AD_KEY',
+                        'format': 'iframe',
+                        'height': 250,
+                        'width': 300,
+                        'params': {}
+                    };
+                </script>
+                <script type="text/javascript" src="//your-ad-source/invoke.js"></script>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content bg-gray-900 rounded-lg shadow-lg p-6">
+            <span class="close text-white cursor-pointer text-2xl absolute top-4 right-4" onclick="closeModal()">×</span>
+            <div class="flex">
+                <img id="modal-image" src="" alt="Movie Poster" class="w-48 h-auto rounded-lg mr-4">
+                <div class="flex-1">
+                    <h2 id="modal-title" class="text-3xl font-bold text-white mb-2">Movie Title</h2>
+                    <div class="stars" id="modal-rating">★★★★☆</div>
+                    <p id="modal-description" class="text-gray-300 mt-2">Movie description goes here.</p>
+                    <div class="mt-4">
+                        <button class="watch-now bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="watchNow()">Watch Now</button>
+                        <button class="add-to-favorites bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700" onclick="addToFavorites()">Add to Favorites</button>
+                        <button class="share-movie bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onclick="shareMovie()">Share</button>
+                    </div>
+                    <div class="server-selector mt-4">
+                        <label for="server" class="mr-2 text-gray-400">Change Server:</label>
+                        <select id="server" onchange="changeServer()" class="bg-gray-700 text-white p-2 rounded">
+                            <option value="vidsrc.cc">Vidsrc.cc</option>
+                            <option value="vidsrc.me">Vidsrc.me</option>
+                            <option value="player.videasy.net">Player.Videasy.net</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <iframe id="modal-video" width="100%" height="400" frameborder="0" allowfullscreen class="mt-4 rounded-lg"></iframe>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-6">
+        <div class="container mx-auto text-center">
+            <p>© 2025 SEEFLIX-MOVIE. All rights reserved.</p>
+            <div class="mt-4 space-x-4">
+                <a href="#" class="text-white hover:text-red-600">Disclaimer</a>
+                <a href="#" class="text-white hover:text-red-600">About Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Popunder Ad Script -->
+    <script type='text/javascript' <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SEEFLIX-MOVIE</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script defer src="js/home.js"></script>
+    <style>
+        /* Custom styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #141414;
+            color: white;
+        }
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Dark background */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            max-width: 800px;
+            width: 90%;
+            background-color: #212121;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .close {
+            color: white;
+            cursor: pointer;
+            font-size: 24px;
+            position: absolute;
+            top: 16px;
+            right: 20px;
+        }
+        .movie-card {
+            position: relative;
+            transition: transform 0.3s;
+        }
+        .movie-card:hover {
+            transform: scale(1.05);
+        }
+        .movie-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .movie-card:hover .movie-overlay {
+            opacity: 1;
+        }
+        .button-container button:hover {
+            opacity: 0.9;
+        }
+        /* Social ad bar styles */
+        .social-ad-bar {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            background: #212121;
+            padding: 10px;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            max-width: 300px;
+        }
+        .social-ad-bar .ad-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .social-ad-bar .ad-fallback {
+            color: #ff0000;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        /* Hide social ad bar on small screens */
+        @media (max-width: 640px) {
+            .social-ad-bar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900">
+    <!-- Social Ad Bar -->
+    <aside class="social-ad-bar" aria-label="Social advertisements">
+        <div class="ad-content">
+            <script type='text/javascript' src='//your-affiliate-link.js'></script>
+            <div class="ad-fallback" style="display: none;">
+                Follow us on social media!
+            </div>
+        </div>
+    </aside>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-800 p-4 sticky top-0 z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <img src="" alt="SEEFLIX-MOVIE" class="h-12" aria-label="SEEFLIX-MOVIE Logo" />
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="index.html" class="text-white hover:text-red-600">Home</a>
+                <a href="#" class="text-white hover:text-red-600">Disclaimer</a>
+                <a href="#" class="text-white hover:text-red-600">About Us</a>
+                <div class="relative">
+                    <input type="text" id="search-bar" class="search-bar bg-gray-700 text-white p-2 rounded-full pl-10 focus:outline-none" placeholder="Search movies..." aria-label="Search movies" onfocus="openSearchModal()" />
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
+            <button class="md:hidden text-2xl text-white" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-96 overflow-hidden" id="banner" onclick="openModal('Featured Movie Title', 'This is a brief description of the movie.', 'path/to/featured-movie-poster.jpg')">
+        <video class="hero-video" autoplay loop muted playsinline poster="my-website/my-website/image.jpg">
+            <source src="YOUR_MOVIE_SOURCE_URL" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="container mx-auto h-full flex items-center justify-center text-center relative z-10">
+            <div>
+                <h1 id="banner-title" class="text-4xl md:text-5xl font-bold mb-4 text-shadow">Featured Movie Title</h1>
+                <button class="play-pause-btn" onclick="toggleHeroVideo(event)">Pause</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Movies Grid -->
+    <section class="container mx-auto py-10">
+        <h2 class="text-3xl font-bold mb-6">Trending Movies</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="movies-list">
+            <div class="movie-card">
+                <img src="movie1.jpg" alt="Movie 1 Poster" class="w-full h-64 object-cover rounded-lg">
+                <div class="movie-overlay">
+                    <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 1', 'Movie description goes here.', 'movie1.jpg')">View Details</button>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="movie2.jpg" alt="Movie 2 Poster" class="w-full h-64 object-cover rounded-lg">
+                <div class="movie-overlay">
+                    <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 2', 'Movie description goes here.', 'movie2.jpg')">View Details</button>
+                </div>
+            </div>
+            <div class="movie-card">
+                <img src="movie3.jpg" alt="Movie 3 Poster" class="w-full h-64 object-cover rounded-lg">
+                <div class="movie-overlay">
+                    <button class="bg-red-600 text-white px-4 py-2 rounded" onclick="openModal('Movie Title 3', 'Movie description goes here.', 'movie3.jpg')">View Details</button>
+                </div>
+            </div>
+            <!-- Add more movie cards as needed -->
+        </div>
+    </section>
+
+    <!-- Ads Section -->
+    <section class="container mx-auto py-10">
+        <h2 class="text-3xl font-bold mb-6">Sponsored</h2>
+        <div class="flex flex-wrap justify-center gap-4">
+            <div class="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition duration-300">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key': 'YOUR_AD_KEY',
+                        'format': 'iframe',
+                        'height': 250,
+                        'width': 300,
+                        'params': {}
+                    };
+                </script>
+                <script type="text/javascript" src="//your-ad-source/invoke.js"></script>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content bg-gray-900 rounded-lg shadow-lg p-6">
+            <span class="close text-white cursor-pointer text-2xl absolute top-4 right-4" onclick="closeModal()">×</span>
+            <div class="flex">
+                <img id="modal-image" src="" alt="Movie Poster" class="w-48 h-auto rounded-lg mr-4">
+                <div class="flex-1">
+                    <h2 id="modal-title" class="text-3xl font-bold text-white mb-2">Movie Title</h2>
+                    <div class="stars" id="modal-rating">★★★★☆</div>
+                    <p id="modal-description" class="text-gray-300 mt-2">Movie description goes here.</p>
+                    <div class="mt-4">
+                        <button class="watch-now bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onclick="watchNow()">Watch Now</button>
+                        <button class="add-to-favorites bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700" onclick="addToFavorites()">Add to Favorites</button>
+                        <button class="share-movie bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onclick="shareMovie()">Share</button>
+                    </div>
+                    <div class="server-selector mt-4">
+                        <label for="server" class="mr-2 text-gray-400">Change Server:</label>
+                        <select id="server" onchange="changeServer()" class="bg-gray-700 text-white p-2 rounded">
+                            <option value="vidsrc.cc">Vidsrc.cc</option>
+                            <option value="vidsrc.me">Vidsrc.me</option>
+                            <option value="player.videasy.net">Player.Videasy.net</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <iframe id="modal-video" width="100%" height="400" frameborder="0" allowfullscreen class="mt-4 rounded-lg"></iframe>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-6">
+        <div class="container mx-auto text-center">
+            <p>© 2025 SEEFLIX-MOVIE. All rights reserved.</p>
+            <div class="mt-4 space-x-4">
+                <a href="#" class="text-white hover:text-red-600">Disclaimer</a>
+                <a href="#" class="text-white hover:text-red-600">About Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Popunder Ad Script -->
+    <script type='text/javascript' <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SEEFLIX-MOVIE</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script defer src="js/home.js"></script>
+    <style>
+        /* Custom styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #141414;
+            color: white;
+        }
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Dark background */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            max-width: 800px;
+            width: 90%;
+            background-color: #212121;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .close {
+            color: white;
+            cursor: pointer;
+            font-size: 24px;
+            position: absolute;
+            top: 16px;
+            right: 20px;
+        }
+        .movie-card {
+            position: relative;
+            transition: transform 0.3s;
+        }
+        .movie-card:hover {
+            transform: scale(1.05);
+        }
+        .movie-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .movie-card:hover .movie-overlay {
+            opacity: 1;
+        }
+        .button-container button:hover {
+            opacity: 0.9;
+        }
+        /* Social ad bar styles */
+        .social-ad-bar {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            background: #212121;
+            padding: 10px;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            max-width: 300px;
+        }
+        .social-ad-bar .ad-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .social-ad-bar .ad-fallback {
+            color: #ff0000;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        /* Hide social ad bar on small screens */
+        @media (max-width: 640px) {
+            .social-ad-bar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900">
+    <!-- Social Ad Bar -->
+    <aside class="social-ad-bar" aria-label="Social advertisements">
+        <div class="ad-content">
             <script type='text/javascript' src='//discusscompetencecallous.com/cf/9e/91/cf9e91ccd70092a71a8b302e2c304629.js'></script>
             <div class="ad-fallback" style="display: none;">
                 Follow us on social media!
@@ -244,7 +724,71 @@
         let hasPopunderFired = sessionStorage.getItem('popunderFired');
         if (!hasPopunderFired) {
             window.addEventListener('click', function triggerPopunder() {
-                const popunderUrl = https://discusscompetencecallous.com/ssupau51vt?key=1f468110f178b2281b03e43da5bc0010; // Replace with your affiliate link
+                const popunderUrl = 'https://discusscompetencecallous.com/ssupau51vt?key=1f468110f178b2281b03e43da5bc0010; // Replace with your affiliate link
+                const newWindow = window.open(popunderUrl, '_blank'); // Use '_blank' for a new tab/window
+                if (newWindow) {
+                    newWindow.blur();
+                    window.focus();
+                }
+                sessionStorage.setItem('popunderFired', 'true');
+                window.removeEventListener('click', triggerPopunder);
+            });
+        }
+    </script>
+
+    <script>
+        function openModal(title, description, image) {
+            document.getElementById('modal-title').innerText = title || 'Unknown Title';
+            document.getElementById('modal-description').innerText = description || 'No description available.';
+            document.getElementById('modal-image').src = image || 'https://via.placeholder.com/150';
+            document.getElementById('modal-video').src = getVideoSource(); // Adjust as needed
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>'></script>
+    <script>
+        // Popunder ad logic (fires once per session to avoid annoyance)
+        let hasPopunderFired = sessionStorage.getItem('popunderFired');
+        if (!hasPopunderFired) {
+            window.addEventListener('click', function triggerPopunder() {
+                const popunderUrl = 'https://your-affiliate-popunder-link'; // Replace with your affiliate link
+                const newWindow = window.open(popunderUrl, '_blank'); // Use '_blank' for a new tab/window
+                if (newWindow) {
+                    newWindow.blur();
+                    window.focus();
+                }
+                sessionStorage.setItem('popunderFired', 'true');
+                window.removeEventListener('click', triggerPopunder);
+            });
+        }
+    </script>
+
+    <script>
+        function openModal(title, description, image) {
+            document.getElementById('modal-title').innerText = title || 'Unknown Title';
+            document.getElementById('modal-description').innerText = description || 'No description available.';
+            document.getElementById('modal-image').src = image || 'https://via.placeholder.com/150';
+            document.getElementById('modal-video').src = getVideoSource(); // Adjust as needed
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>'></script>
+    <script>
+        // Popunder ad logic (fires once per session to avoid annoyance)
+        let hasPopunderFired = sessionStorage.getItem('popunderFired');
+        if (!hasPopunderFired) {
+            window.addEventListener('click', function triggerPopunder() {
+                const popunderUrl = 'https://your-affiliate-popunder-link'; // Replace with your affiliate link
                 const newWindow = window.open(popunderUrl, '_blank'); // Use '_blank' for a new tab/window
                 if (newWindow) {
                     newWindow.blur();
