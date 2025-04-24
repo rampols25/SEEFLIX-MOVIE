@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Google Ads Script -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7977700940936581" crossorigin="anonymous"></script>
-    <script defer src="js/home.js"></script>
     <style>
         body {
             margin: 0;
@@ -121,7 +120,7 @@
     <nav class="bg-gray-900 p-4 sticky top-0 z-20 shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center">
-                <img src="" alt="SEEFLIX Logo" class="h-10" aria-label="SEEFLIX Logo" />
+                <img src="https://via.placeholder.com/40?text=Logo" alt="SEEFLIX Logo" class="h-10" aria-label="SEEFLIX Logo" />
                 <span class="ml-3 text-2xl font-bold text-red-600">SEEFLIX</span>
             </div>
             <div class="hidden md:flex space-x-8 items-center">
@@ -152,23 +151,23 @@
     <!-- Hero Section with Carousel -->
     <section class="relative h-[500px] overflow-hidden">
         <div id="carousel" class="relative w-full h-full">
-            <div class="carousel-item absolute w-full h-full active" data-title="Featured Movie Title 1" data-description="This is a brief description of the movie." data-image="path/to/featured-movie-poster.jpg">
-                <video class="w-full h-full object-cover" autoplay loop muted playsinline poster="my-website/my-website/image.jpg">
-                    <source src="YOUR_MOVIE_SOURCE_URL" type="video/mp4">
+            <div class="carousel-item absolute w-full h-full active" data-title="Featured Movie Title" data-description="This is a brief description of the movie." data-image="https://via.placeholder.com/300x450?text=Featured+Movie">
+                <video class="w-full h-full object-cover" autoplay loop muted playsinline poster="https://via.placeholder.com/1920x1080?text=Poster+1">
+                    <source src="https://vidsrc.cc/v2/embed/movie/featured-movie-title" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                 <div class="container mx-auto h-full flex items-end pb-10 relative z-10">
                     <div>
-                        <h1 class="text-4xl md:text-5xl font-bold mb-4 text-shadow">Featured Movie Title 1</h1>
+                        <h1 class="text-4xl md:text-5xl font-bold mb-4 text-shadow">Featured Movie Title</h1>
                         <p class="text-gray-300 mb-4 max-w-md">This is a brief description of the movie.</p>
-                        <button class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700" onclick="openModal('Featured Movie Title 1', 'This is a brief description of the movie.', 'path/to/featured-movie-poster.jpg')">Watch Now</button>
+                        <button class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700" onclick="openModal('Featured Movie Title', 'This is a brief description of the movie.', 'https://via.placeholder.com/300x450?text=Featured+Movie')">Watch Now</button>
                     </div>
                 </div>
             </div>
-            <div class="carousel-item absolute w-full h-full" data-title="Featured Movie Title 2" data-description="Another exciting movie to watch!" data-image="path/to/featured-movie-poster2.jpg">
-                <video class="w-full h-full object-cover" autoplay loop muted playsinline poster="my-website/my-website/image2.jpg">
-                    <source src="YOUR_MOVIE_SOURCE_URL" type="video/mp4">
+            <div class="carousel-item absolute w-full h-full" data-title="Featured Movie Title 2" data-description="Another exciting movie to watch!" data-image="https://via.placeholder.com/300x450?text=Movie+2">
+                <video class="w-full h-full object-cover" autoplay loop muted playsinline poster="https://via.placeholder.com/1920x1080?text=Poster+2">
+                    <source src="https://vidsrc.cc/v2/embed/movie/featured-movie-title-2" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
@@ -176,13 +175,13 @@
                     <div>
                         <h1 class="text-4xl md:text-5xl font-bold mb-4 text-shadow">Featured Movie Title 2</h1>
                         <p class="text-gray-300 mb-4 max-w-md">Another exciting movie to watch!</p>
-                        <button class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700" onclick="openModal('Featured Movie Title 2', 'Another exciting movie to watch!', 'path/to/featured-movie-poster2.jpg')">Watch Now</button>
+                        <button class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700" onclick="openModal('Featured Movie Title 2', 'Another exciting movie to watch!', 'https://via.placeholder.com/300x450?text=Movie+2')">Watch Now</button>
                     </div>
                 </div>
             </div>
         </div>
-        <button class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800/50 p-2 rounded-full z-10" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
-        <button class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800/50 p-2 rounded-full z-10" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+        <button class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800/50 p-2 rounded-full z-10" onclick="prevSlide()" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+        <button class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800/50 p-2 rounded-full z-10" onclick="nextSlide()" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
     </section>
 
     <!-- Movies Grid -->
@@ -190,27 +189,26 @@
         <h2 class="text-3xl font-bold mb-8">Trending Movies</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6" id="movies-list">
             <div class="movie-card" data-title="Movie Title 1">
-                <img src="movie1.jpg" alt="Movie 1 Poster" class="w-full h-80 object-cover rounded-lg">
+                <img src="https://via.placeholder.com/300x450?text=Movie+1" alt="Movie 1 Poster" class="w-full h-80 object-cover rounded-lg">
                 <div class="movie-overlay">
-                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700" onclick="openModal('Movie Title 1', 'Movie description goes here.', 'movie1.jpg')">View Details</button>
+                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700" onclick="openModal('Movie Title 1', 'Movie description goes here.', 'https://via.placeholder.com/300x450?text=Movie+1')">View Details</button>
                 </div>
                 <h3 class="mt-2 text-lg font-semibold">Movie Title 1</h3>
             </div>
             <div class="movie-card" data-title="Movie Title 2">
-                <img src="movie2.jpg" alt="Movie 2 Poster" class="w-full h-80 object-cover rounded-lg">
+                <img src="https://via.placeholder.com/300x450?text=Movie+2" alt="Movie 2 Poster" class="w-full h-80 object-cover rounded-lg">
                 <div class="movie-overlay">
-                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700" onclick="openModal('Movie Title 2', 'Movie description goes here.', 'movie2.jpg')">View Details</button>
+                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700" onclick="openModal('Movie Title 2', 'Movie description goes here.', 'https://via.placeholder.com/300x450?text=Movie+2')">View Details</button>
                 </div>
                 <h3 class="mt-2 text-lg font-semibold">Movie Title 2</h3>
             </div>
             <div class="movie-card" data-title="Movie Title 3">
-                <img src="movie3.jpg" alt="Movie 3 Poster" class="w-full h-80 object-cover rounded-lg">
+                <img src="https://via.placeholder.com/300x450?text=Movie+3" alt="Movie 3 Poster" class="w-full h-80 object-cover rounded-lg">
                 <div class="movie-overlay">
-                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700" onclick="openModal('Movie Title 3', 'Movie description goes here.', 'movie3.jpg')">View Details</button>
+                    <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700" onclick="openModal('Movie Title 3', 'Movie description goes here.', 'https://via.placeholder.com/300x450?text=Movie+3')">View Details</button>
                 </div>
                 <h3 class="mt-2 text-lg font-semibold">Movie Title 3</h3>
             </div>
-            <!-- Add more movie cards as needed -->
         </div>
     </section>
 
@@ -236,7 +234,7 @@
     <!-- Modal -->
     <div class="modal" id="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">×</span>
+            <span class="close" onclick="closeModal()" aria-label="Close modal">×</span>
             <div class="flex flex-col md:flex-row gap-6">
                 <img id="modal-image" src="" alt="Movie Poster" class="w-full md:w-64 h-auto rounded-lg">
                 <div class="flex-1">
@@ -296,12 +294,23 @@
             });
         }
 
+        // Video source handler
+        function getVideoSource(title, server = 'vidsrc.cc') {
+            const formattedTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            const serverUrls = {
+                'vidsrc.cc': `https://vidsrc.cc/v2/embed/movie/${formattedTitle}`,
+                'vidsrc.me': `https://vidsrc.me/embed/${formattedTitle}`,
+                'player.videasy.net': `https://player.videasy.net/embed/${formattedTitle}`
+            };
+            return serverUrls[server] || serverUrls['vidsrc.cc'];
+        }
+
         // Modal functions
         function openModal(title, description, image) {
             document.getElementById('modal-title').innerText = title || 'Unknown Title';
             document.getElementById('modal-description').innerText = description || 'No description available.';
             document.getElementById('modal-image').src = image || 'https://via.placeholder.com/150';
-            document.getElementById('modal-video').src = getVideoSource();
+            document.getElementById('modal-video').src = getVideoSource(title);
             document.getElementById('modal').style.display = 'flex';
             document.getElementById('social-share').classList.add('hidden');
         }
@@ -309,6 +318,35 @@
         function closeModal() {
             document.getElementById('modal').style.display = 'none';
             document.getElementById('modal-video').src = '';
+        }
+
+        // Server change handler
+        function changeServer() {
+            const server = document.getElementById('server').value;
+            const title = document.getElementById('modal-title').innerText;
+            document.getElementById('modal-video').src = getVideoSource(title, server);
+        }
+
+        // Watch and favorites handlers
+        function watchNow() {
+            const iframe = document.getElementById('modal-video');
+            if (iframe.src) {
+                iframe.focus();
+            } else {
+                alert('No video source available for this movie.');
+            }
+        }
+
+        function addToFavorites() {
+            const title = document.getElementById('modal-title').innerText;
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            if (!favorites.includes(title)) {
+                favorites.push(title);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                alert(`${title} added to favorites!`);
+            } else {
+                alert(`${title} is already in your favorites.`);
+            }
         }
 
         // Mobile menu toggle
@@ -319,7 +357,7 @@
 
         // Search functionality
         function searchMovies() {
-            const query = document.getElementById('search-bar').value.toLowerCase() || document.getElementById('mobile-search-bar').value.toLowerCase();
+            const query = (document.getElementById('search-bar').value || document.getElementById('mobile-search-bar').value).toLowerCase();
             const movieCards = document.querySelectorAll('.movie-card');
             movieCards.forEach(card => {
                 const title = card.getAttribute('data-title').toLowerCase();
