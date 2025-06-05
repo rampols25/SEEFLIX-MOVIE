@@ -73,11 +73,6 @@
         .carousel-item.active {
             display: block;
         }
-        @media (max-width: 640px) {
-            .social-ad-bar {
-                display: none;
-            }
-        }
     </style>
 </head>
 
@@ -184,6 +179,64 @@
 
         // Load movies on page load
         window.onload = loadMovies;
+
+        // Movie loading and display functions
+        async function loadMovies() {
+            try {
+                const gridResponse = await fetch(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`);
+                const gridData = await gridResponse.json();
+                const moviesList = document.getElementById('movies-list');
+                moviesList.innerHTML = gridData.results.slice(0, 10).map(movie => `
+                    <div class="movie-card" data-title="${movie.title}">
+                        <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=No+Poster'}" alt="${movie.title} Poster" class="w-full h-80 object-cover rounded-lg">
+                        <div class="movie-overlay">
+                            <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700" onclick="openModal('${movie.title}', '${movie.overview.replace(/'/g, "\\'")}', '${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=No+Poster'}', '${movie.id}')">View Details</button>
+                        </div>
+                        <h3 class="mt-2 text-lg font-semibold">${movie.title}</h3>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error fetching movies:', error);
+                document.getElementById('movies-list').innerHTML = '<p class="text-red-500">Failed to load movies. Please try again later.</p>';
+            }
+        }
+
+        function openModal(title, description, image, tmdbId) {
+            document.getElementById('modal-title').innerText = title || 'Unknown Title';
+            document.getElementById('modal-description').innerText = description || 'No description available.';
+            document.getElementById('modal-image').src = image || 'https://via.placeholder.com/150';
+            document.getElementById('modal-video').src = getVideoSource(tmdbId);
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('modal-video').src = '';
+        }
+
+        function getVideoSource(tmdbId, server = 'vidsrc.cc') {
+            const serverUrls = {
+                'vidsrc.cc': `https://vidsrc.cc/v2/embed/movie/${tmdbId}`,
+                'vidsrc.me': `https://vidsrc.me/embed/${tmdbId}`,
+                'player.videasy.net': `https://player.videasy.net/embed/${tmdbId}`
+            };
+            return serverUrls[server] || serverUrls['vidsrc.cc'];
+        }
+
+        function searchMovies() {
+            const query = (document.getElementById('search-bar').value || document.getElementById('mobile-search-bar').value).toLowerCase();
+            const movieCards = document.querySelectorAll('.movie-card');
+            movieCards.forEach(card => {
+                const title = card.getAttribute('data-title').toLowerCase();
+                card.style.display = title.includes(query) ? 'block' : 'none';
+            });
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
     </script>
 </body>
 </html>
