@@ -1,4 +1,423 @@
-<!DOCTYPE html>
+<!DOCTYPE html>Add commentMore actions
+<html lang="en">
+<head>
+<head><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7977700940936581"
+     crossorigin="anonymous"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SEEFLIX - Movies & Streaming</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Ads Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7977700940936581" crossorigin="anonymous"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #0a0a0a;
+            color: white;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            max-width: 900px;
+            width: 95%;
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+            padding: 24px;
+        }
+        .close {
+            color: white;
+            cursor: pointer;
+            font-size: 28px;
+            position: absolute;
+            top: 16px;
+            right: 20px;
+        }
+        .movie-card {
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        .movie-card:hover {
+            transform: scale(1.08);
+        }
+        .movie-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .movie-card:hover .movie-overlay {
+            opacity: 1;
+        }
+        .carousel-item {
+            display: none;
+        }
+        .carousel-item.active {
+            display: block;
+        }
+        .social-ad-bar {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            background: #1a1a1a;
+            padding: 12px;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 2px 0 6px rgba(0, 0, 0, 0.4);
+            z-index: 100;
+            max-width: 320px;
+        }
+        .social-ad-bar .ad-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .social-ad-bar .ad-fallback {
+            color: #ff3333;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+        @media (max-width: 640px) {
+            .social-ad-bar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-black">
+    <!-- Social Ad Bar -->
+    <aside class="social-ad-bar" aria-label="Social advertisements">
+        <div class="ad-content">
+            <script type='text/javascript' src='//discusscompetencecallous.com/cf/9e/91/cf9e91ccd70092a71a8b302e2c304629.js'></script>
+            <div class="ad-fallback" style="display: none;">
+                Follow us on social media!
+            </div>
+        </div>
+    </aside>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-900 p-4 sticky top-0 z-20 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <img src="https://via.placeholder.com/40?text=Logo" alt="SEEFLIX Logo" class="h-10" aria-label="SEEFLIX Logo" />
+                <span class="ml-3 text-2xl font-bold text-red-600">SEEFLIX</span>
+            </div>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="index.html" class="text-gray-200 hover:text-red-500 transition">Home</a>
+                <a href="#" class="text-gray-200 hover:text-red-500 transition">Disclaimer</a>
+                <a href="#" class="text-gray-200 hover:text-red-500 transition">About Us</a>
+                <div class="relative">
+                    <input type="text" id="search-bar" class="bg-gray-800 text-white p-2 pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 w-64" placeholder="Search movies..." aria-label="Search movies" oninput="searchMovies()" />
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+            </div>
+            <button class="md:hidden text-2xl text-white" aria-label="Toggle menu" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-gray-800 p-4">
+            <a href="index.html" class="block text-white hover:text-red-500 py-2">Home</a>
+            <a href="#" class="block text-white hover:text-red-500 py-2">Disclaimer</a>
+            <a href="#" class="block text-white hover:text-red-500 py-2">About Us</a>
+            <div class="relative mt-2">
+                <input type="text" id="mobile-search-bar" class="bg-gray-700 text-white p-2 pl-10 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Search movies..." aria-label="Search movies" oninput="searchMovies()" />
+                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Carousel -->
+    <section class="relative h-[500px] overflow-hidden">
+        <div id="carousel" class="relative w-full h-full">
+            <!-- Carousel items will be populated dynamically -->
+        </div>
+        <button class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800/50 p-2 rounded-full z-10" onclick="prevSlide()" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+        <button class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800/50 p-2 rounded-full z-10" onclick="nextSlide()" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
+    </section>
+
+    <!-- Movies Grid -->
+    <section class="container mx-auto py-12">
+        <h2 class="text-3xl font-bold mb-8">Trending Movies</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6" id="movies-list">
+            <!-- Movie cards will be populated dynamically -->
+        </div>
+    </section>
+
+    <!-- Ads Section -->
+    <section class="container mx-auto py-12">
+        <h2 class="text-3xl font-bold mb-8">Sponsored</h2>
+        <div class="flex flex-wrap justify-center gap-6">
+            <div class="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition duration-300">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key': 'e4d0977a541b259398055ac9a562cade',
+                        'format': 'iframe',
+                        'height': 250,
+                        'width': 300,
+                        'params': {}
+                    };
+                </script>
+                <script type="text/javascript" src='//discusscompetencecallous.com/cf/9e/91/cf9e91ccd70092a71a8b302e2c304629.js'></script>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()" aria-label="Close modal">×</span>
+            <div class="flex flex-col md:flex-row gap-6">
+                <img id="modal-image" src="" alt="Movie Poster" class="w-full md:w-64 h-auto rounded-lg">
+                <div class="flex-1">
+                    <h2 id="modal-title" class="text-3xl font-bold mb-3">Movie Title</h2>
+                    <div class="stars text-yellow-400 mb-3" id="modal-rating">★★★★☆</div>
+                    <p id="modal-description" class="text-gray-300 mb-4">Movie description goes here.</p>
+                    <div class="flex gap-3 mb-4">
+                        <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700" onclick="watchNow()">Watch Now</button>
+                        <button class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700" onclick="addToFavorites()">Add to Favorites</button>
+                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700" onclick="shareMovie()">Share</button>
+                    </div>
+                    <div class="server-selector">
+                        <label for="server" class="mr-2 text-gray-400">Change Server:</label>
+                        <select id="server" onchange="changeServer()" class="bg-gray-700 text-white p-2 rounded-lg">
+                            <option value="vidsrc.cc">Vidsrc.cc</option>
+                            <option value="vidsrc.me">Vidsrc.me</option>
+                            <option value="player.videasy.net">Player.Videasy.net</option>
+                        </select>
+                    </div>
+                    <div class="social-share mt-4 hidden" id="social-share">
+                        <a href="#" class="text-gray-300 hover:text-blue-500 mx-2" onclick="shareTo('twitter')"><i class="fab fa-x-twitter"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-blue-700 mx-2" onclick="shareTo('facebook')"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-green-500 mx-2" onclick="shareTo('whatsapp')"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <iframe id="modal-video" width="100%" height="400" frameborder="0" allowfullscreen class="mt-6 rounded-lg"></iframe>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-8">
+        <div class="container mx-auto text-center">
+            <p class="text-gray-400">© 2025 SEEFLIX. All rights reserved.</p>
+            <div class="mt-4 space-x-6">
+                <a href="#" class="text-gray-400 hover:text-red-500">Disclaimer</a>
+                <a href="#" class="text-gray-400 hover:text-red-500">About Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Popunder Ad Script -->
+    <script type='text/javascript' src='//discusscompetencecallous.com/4b/e3/fe/4be3fe69043bc3b4403f92f73a6a7e70.js'></script>
+    <script>
+        // TMDB API Configuration
+        const API_KEY = '169689830f09449f1d23896257d507db';
+        const BASE_URL = 'https://api.themoviedb.org/3';
+        const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+
+        // Popunder ad logic
+        let hasPopunderFired = sessionStorage.getItem('popunderFired');
+        if (!hasPopunderFired) {
+            window.addEventListener('click', function triggerPopunder() {
+                const popunderUrl = 'https://discusscompetencecallous.com/ssupau51vt?key=1f468110f178b2281b03e43da5bc0010';
+                const newWindow = window.open(popunderUrl, '_blank');
+                if (newWindow) {
+                    newWindow.blur();
+                    window.focus();
+                }
+                sessionStorage.setItem('popunderFired', 'true');
+                window.removeEventListener('click', triggerPopunder);
+            });
+        }
+
+        // Video source handler
+        function getVideoSource(tmdbId, server = 'vidsrc.cc') {
+            // Use TMDB ID for streaming servers, assuming they support it
+            const serverUrls = {
+                'vidsrc.cc': `https://vidsrc.cc/v2/embed/movie/${tmdbId}`,
+                'vidsrc.me': `https://vidsrc.me/embed/${tmdbId}`,
+                'player.videasy.net': `https://player.videasy.net/embed/${tmdbId}`
+            };
+            return serverUrls[server] || serverUrls['vidsrc.cc'];
+        }
+
+        // Modal functions
+        function openModal(title, description, image, tmdbId) {
+            document.getElementById('modal-title').innerText = title || 'Unknown Title';
+            document.getElementById('modal-description').innerText = description || 'No description available.';
+            document.getElementById('modal-image').src = image || 'https://via.placeholder.com/150';
+            document.getElementById('modal-video').src = getVideoSource(tmdbId);
+            document.getElementById('modal').style.display = 'flex';
+            document.getElementById('social-share').classList.add('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('modal-video').src = '';
+        }
+
+        // Server change handler
+        function changeServer() {
+            const server = document.getElementById('server').value;
+            const tmdbId = document.getElementById('modal-video').dataset.tmdbId || '0';
+            document.getElementById('modal-video').src = getVideoSource(tmdbId, server);
+        }
+
+        // Watch and favorites handlers
+        function watchNow() {
+            const iframe = document.getElementById('modal-video');
+            if (iframe.src) {
+                iframe.focus();
+            } else {
+                alert('No video source available for this movie.');
+            }
+        }
+
+        function addToFavorites() {
+            const title = document.getElementById('modal-title').innerText;
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            if (!favorites.includes(title)) {
+                favorites.push(title);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                alert(`${title} added to favorites!`);
+            } else {
+                alert(`${title} is already in your favorites.`);
+            }
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Search functionality
+        function searchMovies() {
+            const query = (document.getElementById('search-bar').value || document.getElementById('mobile-search-bar').value).toLowerCase();
+            const movieCards = document.querySelectorAll('.movie-card');
+            movieCards.forEach(card => {
+                const title = card.getAttribute('data-title').toLowerCase();
+                card.style.display = title.includes(query) ? 'block' : 'none';
+            });
+        }
+
+        // Carousel functionality
+        let currentSlide = 0;
+        let slides = [];
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+        }
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // Fetch and display movies
+        async function loadMovies() {
+            try {
+                // Fetch trending movies for the grid
+                const gridResponse = await fetch(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`);
+                const gridData = await gridResponse.json();
+                const moviesList = document.getElementById('movies-list');
+                moviesList.innerHTML = gridData.results.slice(0, 10).map(movie => `
+                    <div class="movie-card" data-title="${movie.title}">
+                        <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=No+Poster'}" alt="${movie.title} Poster" class="w-full h-80 object-cover rounded-lg">
+                        <div class="movie-overlay">
+                            <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700" onclick="openModal('${movie.title}', '${movie.overview.replace(/'/g, "\\'")}', '${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=No+Poster'}', '${movie.id}')">View Details</button>
+                        </div>
+                        <h3 class="mt-2 text-lg font-semibold">${movie.title}</h3>
+                    </div>
+                `).join('');
+
+                // Fetch popular movies for the carousel
+                const carouselResponse = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}`);
+                const carouselData = await carouselResponse.json();
+                const carousel = document.getElementById('carousel');
+                carousel.innerHTML = carouselData.results.slice(0, 2).map((movie, index) => `
+                    <div class="carousel-item absolute w-full h-full ${index === 0 ? 'active' : ''}" data-title="${movie.title}" data-description="${movie.overview}" data-image="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=No+Poster'}">
+                        <video class="w-full h-full object-cover" autoplay loop muted playsinline poster="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/1920x1080?text=No+Poster'}">
+                            <source src="${getVideoSource(movie.id)}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div class="container mx-auto h-full flex items-end pb-10 relative z-10">
+                            <div>
+                                <h1 class="text-4xl md:text-5xl font-bold mb-4 text-shadow">${movie.title}</h1>
+                                <p class="text-gray-300 mb-4 max-w-md">${movie.overview}</p>
+                                <button class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700" onclick="openModal('${movie.title}', '${movie.overview.replace(/'/g, "\\'")}', '${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=No+Poster'}', '${movie.id}')">Watch Now</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Update slides for carousel
+                slides = document.querySelectorAll('.carousel-item');
+                setInterval(nextSlide, 5000);
+            } catch (error) {
+                console.error('Error fetching movies:', error);
+                document.getElementById('movies-list').innerHTML = '<p class="text-red-500">Failed to load movies. Please try again later.</p>';
+                document.getElementById('carousel').innerHTML = '<p class="text-red-500">Failed to load featured movies.</p>';
+            }
+        }
+
+        // Share functionality
+        function shareMovie() {
+            const shareSection = document.getElementById('social-share');
+            shareSection.classList.toggle('hidden');
+        }
+        function shareTo(platform) {
+            const title = document.getElementById('modal-title').innerText;
+            const url = window.location.href;
+            let shareUrl;
+            switch (platform) {
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?text=Check out ${title} on SEEFLIX!&url=${url}`;
+                    break;
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                    break;
+                case 'whatsapp':
+                    shareUrl = `https://api.whatsapp.com/send?text=Check out ${title} on SEEFLIX! ${url}`;
+                    break;
+            }
+            window.open(shareUrl, '_blank');
+        }
+
+        // Load movies on page load
+        window.onload = loadMovies;
+    </script>
+</body>More actions
+</html><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta name="monetag" content="827748e95186e9de1043a849a5cc565b">
