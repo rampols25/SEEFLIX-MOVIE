@@ -14,17 +14,16 @@
 
   <!-- Header -->
   <header class="p-4 bg-gray-900 sticky top-0 z-50 shadow-md">
-    <div class="flex justify-between items-center">
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
       <h1 class="text-2xl font-bold text-red-600">SEEFLIX</h1>
-      <input id="search-bar" type="text" placeholder="Search movies..."
-             class="px-4 py-2 rounded-lg text-black w-64" onkeypress="checkSearchKey(event)">
+      <div class="flex gap-2">
+        <input id="search-bar" type="text" placeholder="Search movies, shows, anime..."
+               class="px-4 py-2 rounded-lg text-black w-64" onkeypress="checkSearchKey(event)">
+        <button onclick="clearSearch()" class="bg-red-600 px-3 py-2 rounded-lg text-white font-semibold hover:bg-red-700">
+          Clear Search
+        </button>
+      </div>
     </div>
-    <nav class="mt-3 flex gap-4 text-sm sm:text-base font-semibold text-gray-300">
-      <button onclick="switchCategory('trending')" class="hover:text-red-500">Trending</button>
-      <button onclick="switchCategory('popular')" class="hover:text-red-500">Popular</button>
-      <button onclick="switchCategory('upcoming')" class="hover:text-red-500">Upcoming</button>
-      <button onclick="switchCategory('top_rated')" class="hover:text-red-500">Top Rated</button>
-    </nav>
   </header>
 
   <!-- Ad banner -->
@@ -38,10 +37,31 @@
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
-  <!-- Movies Section -->
-  <main class="p-4">
-    <div id="movies-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4"></div>
-    <p id="no-results" class="hidden text-center text-gray-400 mt-6">No movies found.</p>
+  <!-- Sections -->
+  <main class="p-4 space-y-8">
+    <section>
+      <h2 class="text-xl font-bold mb-3">🎬 Movies</h2>
+      <div id="movies-loading" class="flex justify-center py-6 hidden">
+        <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-red-600 border-solid"></div>
+      </div>
+      <div id="movies-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4"></div>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-bold mb-3">📺 TV Shows</h2>
+      <div id="tvshows-loading" class="flex justify-center py-6 hidden">
+        <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-red-600 border-solid"></div>
+      </div>
+      <div id="tvshows-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4"></div>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-bold mb-3">🍿 Anime</h2>
+      <div id="anime-loading" class="flex justify-center py-6 hidden">
+        <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-red-600 border-solid"></div>
+      </div>
+      <div id="anime-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4"></div>
+    </section>
   </main>
 
   <!-- Modal -->
@@ -75,54 +95,75 @@
     const IMG_URL = 'https://image.tmdb.org/t/p/w500';
     let currentItem;
 
-    let currentPage = 1;
-    let currentCategory = 'trending';
+    function showLoading(section) {
+      document.getElementById(section + "-loading").classList.remove("hidden");
+    }
 
-    async function fetchMovies(category, page=1) {
-      let url = "";
-      switch(category) {
-        case "popular": url = `${BASE_URL}/movie/popular?api_key=${API_KEY}&page=${page}`; break;
-        case "upcoming": url = `${BASE_URL}/movie/upcoming?api_key=${API_KEY}&page=${page}`; break;
-        case "top_rated": url = `${BASE_URL}/movie/top_rated?api_key=${API_KEY}&page=${page}`; break;
-        default: url = `${BASE_URL}/trending/movie/week?api_key=${API_KEY}&page=${page}`;
-      }
-      const res = await fetch(url);
+    function hideLoading(section) {
+      document.getElementById(section + "-loading").classList.add("hidden");
+    }
+
+    // Fetch Movies & TV
+    async function fetchTrending(type, section) {
+      showLoading(section);
+      const res = await fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
       const data = await res.json();
+      hideLoading(section);
       return data.results;
     }
 
-    function displayMovies(movies) {
-      const container = document.getElementById("movies-list");
-      container.innerHTML = "";
-      movies.forEach(movie => {
-        const card = document.createElement("div");
-        card.className = "cursor-pointer";
-        card.innerHTML = `
-          <img src="${movie.poster_path ? IMG_URL+movie.poster_path : 'https://via.placeholder.com/300x450?text=No+Poster'}"
-               alt="${movie.title}" class="w-full h-80 object-cover rounded-lg">
-          <h3 class="mt-2 text-sm text-center">${movie.title}</h3>
-        `;
-        card.onclick = () => showDetails(movie);
-        container.appendChild(card);
+    // Fetch Anime (Japanese + Animation genre)
+    async function fetchTrendingAnime() {
+      showLoading("anime");
+      let allResults = [];
+      for (let page = 1; page <= 3; page++) {
+        const res = await fetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&page=${page}`);
+        const data = await res.json();
+        const filtered = data.results.filter(item =>
+          item.original_language === 'ja' && item.genre_ids.includes(16)
+        );
+        allResults = allResults.concat(filtered);
+      }
+      hideLoading("anime");
+      return allResults;
+    }
+
+    // Display list of items
+    function displayList(items, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      if (!items || items.length === 0) {
+        container.innerHTML = '<p class="text-gray-400 col-span-full">No results found</p>';
+        return;
+      }
+      items.forEach(item => {
+        if (!item.poster_path) return;
+        const img = document.createElement('img');
+        img.src = `${IMG_URL}${item.poster_path}`;
+        img.alt = item.title || item.name;
+        img.className = "w-full h-72 object-cover rounded-lg cursor-pointer";
+        img.onclick = () => showDetails(item);
+        container.appendChild(img);
       });
     }
 
+    // Modal details
     function showDetails(item) {
       currentItem = item;
-      document.getElementById("modal-title").textContent = item.title;
-      document.getElementById("modal-description").textContent = item.overview;
-      document.getElementById("modal-image").src = item.poster_path ? IMG_URL+item.poster_path : '';
-      document.getElementById("modal-release").textContent = `Release Date: ${item.release_date || "N/A"}`;
-      document.getElementById("modal-rating").innerHTML = "★".repeat(Math.round(item.vote_average/2));
-      document.getElementById("modal").classList.remove("hidden");
-      document.getElementById("modal").classList.add("flex");
+      document.getElementById('modal-title').textContent = item.title || item.name;
+      document.getElementById('modal-description').textContent = item.overview;
+      document.getElementById('modal-image').src = `${IMG_URL}${item.poster_path}`;
+      document.getElementById('modal-release').textContent = `Release Date: ${item.release_date || item.first_air_date || "N/A"}`;
+      document.getElementById('modal-rating').innerHTML = '★'.repeat(Math.round(item.vote_average / 2));
       changeServer();
+      document.getElementById('modal').classList.remove('hidden');
+      document.getElementById('modal').classList.add('flex');
     }
 
+    // Switch streaming server
     function changeServer() {
-      if (!currentItem) return;
-      const server = document.getElementById("server").value;
-      let type = "movie";
+      const server = document.getElementById('server').value;
+      const type = currentItem.media_type === "tv" ? "tv" : "movie";
       let embedURL = "";
 
       if (server === "vidsrc.cc") {
@@ -133,42 +174,68 @@
         embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
       }
 
-      document.getElementById("modal-video").src = embedURL;
+      document.getElementById('modal-video').src = embedURL;
     }
 
     function closeModal() {
-      document.getElementById("modal").classList.add("hidden");
-      document.getElementById("modal").classList.remove("flex");
-      document.getElementById("modal-video").src = "";
+      document.getElementById('modal').classList.add('hidden');
+      document.getElementById('modal').classList.remove('flex');
+      document.getElementById('modal-video').src = '';
     }
 
-    async function searchMoviesAPI(query) {
-      const res = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
-      const data = await res.json();
-      displayMovies(data.results);
+    // Search across all
+    async function searchAll(query) {
+      showLoading("movies");
+      showLoading("tvshows");
+      showLoading("anime");
+
+      const movieRes = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+      const tvRes = await fetch(`${BASE_URL}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+      const animeRes = await fetch(`${BASE_URL}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+
+      const movieData = await movieRes.json();
+      const tvData = await tvRes.json();
+      const animeData = await animeRes.json();
+
+      hideLoading("movies");
+      hideLoading("tvshows");
+      hideLoading("anime");
+
+      // Anime filter: Japanese + Animation
+      const animeFiltered = animeData.results.filter(item =>
+        item.original_language === 'ja' && item.genre_ids.includes(16)
+      );
+
+      displayList(movieData.results, 'movies-list');
+      displayList(tvData.results, 'tvshows-list');
+      displayList(animeFiltered, 'anime-list');
     }
 
     function checkSearchKey(e) {
-      if (e.key === "Enter") {
-        const query = document.getElementById("search-bar").value.trim();
-        if (query) searchMoviesAPI(query);
-        else loadMovies();
+      if (e.key === 'Enter') {
+        const query = document.getElementById('search-bar').value.trim();
+        if (query) searchAll(query);
+        else init();
       }
     }
 
-    async function loadMovies() {
-      const movies = await fetchMovies(currentCategory, currentPage);
-      displayMovies(movies);
-    }
-
-    function switchCategory(cat) {
-      currentCategory = cat;
-      currentPage = 1;
-      loadMovies();
+    // ✅ Clear Search button
+    function clearSearch() {
+      document.getElementById('search-bar').value = '';
+      init();
     }
 
     // Init
-    loadMovies();
+    async function init() {
+      const movies = await fetchTrending('movie', 'movies');
+      const tvShows = await fetchTrending('tv', 'tvshows');
+      const anime = await fetchTrendingAnime();
+      displayList(movies, 'movies-list');
+      displayList(tvShows, 'tvshows-list');
+      displayList(anime, 'anime-list');
+    }
+
+    init();
   </script>
 </body>
 </html>
