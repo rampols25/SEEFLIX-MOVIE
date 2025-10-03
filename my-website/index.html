@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -215,34 +216,33 @@
       }
 
       document.getElementById('modal').classList.remove('hidden');
+      document.getElementById('modal').classList.add('flex');
     }
 
     function closeModal() {
       document.getElementById('modal').classList.add('hidden');
-      document.getElementById('modal-video').src = "";
+      document.getElementById('modal').classList.remove('flex');
+      document.getElementById('modal-video').src = '';
     }
 
     function switchCategory(category) {
       currentCategory = category;
       currentPage = 1;
       moviesList.innerHTML = '';
-      loadMovies(currentPage, category);
-
-      // Highlight active button
-      document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('text-red-500'));
-      document.getElementById(`btn-${category}`).classList.add('text-red-500');
+      loadMovies(currentPage, currentCategory);
     }
 
     // Infinite Scroll
     window.addEventListener('scroll', () => {
-      if (!isSearching && window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
-        loadMovies(++currentPage, currentCategory);
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200 && !isLoading && !isSearching) {
+        currentPage++;
+        loadMovies(currentPage, currentCategory);
       }
     });
 
-    // Initial load
-    switchCategory('trending');
+    // Init load
+    loadMovies(currentPage, currentCategory);
   </script>
 </body>
 </html>
-
+```
