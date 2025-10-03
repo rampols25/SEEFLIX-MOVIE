@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,17 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SEEFLIX - Premium Movie Streaming</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .skeleton {
-      background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-    }
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-  </style>
 
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7977700940936581"
@@ -28,15 +16,14 @@
   <header class="p-4 bg-gray-900 sticky top-0 z-50 shadow-md">
     <div class="flex justify-between items-center">
       <h1 class="text-2xl font-bold text-red-600">SEEFLIX</h1>
-      <input id="search-bar" type="text" placeholder="Search movies..." 
+      <input id="search-bar" type="text" placeholder="Search movies..."
              class="px-4 py-2 rounded-lg text-black w-64" onkeypress="checkSearchKey(event)">
     </div>
-    <!-- Categories Navigation -->
     <nav class="mt-3 flex gap-4 text-sm sm:text-base font-semibold text-gray-300">
-      <button onclick="switchCategory('trending')" class="hover:text-red-500" id="btn-trending">Trending</button>
-      <button onclick="switchCategory('popular')" class="hover:text-red-500" id="btn-popular">Popular</button>
-      <button onclick="switchCategory('upcoming')" class="hover:text-red-500" id="btn-upcoming">Upcoming</button>
-      <button onclick="switchCategory('top_rated')" class="hover:text-red-500" id="btn-toprated">Top Rated</button>
+      <button onclick="switchCategory('trending')" class="hover:text-red-500">Trending</button>
+      <button onclick="switchCategory('popular')" class="hover:text-red-500">Popular</button>
+      <button onclick="switchCategory('upcoming')" class="hover:text-red-500">Upcoming</button>
+      <button onclick="switchCategory('top_rated')" class="hover:text-red-500">Top Rated</button>
     </nav>
   </header>
 
@@ -57,14 +44,9 @@
     <p id="no-results" class="hidden text-center text-gray-400 mt-6">No movies found.</p>
   </main>
 
-  <!-- Spinner -->
-  <div id="loading-spinner" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50">
-    <div class="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-  </div>
-
   <!-- Modal -->
-  <div id="modal" class="fixed inset-0 bg-black bg-opacity-90 hidden items-center justify-center z-50 p-4">
-    <div class="bg-gray-900 rounded-lg max-w-3xl w-full relative">
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-95 hidden items-center justify-center z-50 p-4">
+    <div class="bg-gray-900 rounded-lg max-w-5xl w-full relative">
       <button onclick="closeModal()" class="absolute top-2 right-2 text-white text-2xl">&times;</button>
       <div class="flex flex-col md:flex-row">
         <img id="modal-image" class="w-full md:w-1/3 rounded-lg object-cover" alt="">
@@ -72,8 +54,17 @@
           <h2 id="modal-title" class="text-2xl font-bold mb-2"></h2>
           <p id="modal-release" class="text-gray-400 text-sm mb-4"></p>
           <p id="modal-description" class="mb-4"></p>
-          <iframe id="modal-video" class="w-full h-64 rounded-lg" frameborder="0" allowfullscreen></iframe>
+          <p id="modal-rating" class="text-yellow-400 mb-2"></p>
+          <label class="block mb-2 text-sm">Choose Server:</label>
+          <select id="server" onchange="changeServer()" class="text-black px-2 py-1 rounded">
+            <option value="vidsrc.cc">vidsrc.cc</option>
+            <option value="vidsrc.me">vidsrc.me</option>
+            <option value="player.videasy.net">videasy</option>
+          </select>
         </div>
+      </div>
+      <div class="p-4">
+        <iframe id="modal-video" class="w-full h-[500px] rounded-lg" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
   </div>
@@ -82,167 +73,103 @@
     const API_KEY = '169689830f09449f1d23896257d507db';
     const BASE_URL = 'https://api.themoviedb.org/3';
     const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+    let currentItem;
 
     let currentPage = 1;
-    let isLoading = false;
     let currentCategory = 'trending';
-    let isSearching = false;
 
-    const spinner = document.getElementById('loading-spinner');
-    const moviesList = document.getElementById('movies-list');
-
-    function showSpinner() { spinner.classList.remove('hidden'); }
-    function hideSpinner() { spinner.classList.add('hidden'); }
-
-    function showSkeleton(count = 12) {
-      for (let i = 0; i < count; i++) {
-        const skeletonCard = document.createElement('div');
-        skeletonCard.className = 'movie-card space-y-2';
-        skeletonCard.innerHTML = `
-          <div class="w-full h-80 rounded-lg skeleton"></div>
-          <div class="h-4 w-3/4 mx-auto rounded skeleton"></div>
-        `;
-        moviesList.appendChild(skeletonCard);
-      }
-    }
-
-    function getCategoryEndpoint(category, page) {
+    async function fetchMovies(category, page=1) {
+      let url = "";
       switch(category) {
-        case 'popular': return `${BASE_URL}/movie/popular?api_key=${API_KEY}&page=${page}`;
-        case 'upcoming': return `${BASE_URL}/movie/upcoming?api_key=${API_KEY}&page=${page}`;
-        case 'top_rated': return `${BASE_URL}/movie/top_rated?api_key=${API_KEY}&page=${page}`;
-        default: return `${BASE_URL}/trending/movie/week?api_key=${API_KEY}&page=${page}`;
+        case "popular": url = `${BASE_URL}/movie/popular?api_key=${API_KEY}&page=${page}`; break;
+        case "upcoming": url = `${BASE_URL}/movie/upcoming?api_key=${API_KEY}&page=${page}`; break;
+        case "top_rated": url = `${BASE_URL}/movie/top_rated?api_key=${API_KEY}&page=${page}`; break;
+        default: url = `${BASE_URL}/trending/movie/week?api_key=${API_KEY}&page=${page}`;
       }
+      const res = await fetch(url);
+      const data = await res.json();
+      return data.results;
     }
 
-    async function loadMovies(page = 1, category = 'trending') {
-      if (isLoading || isSearching) return;
-      isLoading = true;
-      showSpinner();
-      showSkeleton();
-      try {
-        const res = await fetch(getCategoryEndpoint(category, page));
-        const data = await res.json();
-        displayMovies(data.results, true);
-      } catch (err) {
-        console.error("Error loading movies:", err);
-      } finally {
-        hideSpinner();
-        isLoading = false;
-      }
-    }
-
-    async function searchMoviesAPI(query) {
-      moviesList.innerHTML = '';
-      isSearching = true;
-      showSpinner();
-      showSkeleton();
-      try {
-        const res = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
-        const data = await res.json();
-        displayMovies(data.results);
-      } catch (err) {
-        console.error("Search error:", err);
-      } finally {
-        hideSpinner();
-        isSearching = false;
-      }
-    }
-
-    function checkSearchKey(e) {
-      if (e.key === 'Enter') {
-        const query = document.getElementById('search-bar').value.trim();
-        if (query) {
-          searchMoviesAPI(query);
-        } else {
-          moviesList.innerHTML = '';
-          currentPage = 1;
-          loadMovies(currentPage, currentCategory);
-        }
-      }
-    }
-
-    function displayMovies(movies, append = false) {
-      if (!append) moviesList.innerHTML = '';
-
-      if (!movies.length) {
-        document.getElementById('no-results').classList.remove('hidden');
-        return;
-      }
-      document.getElementById('no-results').classList.add('hidden');
-
+    function displayMovies(movies) {
+      const container = document.getElementById("movies-list");
+      container.innerHTML = "";
       movies.forEach(movie => {
-        const card = document.createElement('div');
-        card.className = 'movie-card relative group cursor-pointer';
-        card.setAttribute('tabindex', '0');
-        card.setAttribute('role', 'button');
-        card.setAttribute('aria-label', movie.title);
-
+        const card = document.createElement("div");
+        card.className = "cursor-pointer";
         card.innerHTML = `
-          <img src="${movie.poster_path ? IMG_URL + movie.poster_path : 'https://via.placeholder.com/300x450?text=No+Poster'}" 
-               alt="${movie.title} Poster" 
-               class="w-full h-80 object-cover rounded-lg">
-          <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-            <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Details</button>
-          </div>
-          <h3 class="mt-2 text-sm sm:text-base font-semibold text-center">${movie.title}</h3>
+          <img src="${movie.poster_path ? IMG_URL+movie.poster_path : 'https://via.placeholder.com/300x450?text=No+Poster'}"
+               alt="${movie.title}" class="w-full h-80 object-cover rounded-lg">
+          <h3 class="mt-2 text-sm text-center">${movie.title}</h3>
         `;
-
-        card.querySelector("button").onclick = () => openModal(
-          movie.title, movie.overview, 
-          movie.poster_path ? IMG_URL + movie.poster_path : '', 
-          movie.id, movie.release_date
-        );
-
-        moviesList.appendChild(card);
+        card.onclick = () => showDetails(movie);
+        container.appendChild(card);
       });
     }
 
-    async function openModal(title, description, image, id, release) {
-      document.getElementById('modal-title').innerText = title;
-      document.getElementById('modal-description').innerText = description;
-      document.getElementById('modal-image').src = image;
-      document.getElementById('modal-release').innerText = `Release Date: ${release}`;
+    function showDetails(item) {
+      currentItem = item;
+      document.getElementById("modal-title").textContent = item.title;
+      document.getElementById("modal-description").textContent = item.overview;
+      document.getElementById("modal-image").src = item.poster_path ? IMG_URL+item.poster_path : '';
+      document.getElementById("modal-release").textContent = `Release Date: ${item.release_date || "N/A"}`;
+      document.getElementById("modal-rating").innerHTML = "★".repeat(Math.round(item.vote_average/2));
+      document.getElementById("modal").classList.remove("hidden");
+      document.getElementById("modal").classList.add("flex");
+      changeServer();
+    }
 
-      try {
-        const res = await fetch(`${BASE_URL}/movie/${id}/videos?api_key=${API_KEY}`);
-        const data = await res.json();
-        const trailer = data.results.find(v => v.type === "Trailer" && v.site === "YouTube");
-        document.getElementById('modal-video').src = trailer 
-          ? `https://www.youtube.com/embed/${trailer.key}`
-          : `https://vidsrc.to/embed/movie/${id}`;
-      } catch {
-        document.getElementById('modal-video').src = `https://vidsrc.to/embed/movie/${id}`;
+    function changeServer() {
+      if (!currentItem) return;
+      const server = document.getElementById("server").value;
+      let type = "movie";
+      let embedURL = "";
+
+      if (server === "vidsrc.cc") {
+        embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
+      } else if (server === "vidsrc.me") {
+        embedURL = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
+      } else if (server === "player.videasy.net") {
+        embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
       }
 
-      document.getElementById('modal').classList.remove('hidden');
-      document.getElementById('modal').classList.add('flex');
+      document.getElementById("modal-video").src = embedURL;
     }
 
     function closeModal() {
-      document.getElementById('modal').classList.add('hidden');
-      document.getElementById('modal').classList.remove('flex');
-      document.getElementById('modal-video').src = '';
+      document.getElementById("modal").classList.add("hidden");
+      document.getElementById("modal").classList.remove("flex");
+      document.getElementById("modal-video").src = "";
     }
 
-    function switchCategory(category) {
-      currentCategory = category;
-      currentPage = 1;
-      moviesList.innerHTML = '';
-      loadMovies(currentPage, currentCategory);
+    async function searchMoviesAPI(query) {
+      const res = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+      const data = await res.json();
+      displayMovies(data.results);
     }
 
-    // Infinite Scroll
-    window.addEventListener('scroll', () => {
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200 && !isLoading && !isSearching) {
-        currentPage++;
-        loadMovies(currentPage, currentCategory);
+    function checkSearchKey(e) {
+      if (e.key === "Enter") {
+        const query = document.getElementById("search-bar").value.trim();
+        if (query) searchMoviesAPI(query);
+        else loadMovies();
       }
-    });
+    }
 
-    // Init load
-    loadMovies(currentPage, currentCategory);
+    async function loadMovies() {
+      const movies = await fetchMovies(currentCategory, currentPage);
+      displayMovies(movies);
+    }
+
+    function switchCategory(cat) {
+      currentCategory = cat;
+      currentPage = 1;
+      loadMovies();
+    }
+
+    // Init
+    loadMovies();
   </script>
 </body>
 </html>
-```
+
