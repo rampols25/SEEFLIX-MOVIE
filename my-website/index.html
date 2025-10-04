@@ -3,118 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEEFLIX - Premium Movie Streaming</title>
+  <title>SEEFLIX - Watch Movies & TV Shows</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7977700940936581" crossorigin="anonymous"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7977700940936581"
-     crossorigin="anonymous"></script>
 </head>
-<body class="bg-black text-white font-sans">
+<body class="bg-gray-950 text-white font-sans">
 
   <!-- Header -->
-  <header class="p-4 bg-gray-900 sticky top-0 z-50 shadow-md">
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
-      <h1 class="text-2xl font-bold text-red-600">SEEFLIX</h1>
-      <div class="flex gap-2">
-        <input id="search-bar" type="text" placeholder="Search movies, shows, anime..."
-               class="px-4 py-2 rounded-lg text-black w-64" onkeypress="checkSearchKey(event)">
-        <button onclick="clearSearch()" class="bg-red-600 px-3 py-2 rounded-lg text-white font-semibold hover:bg-red-700">
-          Clear Search
-        </button>
-      </div>
-    </div>
+  <header class="bg-gray-900 p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-red-500">SEEFLIX</h1>
+    <button onclick="openSearchModal()" class="bg-red-600 px-4 py-2 rounded">Search</button>
   </header>
 
-  <!-- Ad banner -->
-  <div class="my-4 flex justify-center">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-7977700940936581"
-         data-ad-slot="1234567890"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
+  <!-- Banner -->
+  <section id="banner" class="h-64 bg-cover bg-center flex items-end p-6 text-white">
+    <h2 id="banner-title" class="text-3xl font-bold drop-shadow-lg"></h2>
+  </section>
 
   <!-- Sections -->
-  <main class="p-4 space-y-8">
-    <section>
-      <h2 class="text-xl font-bold mb-3">🎬 Movies</h2>
-      <div id="movies-loading" class="flex justify-center py-6 hidden">
-        <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-red-600 border-solid"></div>
-      </div>
-      <div id="movies-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4"></div>
-    </section>
+  <section class="p-6">
+    <h3 class="text-xl font-semibold mb-2">Trending Movies</h3>
+    <div id="movies-list" class="flex gap-2 overflow-x-auto"></div>
+  </section>
 
-    <section>
-      <h2 class="text-xl font-bold mb-3">📺 TV Shows</h2>
-      <div id="tvshows-loading" class="flex justify-center py-6 hidden">
-        <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-red-600 border-solid"></div>
-      </div>
-      <div id="tvshows-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4"></div>
-    </section>
+  <section class="p-6">
+    <h3 class="text-xl font-semibold mb-2">Trending TV Shows</h3>
+    <div id="tvshows-list" class="flex gap-2 overflow-x-auto"></div>
+  </section>
 
-    <section>
-      <h2 class="text-xl font-bold mb-3">🍿 Anime</h2>
-      <div id="anime-loading" class="flex justify-center py-6 hidden">
-        <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-red-600 border-solid"></div>
-      </div>
-      <div id="anime-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4"></div>
-    </section>
-  </main>
+  <section class="p-6">
+    <h3 class="text-xl font-semibold mb-2">Trending Anime</h3>
+    <div id="anime-list" class="flex gap-2 overflow-x-auto"></div>
+  </section>
 
   <!-- Modal -->
-  <div id="modal" class="fixed inset-0 bg-black bg-opacity-95 hidden items-center justify-center z-50 p-4">
-    <div class="bg-gray-900 rounded-lg max-w-5xl w-full relative">
-      <button onclick="closeModal()" class="absolute top-2 right-2 text-white text-2xl">&times;</button>
-      <div class="flex flex-col md:flex-row">
-        <img id="modal-image" class="w-full md:w-1/3 rounded-lg object-cover" alt="">
-        <div class="p-4 md:w-2/3">
-          <h2 id="modal-title" class="text-2xl font-bold mb-2"></h2>
-          <p id="modal-release" class="text-gray-400 text-sm mb-4"></p>
-          <p id="modal-description" class="mb-4"></p>
-          <p id="modal-rating" class="text-yellow-400 mb-2"></p>
-          <label class="block mb-2 text-sm">Choose Server:</label>
-          <select id="server" onchange="changeServer()" class="text-black px-2 py-1 rounded">
-            <option value="vidsrc.cc">vidsrc.cc</option>
-            <option value="vidsrc.me">vidsrc.me</option>
-            <option value="player.videasy.net">videasy</option>
-          </select>
-        </div>
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center p-6 z-50">
+    <div class="bg-gray-900 rounded-lg shadow-lg w-11/12 h-5/6 flex overflow-hidden">
+
+      <!-- Left: Video Player -->
+      <div class="w-2/3 bg-black flex items-center justify-center">
+        <iframe id="modal-video" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
       </div>
-      <div class="p-4">
-        <iframe id="modal-video" class="w-full h-[500px] rounded-lg" frameborder="0" allowfullscreen></iframe>
+
+      <!-- Right: Movie Info -->
+      <div class="w-1/3 p-4 flex flex-col text-white overflow-y-auto">
+        <h2 id="modal-title" class="text-2xl font-bold mb-2"></h2>
+        <img id="modal-image" class="w-40 mb-3 rounded" alt="Poster">
+        <p id="modal-description" class="text-sm mb-3"></p>
+        <p id="modal-rating" class="text-yellow-400 mb-2"></p>
+        <p id="modal-release" class="text-gray-400 mb-4"></p>
+
+        <!-- Server Switch -->
+        <label class="mb-1">Choose Server:</label>
+        <select id="server" class="bg-gray-800 p-2 rounded mb-4" onchange="changeServer()">
+          <option value="vidsrc.cc">Vidsrc.cc</option>
+          <option value="vidsrc.me">Vidsrc.me</option>
+          <option value="player.videasy.net">Videasy</option>
+        </select>
+
+        <!-- Suggested Movies -->
+        <h3 class="text-lg font-semibold mt-2 mb-2">Suggested</h3>
+        <div id="suggested" class="grid grid-cols-2 gap-2 overflow-y-auto max-h-48"></div>
       </div>
+
+    </div>
+
+    <!-- Close Button -->
+    <button onclick="closeModal()" class="absolute top-4 right-4 text-white text-3xl">&times;</button>
+  </div>
+
+  <!-- Search Modal -->
+  <div id="search-modal" class="fixed inset-0 bg-black bg-opacity-90 hidden items-center justify-center z-50">
+    <div class="bg-gray-900 p-6 rounded-lg w-11/12 h-5/6 flex flex-col">
+      <input id="search-input" type="text" placeholder="Search movies or shows..." class="p-3 mb-4 bg-gray-800 text-white rounded" oninput="searchTMDB()">
+      <div id="search-results" class="flex gap-2 overflow-x-auto"></div>
+      <button onclick="closeSearchModal()" class="mt-4 bg-red-600 px-4 py-2 rounded">Close</button>
     </div>
   </div>
 
+  <!-- Script -->
   <script>
     const API_KEY = '169689830f09449f1d23896257d507db';
     const BASE_URL = 'https://api.themoviedb.org/3';
     const IMG_URL = 'https://image.tmdb.org/t/p/w500';
     let currentItem;
 
-    function showLoading(section) {
-      document.getElementById(section + "-loading").classList.remove("hidden");
-    }
-
-    function hideLoading(section) {
-      document.getElementById(section + "-loading").classList.add("hidden");
-    }
-
-    // Fetch Movies & TV
-    async function fetchTrending(type, section) {
-      showLoading(section);
+    async function fetchTrending(type) {
       const res = await fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
       const data = await res.json();
-      hideLoading(section);
       return data.results;
     }
 
-    // Fetch Anime (Japanese + Animation genre)
     async function fetchTrendingAnime() {
-      showLoading("anime");
       let allResults = [];
       for (let page = 1; page <= 3; page++) {
         const res = await fetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&page=${page}`);
@@ -124,48 +104,44 @@
         );
         allResults = allResults.concat(filtered);
       }
-      hideLoading("anime");
       return allResults;
     }
 
-    // Display list of items
+    function displayBanner(item) {
+      document.getElementById('banner').style.backgroundImage = `url(${IMG_URL}${item.backdrop_path})`;
+      document.getElementById('banner-title').textContent = item.title || item.name;
+    }
+
     function displayList(items, containerId) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
-      if (!items || items.length === 0) {
-        container.innerHTML = '<p class="text-gray-400 col-span-full">No results found</p>';
-        return;
-      }
       items.forEach(item => {
         if (!item.poster_path) return;
         const img = document.createElement('img');
         img.src = `${IMG_URL}${item.poster_path}`;
         img.alt = item.title || item.name;
-        img.className = "w-full h-72 object-cover rounded-lg cursor-pointer";
+        img.className = "w-32 cursor-pointer rounded hover:scale-105 transition";
         img.onclick = () => showDetails(item);
         container.appendChild(img);
       });
     }
 
-    // Modal details
     function showDetails(item) {
       currentItem = item;
       document.getElementById('modal-title').textContent = item.title || item.name;
       document.getElementById('modal-description').textContent = item.overview;
       document.getElementById('modal-image').src = `${IMG_URL}${item.poster_path}`;
-      document.getElementById('modal-release').textContent = `Release Date: ${item.release_date || item.first_air_date || "N/A"}`;
       document.getElementById('modal-rating').innerHTML = '★'.repeat(Math.round(item.vote_average / 2));
+      document.getElementById('modal-release').innerText = `Release Date: ${item.release_date || item.first_air_date || "N/A"}`;
       changeServer();
-      document.getElementById('modal').classList.remove('hidden');
-      document.getElementById('modal').classList.add('flex');
+      loadSuggested();
+      document.getElementById('modal').style.display = 'flex';
     }
 
-    // Switch streaming server
     function changeServer() {
       const server = document.getElementById('server').value;
-      const type = currentItem.media_type === "tv" ? "tv" : "movie";
+      const type = currentItem.media_type === "movie" ? "movie" : "tv";
       let embedURL = "";
-
       if (server === "vidsrc.cc") {
         embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
       } else if (server === "vidsrc.me") {
@@ -173,63 +149,68 @@
       } else if (server === "player.videasy.net") {
         embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
       }
-
       document.getElementById('modal-video').src = embedURL;
     }
 
     function closeModal() {
-      document.getElementById('modal').classList.add('hidden');
-      document.getElementById('modal').classList.remove('flex');
+      document.getElementById('modal').style.display = 'none';
       document.getElementById('modal-video').src = '';
     }
 
-    // Search across all
-    async function searchAll(query) {
-      showLoading("movies");
-      showLoading("tvshows");
-      showLoading("anime");
-
-      const movieRes = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
-      const tvRes = await fetch(`${BASE_URL}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
-      const animeRes = await fetch(`${BASE_URL}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
-
-      const movieData = await movieRes.json();
-      const tvData = await tvRes.json();
-      const animeData = await animeRes.json();
-
-      hideLoading("movies");
-      hideLoading("tvshows");
-      hideLoading("anime");
-
-      // Anime filter: Japanese + Animation
-      const animeFiltered = animeData.results.filter(item =>
-        item.original_language === 'ja' && item.genre_ids.includes(16)
-      );
-
-      displayList(movieData.results, 'movies-list');
-      displayList(tvData.results, 'tvshows-list');
-      displayList(animeFiltered, 'anime-list');
+    async function loadSuggested() {
+      const movies = await fetchTrending('movie');
+      const container = document.getElementById('suggested');
+      container.innerHTML = '';
+      movies.slice(0, 6).forEach(item => {
+        if (!item.poster_path) return;
+        const img = document.createElement('img');
+        img.src = `${IMG_URL}${item.poster_path}`;
+        img.alt = item.title || item.name;
+        img.className = "cursor-pointer rounded hover:scale-105 transition";
+        img.onclick = () => showDetails(item);
+        container.appendChild(img);
+      });
     }
 
-    function checkSearchKey(e) {
-      if (e.key === 'Enter') {
-        const query = document.getElementById('search-bar').value.trim();
-        if (query) searchAll(query);
-        else init();
+    function openSearchModal() {
+      document.getElementById('search-modal').style.display = 'flex';
+      document.getElementById('search-input').focus();
+    }
+
+    function closeSearchModal() {
+      document.getElementById('search-modal').style.display = 'none';
+      document.getElementById('search-results').innerHTML = '';
+    }
+
+    async function searchTMDB() {
+      const query = document.getElementById('search-input').value;
+      if (!query.trim()) {
+        document.getElementById('search-results').innerHTML = '';
+        return;
       }
+      const res = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${query}`);
+      const data = await res.json();
+      const container = document.getElementById('search-results');
+      container.innerHTML = '';
+      data.results.forEach(item => {
+        if (!item.poster_path) return;
+        const img = document.createElement('img');
+        img.src = `${IMG_URL}${item.poster_path}`;
+        img.alt = item.title || item.name;
+        img.className = "w-32 cursor-pointer rounded hover:scale-105 transition";
+        img.onclick = () => {
+          closeSearchModal();
+          showDetails(item);
+        };
+        container.appendChild(img);
+      });
     }
 
-    // ✅ Clear Search button
-    function clearSearch() {
-      document.getElementById('search-bar').value = '';
-      init();
-    }
-
-    // Init
     async function init() {
-      const movies = await fetchTrending('movie', 'movies');
-      const tvShows = await fetchTrending('tv', 'tvshows');
+      const movies = await fetchTrending('movie');
+      const tvShows = await fetchTrending('tv');
       const anime = await fetchTrendingAnime();
+      displayBanner(movies[Math.floor(Math.random() * movies.length)]);
       displayList(movies, 'movies-list');
       displayList(tvShows, 'tvshows-list');
       displayList(anime, 'anime-list');
