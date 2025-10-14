@@ -1,223 +1,531 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEEFLIX - Watch Movies & TV Shows</title>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7977700940936581" crossorigin="anonymous"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SEEFLIX — Watch Movies & TV Shows</title>
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7977700940936581"
+    crossorigin="anonymous"></script>
+
+  <!-- Your additional ad script -->
+  <script src="https://fpyf8.com/88/tag.min.js" data-zone="178048" async data-cfasync="false"></script>
+
+  <style>
+    /* small tweaks */
+    html,body { height: 100%; }
+    /* keep modal contents from overflowing on small screens */
+    .modal-inner { min-height: 0; }
+    .episode-thumb { width: 76px; height: 44px; object-fit: cover; border-radius: 6px; }
+    .episode-item:hover { background: rgba(255,255,255,0.03); }
+    .suggested-thumb { width: 84px; height: 120px; object-fit: cover; border-radius: 6px; }
+  </style>
 </head>
-<body class="bg-gray-950 text-white font-sans">
+<body class="bg-gray-900 text-white">
 
   <!-- Header -->
-  <header class="bg-gray-900 p-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-red-500">SEEFLIX</h1>
-    <button onclick="openSearchModal()" class="bg-red-600 px-4 py-2 rounded">Search</button>
+  <header class="bg-gray-800/80 backdrop-blur-sm sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="text-2xl font-bold text-red-500">SEEFLIX</div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <input id="search-bar-top" type="text" placeholder="Search (press Enter)" aria-label="Search"
+               class="px-3 py-2 rounded bg-gray-800 text-sm text-white w-56" />
+        <button id="btn-open-search" class="bg-red-600 px-3 py-2 rounded text-sm">Search</button>
+      </div>
+    </div>
   </header>
 
   <!-- Banner -->
-  <section id="banner" class="h-64 bg-cover bg-center flex items-end p-6 text-white">
-    <h2 id="banner-title" class="text-3xl font-bold drop-shadow-lg"></h2>
-  </section>
-
-  <!-- Sections -->
-  <section class="p-6">
-    <h3 class="text-xl font-semibold mb-2">Trending Movies</h3>
-    <div id="movies-list" class="flex gap-2 overflow-x-auto"></div>
-  </section>
-
-  <section class="p-6">
-    <h3 class="text-xl font-semibold mb-2">Trending TV Shows</h3>
-    <div id="tvshows-list" class="flex gap-2 overflow-x-auto"></div>
-  </section>
-
-  <section class="p-6">
-    <h3 class="text-xl font-semibold mb-2">Trending Anime</h3>
-    <div id="anime-list" class="flex gap-2 overflow-x-auto"></div>
-  </section>
-
-  <!-- Modal -->
-  <div id="modal" class="fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center p-6 z-50">
-    <div class="bg-gray-900 rounded-lg shadow-lg w-11/12 h-5/6 flex overflow-hidden">
-
-      <!-- Left: Video Player -->
-      <div class="w-2/3 bg-black flex items-center justify-center">
-        <iframe id="modal-video" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
-      </div>
-
-      <!-- Right: Movie Info -->
-      <div class="w-1/3 p-4 flex flex-col text-white overflow-y-auto">
-        <h2 id="modal-title" class="text-2xl font-bold mb-2"></h2>
-        <img id="modal-image" class="w-40 mb-3 rounded" alt="Poster">
-        <p id="modal-description" class="text-sm mb-3"></p>
-        <p id="modal-rating" class="text-yellow-400 mb-2"></p>
-        <p id="modal-release" class="text-gray-400 mb-4"></p>
-
-        <!-- Server Switch -->
-        <label class="mb-1">Choose Server:</label>
-        <select id="server" class="bg-gray-800 p-2 rounded mb-4" onchange="changeServer()">
-          <option value="vidsrc.cc">Vidsrc.cc</option>
-          <option value="vidsrc.me">Vidsrc.me</option>
-          <option value="player.videasy.net">Videasy</option>
-        </select>
-
-        <!-- Suggested Movies -->
-        <h3 class="text-lg font-semibold mt-2 mb-2">Suggested</h3>
-        <div id="suggested" class="grid grid-cols-2 gap-2 overflow-y-auto max-h-48"></div>
-      </div>
-
+  <section id="banner" class="h-56 bg-cover bg-center flex items-end p-6">
+    <div class="bg-gradient-to-t from-black/70 to-transparent w-full p-4 rounded">
+      <h1 id="banner-title" class="text-3xl font-bold"></h1>
     </div>
+  </section>
 
-    <!-- Close Button -->
-    <button onclick="closeModal()" class="absolute top-4 right-4 text-white text-3xl">&times;</button>
+  <!-- Main lists -->
+  <main class="max-w-7xl mx-auto px-4 py-6 space-y-8">
+    <section>
+      <h2 class="text-xl font-semibold mb-3">Trending Movies</h2>
+      <div id="movies-list" class="flex gap-3 overflow-x-auto pb-2"></div>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold mb-3">Trending TV Shows</h2>
+      <div id="tvshows-list" class="flex gap-3 overflow-x-auto pb-2"></div>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold mb-3">Trending Anime</h2>
+      <div id="anime-list" class="flex gap-3 overflow-x-auto pb-2"></div>
+    </section>
+  </main>
+
+  <!-- Player Modal (left: player, right: info + season/episodes + suggested) -->
+  <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-6">
+    <div class="bg-gray-800 rounded-lg w-[95%] max-w-[1200px] h-[85vh] flex overflow-hidden modal-inner">
+      <!-- Left: Player -->
+      <div class="w-2/3 bg-black flex flex-col">
+        <div class="flex-1">
+          <iframe id="modal-video" class="w-full h-full" frameborder="0" allowfullscreen title="Player"></iframe>
+        </div>
+
+        <!-- episodes row (shows on tv/anime) - horizontally scrollable if many items -->
+        <div id="episodes" class="border-t border-gray-700 p-3 bg-gray-900/60 hidden">
+          <div id="episodes-list" class="flex gap-3 overflow-x-auto"></div>
+        </div>
+      </div>
+
+      <!-- Right: Info + season selector + episodes list (vertical) + suggested -->
+      <div class="w-1/3 p-4 flex flex-col gap-3 overflow-y-auto">
+        <div class="flex items-start gap-3">
+          <img id="modal-image" class="w-28 h-40 object-cover rounded" src="" alt="Poster" />
+          <div class="flex-1">
+            <h3 id="modal-title" class="text-lg font-bold"></h3>
+            <p id="modal-release" class="text-sm text-gray-300 mt-1"></p>
+            <p id="modal-rating" class="text-sm text-yellow-400 mt-1"></p>
+          </div>
+        </div>
+
+        <!-- Season selector (visible for TV shows / anime) -->
+        <div id="season-block" class="space-y-2 hidden">
+          <label class="text-sm text-gray-300">Season</label>
+          <select id="season-select" class="w-full bg-gray-800 text-white p-2 rounded"></select>
+        </div>
+
+        <!-- Episodes vertical list with thumbnails (for detail view) -->
+        <div id="episodes-vertical-block" class="space-y-2 hidden">
+          <label class="text-sm text-gray-300">Episodes</label>
+          <div id="episodes-vertical" class="flex flex-col gap-2 max-h-40 overflow-y-auto"></div>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label class="text-sm text-gray-300">Description</label>
+          <p id="modal-description" class="text-sm text-gray-200 mt-1"></p>
+        </div>
+
+        <!-- Server selector -->
+        <div>
+          <label class="text-sm text-gray-300">Server</label>
+          <select id="server-select" class="w-full bg-gray-800 p-2 rounded">
+            <option value="vidsrc.cc">vidsrc.cc</option>
+            <option value="vidsrc.me">vidsrc.me</option>
+            <option value="player.videasy.net">player.videasy.net</option>
+          </select>
+        </div>
+
+        <!-- Suggested -->
+        <div>
+          <label class="text-sm text-gray-300">Suggested</label>
+          <div id="suggested" class="grid grid-cols-2 gap-2 mt-2 max-h-40 overflow-y-auto"></div>
+        </div>
+
+        <!-- Close -->
+        <div class="mt-auto">
+          <button id="close-modal" class="w-full bg-red-600 hover:bg-red-700 px-3 py-2 rounded">Close</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Search Modal -->
-  <div id="search-modal" class="fixed inset-0 bg-black bg-opacity-90 hidden items-center justify-center z-50">
-    <div class="bg-gray-900 p-6 rounded-lg w-11/12 h-5/6 flex flex-col">
-      <input id="search-input" type="text" placeholder="Search movies or shows..." class="p-3 mb-4 bg-gray-800 text-white rounded" oninput="searchTMDB()">
-      <div id="search-results" class="flex gap-2 overflow-x-auto"></div>
-      <button onclick="closeSearchModal()" class="mt-4 bg-red-600 px-4 py-2 rounded">Close</button>
+  <div id="search-modal" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/85 p-6">
+    <div class="bg-gray-800 rounded-lg w-[95%] max-w-[1000px] h-[80vh] p-4 flex flex-col">
+      <div class="flex gap-3 mb-3">
+        <input id="search-input" class="flex-1 bg-gray-700 p-3 rounded text-white" placeholder="Search movies, tv or anime" />
+        <button id="btn-close-search" class="bg-red-600 px-4 rounded">Close</button>
+      </div>
+      <div id="search-results" class="flex gap-3 overflow-x-auto"></div>
     </div>
   </div>
 
-  <!-- Script -->
   <script>
+    // ---- CONFIG ----
     const API_KEY = '169689830f09449f1d23896257d507db';
     const BASE_URL = 'https://api.themoviedb.org/3';
     const IMG_URL = 'https://image.tmdb.org/t/p/w500';
-    let currentItem;
 
-    async function fetchTrending(type) {
-      const res = await fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
-      const data = await res.json();
-      return data.results;
+    // ---- STATE ----
+    let currentItem = null;           // currently selected movie/tv
+    let currentEpisode = null;        // currently selected episode object
+    let currentSeasonNumber = null;
+
+    // ---- UTIL ----
+    function el(id){ return document.getElementById(id); }
+    function safeImg(path, w = 300){ return path ? IMG_URL + path : `https://via.placeholder.com/${w}x${Math.round(w*1.5)}?text=No+Image`; }
+
+    // ---- FETCH HELPERS ----
+    async function fetchJSON(url){
+      const r = await fetch(url);
+      if (!r.ok) throw new Error('Network error');
+      return await r.json();
     }
 
-    async function fetchTrendingAnime() {
-      let allResults = [];
-      for (let page = 1; page <= 3; page++) {
-        const res = await fetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&page=${page}`);
-        const data = await res.json();
-        const filtered = data.results.filter(item =>
-          item.original_language === 'ja' && item.genre_ids.includes(16)
-        );
-        allResults = allResults.concat(filtered);
+    async function fetchTrending(type){
+      const data = await fetchJSON(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
+      return data.results || [];
+    }
+
+    async function fetchTrendingAnime(){
+      let list = [];
+      for (let p=1; p<=3; p++){
+        const data = await fetchJSON(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&page=${p}`);
+        const filtered = (data.results||[]).filter(i => i.original_language === 'ja' && (i.genre_ids||[]).includes(16));
+        list = list.concat(filtered);
       }
-      return allResults;
+      return list;
     }
 
-    function displayBanner(item) {
-      document.getElementById('banner').style.backgroundImage = `url(${IMG_URL}${item.backdrop_path})`;
-      document.getElementById('banner-title').textContent = item.title || item.name;
+    // ---- RENDER LISTS ----
+    function renderTile(item){
+      const img = document.createElement('img');
+      img.src = safeImg(item.poster_path, 154);
+      img.alt = item.title || item.name || 'Item';
+      img.className = 'w-32 h-48 object-cover rounded cursor-pointer hover:scale-105 transition';
+      img.addEventListener('click', ()=> openDetail(item));
+      return img;
     }
 
-    function displayList(items, containerId) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      items.forEach(item => {
-        if (!item.poster_path) return;
-        const img = document.createElement('img');
-        img.src = `${IMG_URL}${item.poster_path}`;
-        img.alt = item.title || item.name;
-        img.className = "w-32 cursor-pointer rounded hover:scale-105 transition";
-        img.onclick = () => showDetails(item);
-        container.appendChild(img);
+    function displayList(items, containerId){
+      const c = el(containerId);
+      c.innerHTML = '';
+      (items || []).forEach(i => {
+        if (!i || (!i.poster_path && !i.profile_path)) return;
+        c.appendChild(renderTile(i));
       });
     }
 
-    function showDetails(item) {
+    // ---- OPEN DETAIL / MODAL ----
+    async function openDetail(item){
       currentItem = item;
-      document.getElementById('modal-title').textContent = item.title || item.name;
-      document.getElementById('modal-description').textContent = item.overview;
-      document.getElementById('modal-image').src = `${IMG_URL}${item.poster_path}`;
-      document.getElementById('modal-rating').innerHTML = '★'.repeat(Math.round(item.vote_average / 2));
-      document.getElementById('modal-release').innerText = `Release Date: ${item.release_date || item.first_air_date || "N/A"}`;
-      changeServer();
-      loadSuggested();
-      document.getElementById('modal').style.display = 'flex';
-    }
+      currentEpisode = null;
+      currentSeasonNumber = null;
 
-    function changeServer() {
-      const server = document.getElementById('server').value;
-      const type = currentItem.media_type === "movie" ? "movie" : "tv";
-      let embedURL = "";
-      if (server === "vidsrc.cc") {
-        embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
-      } else if (server === "vidsrc.me") {
-        embedURL = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
-      } else if (server === "player.videasy.net") {
-        embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
+      // set info
+      el('modal-title').textContent = item.title || item.name || 'Untitled';
+      el('modal-description').textContent = item.overview || 'No description available';
+      el('modal-image').src = safeImg(item.poster_path || item.backdrop_path, 200);
+      el('modal-release').textContent = item.release_date ? `Release: ${item.release_date}` : (item.first_air_date ? `First air: ${item.first_air_date}` : '');
+      el('modal-rating').textContent = item.vote_average ? `Rating: ${item.vote_average}/10` : '';
+
+      // reset season / episodes UI
+      el('season-block').classList.add('hidden');
+      el('episodes-vertical-block').classList.add('hidden');
+      el('episodes').classList.add('hidden');            // horizontal episodes under player
+
+      // try to auto-play movie / first ep
+      setPlayerForItem(item);
+
+      // if TV show -> load seasons and autoplay S1E1
+      if (item.media_type === 'tv' || item.first_air_date || item.number_of_seasons !== undefined){
+        await loadSeasonsAndEpisodes(item);
+      } else {
+        // for movies: show suggested
+        await loadSuggested(item);
       }
-      document.getElementById('modal-video').src = embedURL;
+
+      // open modal
+      document.body.style.overflow = 'hidden';
+      el('modal').classList.remove('hidden');
+
+      // autoplay Episode 1 if TV (user asked for autoplay)
+      if (item.media_type === 'tv'){
+        // if season list exists, pick first season and auto load first episode (handled by loadSeasonsAndEpisodes)
+      }
     }
 
-    function closeModal() {
-      document.getElementById('modal').style.display = 'none';
-      document.getElementById('modal-video').src = '';
+    function closeModal(){
+      el('modal-video').src = '';
+      el('modal').classList.add('hidden');
+      document.body.style.overflow = '';
     }
 
-    async function loadSuggested() {
-      const movies = await fetchTrending('movie');
-      const container = document.getElementById('suggested');
+    // ---- PLAYER URL BUILDERS ----
+    function buildEmbedUrlForMovie(server, movieId){
+      // server-specific patterns (best-effort)
+      if (server === 'vidsrc.cc') return `https://vidsrc.cc/v2/embed/movie/${movieId}`;
+      if (server === 'vidsrc.me' || server === 'vidsrc.net') return `https://vidsrc.net/embed/movie/?tmdb=${movieId}`;
+      if (server === 'player.videasy.net') return `https://player.videasy.net/movie/${movieId}`;
+      // fallback:
+      return `https://vidsrc.cc/v2/embed/movie/${movieId}`;
+    }
+
+    function buildEmbedUrlForEpisode(server, tvId, seasonNumber, episodeNumber){
+      if (server === 'vidsrc.cc') return `https://vidsrc.cc/v2/embed/tv/${tvId}/${seasonNumber}/${episodeNumber}`;
+      if (server === 'vidsrc.me' || server === 'vidsrc.net') return `https://vidsrc.net/embed/tv/?tmdb=${tvId}&season=${seasonNumber}&episode=${episodeNumber}`;
+      if (server === 'player.videasy.net') return `https://player.videasy.net/tv/${tvId}/${seasonNumber}/${episodeNumber}`;
+      return `https://vidsrc.cc/v2/embed/tv/${tvId}/${seasonNumber}/${episodeNumber}`;
+    }
+
+    function setPlayerForItem(item){
+      // if it's a movie -> build movie embed
+      const server = el('server-select').value || 'vidsrc.cc';
+      if (!item) return;
+      if (item.media_type === 'movie' || item.title){
+        // movie
+        const url = buildEmbedUrlForMovie(server, item.id);
+        el('modal-video').src = url;
+      } else {
+        // not TV or movie (fallback): try treat as movie
+        const url = buildEmbedUrlForMovie(server, item.id);
+        el('modal-video').src = url;
+      }
+    }
+
+    // when server changes
+    el('server-select').addEventListener('change', ()=>{
+      if (!currentItem) return;
+      if (currentEpisode){
+        const url = buildEmbedUrlForEpisode(el('server-select').value, currentItem.id, currentEpisode.season_number, currentEpisode.episode_number);
+        el('modal-video').src = url;
+      } else {
+        // movie or tv without a selected episode
+        setPlayerForItem(currentItem);
+      }
+    });
+
+    // ---- SEASONS / EPISODES ----
+    async function loadSeasonsAndEpisodes(item){
+      // fetch full TV details (includes seasons)
+      try {
+        const tv = await fetchJSON(`${BASE_URL}/tv/${item.id}?api_key=${API_KEY}`);
+        // show season selector and populate
+        const seasons = tv.seasons || [];
+        if (!seasons.length) return;
+
+        el('season-block').classList.remove('hidden');
+        const sel = el('season-select');
+        sel.innerHTML = '';
+        seasons.forEach(s=>{
+          const opt = document.createElement('option');
+          opt.value = s.season_number;
+          opt.textContent = `Season ${s.season_number}${s.name ? ' - ' + s.name : ''}`;
+          sel.appendChild(opt);
+        });
+
+        // choose first non-special season (usually season_number > 0)
+        let firstSeason = seasons.find(s => s.season_number > 0) || seasons[0];
+        if (!firstSeason) firstSeason = seasons[0];
+        currentSeasonNumber = firstSeason.season_number;
+        sel.value = currentSeasonNumber;
+
+        // load that season's episodes
+        await loadEpisodesForSeason(item.id, currentSeasonNumber);
+
+        // wire season change
+        sel.onchange = async () => {
+          currentSeasonNumber = parseInt(sel.value);
+          await loadEpisodesForSeason(item.id, currentSeasonNumber);
+        };
+
+        // show vertical episodes block as well
+        el('episodes-vertical-block').classList.remove('hidden');
+
+        // autoplay S1E1 if present (user requested)
+        // find first episode in the loaded season and play it
+        const firstEp = el('episodes-vertical').querySelector('button[data-ep-index]');
+        if (firstEp){
+          firstEp.click();
+        }
+
+      } catch (err){
+        console.warn('Could not load seasons', err);
+      }
+    }
+
+    async function loadEpisodesForSeason(tvId, seasonNumber){
+      try {
+        const season = await fetchJSON(`${BASE_URL}/tv/${tvId}/season/${seasonNumber}?api_key=${API_KEY}`);
+        const episodes = season.episodes || [];
+
+        // horizontal episode row under player
+        const episodesList = el('episodes-list');
+        episodesList.innerHTML = '';
+
+        // vertical episode list on right
+        const episodesVertical = el('episodes-vertical');
+        episodesVertical.innerHTML = '';
+
+        episodes.forEach(ep => {
+          // horizontal small thumb
+          const container = document.createElement('div');
+          container.className = 'flex flex-col gap-1 items-center episode-item cursor-pointer';
+          const thumb = document.createElement('img');
+          thumb.className = 'episode-thumb';
+          thumb.src = safeImg(ep.still_path, 160);
+          thumb.alt = ep.name || `E${ep.episode_number}`;
+          const label = document.createElement('div');
+          label.className = 'text-xs text-center text-gray-300';
+          label.textContent = `E${ep.episode_number}`;
+          container.appendChild(thumb);
+          container.appendChild(label);
+          container.addEventListener('click', ()=>{
+            playEpisode(tvId, seasonNumber, ep);
+            // highlight active
+            document.querySelectorAll('#episodes-list .episode-item, #episodes-vertical .episode-row').forEach(n => n.classList.remove('bg-gray-700'));
+            container.classList.add('bg-gray-700');
+          });
+          episodesList.appendChild(container);
+
+          // vertical row with thumbnail and title
+          const row = document.createElement('div');
+          row.className = 'flex items-center gap-2 p-2 rounded episode-row cursor-pointer';
+          row.innerHTML = `
+            <img class="w-20 h-12 object-cover rounded" src="${safeImg(ep.still_path,160)}" alt="${(ep.name||'')}" />
+            <div class="flex-1 text-sm">
+              <div class="font-medium">${ep.episode_number}. ${ep.name || 'Untitled'}</div>
+              <div class="text-xs text-gray-300">${ep.air_date || ''}</div>
+            </div>
+          `;
+          row.addEventListener('click', ()=>{
+            playEpisode(tvId, seasonNumber, ep);
+            document.querySelectorAll('#episodes-list .episode-item, #episodes-vertical .episode-row').forEach(n => n.classList.remove('bg-gray-700'));
+            row.classList.add('bg-gray-700');
+          });
+          // store metadata for autoplay reference
+          row.setAttribute('data-ep-index', ep.episode_number);
+          episodesVertical.appendChild(row);
+        });
+
+        // reveal episodes area(s)
+        el('episodes').classList.remove('hidden');
+
+      } catch (err){
+        console.warn('Could not load season episodes', err);
+      }
+    }
+
+    function playEpisode(tvId, seasonNumber, ep){
+      currentEpisode = ep;
+      currentSeasonNumber = seasonNumber;
+      const server = el('server-select').value || 'vidsrc.cc';
+      const url = buildEmbedUrlForEpisode(server, tvId, seasonNumber, ep.episode_number);
+      el('modal-video').src = url;
+      // scroll to top of player for better UX
+      document.querySelector('#modal .w-2/3').scrollIntoView({behavior:'smooth'});
+    }
+
+    // ---- SUGGESTED ----
+    async function loadSuggested(item){
+      // We'll fetch similar movies (if available), otherwise trending movies
+      let suggested = [];
+      try {
+        if (item && item.id && item.media_type === 'movie'){
+          const data = await fetchJSON(`${BASE_URL}/movie/${item.id}/similar?api_key=${API_KEY}`);
+          suggested = data.results || [];
+        }
+        // fallback: trending movies
+        if (!suggested.length){
+          suggested = await fetchTrending('movie');
+        }
+      } catch (err){
+        suggested = await fetchTrending('movie');
+      }
+
+      const container = el('suggested');
       container.innerHTML = '';
-      movies.slice(0, 6).forEach(item => {
-        if (!item.poster_path) return;
+      (suggested.slice(0,6)).forEach(s => {
+        if (!s) return;
+        const div = document.createElement('div');
+        div.className = 'flex flex-col items-center gap-1';
         const img = document.createElement('img');
-        img.src = `${IMG_URL}${item.poster_path}`;
-        img.alt = item.title || item.name;
-        img.className = "cursor-pointer rounded hover:scale-105 transition";
-        img.onclick = () => showDetails(item);
-        container.appendChild(img);
+        img.className = 'suggested-thumb cursor-pointer';
+        img.src = safeImg(s.poster_path,160);
+        img.alt = s.title || s.name;
+        img.addEventListener('click', ()=> openDetail(s));
+        const label = document.createElement('div');
+        label.className = 'text-xs text-center';
+        label.textContent = s.title || s.name;
+        div.appendChild(img);
+        div.appendChild(label);
+        container.appendChild(div);
       });
     }
 
-    function openSearchModal() {
-      document.getElementById('search-modal').style.display = 'flex';
-      document.getElementById('search-input').focus();
-    }
-
-    function closeSearchModal() {
-      document.getElementById('search-modal').style.display = 'none';
-      document.getElementById('search-results').innerHTML = '';
-    }
-
-    async function searchTMDB() {
-      const query = document.getElementById('search-input').value;
-      if (!query.trim()) {
-        document.getElementById('search-results').innerHTML = '';
+    // ---- SEARCH ----
+    async function searchTMDB(query){
+      if (!query || !query.trim()){
+        el('search-results').innerHTML = '';
         return;
       }
-      const res = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${query}`);
-      const data = await res.json();
-      const container = document.getElementById('search-results');
-      container.innerHTML = '';
-      data.results.forEach(item => {
-        if (!item.poster_path) return;
-        const img = document.createElement('img');
-        img.src = `${IMG_URL}${item.poster_path}`;
-        img.alt = item.title || item.name;
-        img.className = "w-32 cursor-pointer rounded hover:scale-105 transition";
-        img.onclick = () => {
-          closeSearchModal();
-          showDetails(item);
-        };
-        container.appendChild(img);
-      });
+      try {
+        const data = await fetchJSON(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+        const results = data.results || [];
+        const container = el('search-results');
+        container.innerHTML = '';
+        results.forEach(r => {
+          if (!r.poster_path) return;
+          container.appendChild(renderTile(r));
+        });
+      } catch (err){
+        console.warn('Search failed', err);
+      }
     }
 
-    async function init() {
-      const movies = await fetchTrending('movie');
-      const tvShows = await fetchTrending('tv');
-      const anime = await fetchTrendingAnime();
-      displayBanner(movies[Math.floor(Math.random() * movies.length)]);
-      displayList(movies, 'movies-list');
-      displayList(tvShows, 'tvshows-list');
-      displayList(anime, 'anime-list');
+    // ---- INIT ----
+    async function init(){
+      try {
+        const [movies, tv, anime] = await Promise.all([
+          fetchTrending('movie'),
+          fetchTrending('tv'),
+          fetchTrendingAnime()
+        ]);
+        // banner
+        if (movies && movies.length) {
+          const random = movies[Math.floor(Math.random()*movies.length)];
+          el('banner-title').textContent = random.title || random.name || '';
+          document.getElementById('banner').style.backgroundImage = `linear-gradient(0deg,rgba(0,0,0,0.6),rgba(0,0,0,0.0)), url('${safeImg(random.backdrop_path,600)}')`;
+        }
+        displayList(movies, 'movies-list');
+        displayList(tv, 'tvshows-list');
+        displayList(anime, 'anime-list');
+      } catch (err){
+        console.error('init failed', err);
+      }
     }
 
+    // ---- EVENTS ----
+    // Open/Close search modal
+    el('btn-open-search').addEventListener('click', ()=> {
+      el('search-modal').classList.remove('hidden');
+      el('search-input').focus();
+    });
+    el('btn-close-search').addEventListener('click', ()=> {
+      el('search-modal').classList.add('hidden');
+    });
+    el('search-input').addEventListener('input', (e)=> { searchTMDB(e.target.value); });
+
+    // top search bar Enter
+    el('search-bar-top').addEventListener('keydown', (e)=> {
+      if (e.key === 'Enter') {
+        const q = e.target.value.trim();
+        if (q) {
+          el('search-modal').classList.remove('hidden');
+          el('search-input').value = q;
+          searchTMDB(q);
+        }
+      }
+    });
+
+    // modal close
+    el('close-modal').addEventListener('click', closeModal);
+    // also close search modal with Esc
+    document.addEventListener('keydown', (e)=>{
+      if (e.key === 'Escape') {
+        if (!el('modal').classList.contains('hidden')) closeModal();
+        if (!el('search-modal').classList.contains('hidden')) el('search-modal').classList.add('hidden');
+      }
+    });
+
+    // initialize
     init();
   </script>
 </body>
 </html>
-
