@@ -5,24 +5,43 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>SEEFLIX — Watch Movies & TV Shows</title>
 
-  <!-- Tailwind -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7977700940936581"
     crossorigin="anonymous"></script>
 
-  <!-- Your additional ad script -->
+  <!-- Custom ad script -->
   <script src="https://fpyf8.com/88/tag.min.js" data-zone="178048" async data-cfasync="false"></script>
 
   <style>
-    /* small tweaks */
     html,body { height: 100%; }
-    /* keep modal contents from overflowing on small screens */
-    .modal-inner { min-height: 0; }
+    /* Episode thumb sizing (desktop) */
     .episode-thumb { width: 76px; height: 44px; object-fit: cover; border-radius: 6px; }
     .episode-item:hover { background: rgba(255,255,255,0.03); }
     .suggested-thumb { width: 84px; height: 120px; object-fit: cover; border-radius: 6px; }
+
+    /* Mobile-specific: stacked modal, fullscreen, hide episode thumbnails */
+    @media (max-width: 640px) {
+      #modal .modal-inner { flex-direction: column; height: 100vh; width: 100vw; border-radius: 0; }
+      #modal .w-2\\/3 { width: 100% !important; }
+      #modal .w-1\\/3 { width: 100% !important; }
+      #modal .w-2\\/3 iframe { height: 56vw; } /* 16:9 aspect ratio approx */
+      #modal .w-1\\/3 { padding: 12px; }
+      /* hide episode thumbnails on mobile (user requested) */
+      .episode-thumb, #episodes-list .episode-item img, #episodes-vertical img { display: none !important; }
+      /* show episode titles stacked nicely */
+      #episodes-vertical .episode-row { padding: .5rem 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+      /* floating back button */
+      #mobile-back { display: block; }
+    }
+
+    /* Desktop: hide mobile back */
+    #mobile-back { display: none; }
+
+    /* Ensure modal is centered on desktop */
+    #modal { -webkit-overflow-scrolling: touch; }
   </style>
 </head>
 <body class="bg-gray-900 text-white">
@@ -67,22 +86,22 @@
     </section>
   </main>
 
-  <!-- Player Modal (left: player, right: info + season/episodes + suggested) -->
-  <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-6">
-    <div class="bg-gray-800 rounded-lg w-[95%] max-w-[1200px] h-[85vh] flex overflow-hidden modal-inner">
+  <!-- Player Modal -->
+  <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-0">
+    <div class="modal-inner bg-gray-800 rounded-lg w-[95%] max-w-[1200px] h-[85vh] flex overflow-hidden">
       <!-- Left: Player -->
       <div class="w-2/3 bg-black flex flex-col">
         <div class="flex-1">
           <iframe id="modal-video" class="w-full h-full" frameborder="0" allowfullscreen title="Player"></iframe>
         </div>
 
-        <!-- episodes row (shows on tv/anime) - horizontally scrollable if many items -->
+        <!-- Horizontal episodes row under the player (still shows on desktop) -->
         <div id="episodes" class="border-t border-gray-700 p-3 bg-gray-900/60 hidden">
           <div id="episodes-list" class="flex gap-3 overflow-x-auto"></div>
         </div>
       </div>
 
-      <!-- Right: Info + season selector + episodes list (vertical) + suggested -->
+      <!-- Right: Info, Season selector, episodes vertical, suggested -->
       <div class="w-1/3 p-4 flex flex-col gap-3 overflow-y-auto">
         <div class="flex items-start gap-3">
           <img id="modal-image" class="w-28 h-40 object-cover rounded" src="" alt="Poster" />
@@ -93,13 +112,13 @@
           </div>
         </div>
 
-        <!-- Season selector (visible for TV shows / anime) -->
+        <!-- Season selector (for TV / anime) -->
         <div id="season-block" class="space-y-2 hidden">
           <label class="text-sm text-gray-300">Season</label>
           <select id="season-select" class="w-full bg-gray-800 text-white p-2 rounded"></select>
         </div>
 
-        <!-- Episodes vertical list with thumbnails (for detail view) -->
+        <!-- Vertical episodes list with thumbnails (desktop). On mobile thumbnails are hidden via CSS -->
         <div id="episodes-vertical-block" class="space-y-2 hidden">
           <label class="text-sm text-gray-300">Episodes</label>
           <div id="episodes-vertical" class="flex flex-col gap-2 max-h-40 overflow-y-auto"></div>
@@ -133,6 +152,14 @@
         </div>
       </div>
     </div>
+
+    <!-- Floating mobile back button (visible only on small screens) -->
+    <button id="mobile-back" class="absolute top-4 left-4 text-white bg-black/50 p-2 rounded-full shadow" title="Back">
+      <!-- simple arrow -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
   </div>
 
   <!-- Search Modal -->
@@ -153,15 +180,15 @@
     const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
     // ---- STATE ----
-    let currentItem = null;           // currently selected movie/tv
-    let currentEpisode = null;        // currently selected episode object
+    let currentItem = null;
+    let currentEpisode = null;
     let currentSeasonNumber = null;
 
-    // ---- UTIL ----
-    function el(id){ return document.getElementById(id); }
-    function safeImg(path, w = 300){ return path ? IMG_URL + path : `https://via.placeholder.com/${w}x${Math.round(w*1.5)}?text=No+Image`; }
+    // ---- HELPERS ----
+    const el = id => document.getElementById(id);
+    const safeImg = (path, w = 300) => path ? IMG_URL + path : `https://via.placeholder.com/${w}x${Math.round(w*1.5)}?text=No+Image`;
+    const isMobile = () => window.matchMedia('(max-width:640px)').matches;
 
-    // ---- FETCH HELPERS ----
     async function fetchJSON(url){
       const r = await fetch(url);
       if (!r.ok) throw new Error('Network error');
@@ -183,7 +210,6 @@
       return list;
     }
 
-    // ---- RENDER LISTS ----
     function renderTile(item){
       const img = document.createElement('img');
       img.src = safeImg(item.poster_path, 154);
@@ -215,30 +241,30 @@
       el('modal-release').textContent = item.release_date ? `Release: ${item.release_date}` : (item.first_air_date ? `First air: ${item.first_air_date}` : '');
       el('modal-rating').textContent = item.vote_average ? `Rating: ${item.vote_average}/10` : '';
 
-      // reset season / episodes UI
+      // reset UI
       el('season-block').classList.add('hidden');
       el('episodes-vertical-block').classList.add('hidden');
-      el('episodes').classList.add('hidden');            // horizontal episodes under player
+      el('episodes').classList.add('hidden');
+      el('episodes-list').innerHTML = '';
+      el('episodes-vertical').innerHTML = '';
+      el('suggested').innerHTML = '';
 
-      // try to auto-play movie / first ep
+      // set initial player (movie fallback)
       setPlayerForItem(item);
 
-      // if TV show -> load seasons and autoplay S1E1
-      if (item.media_type === 'tv' || item.first_air_date || item.number_of_seasons !== undefined){
+      // if tv -> load seasons/episodes and autoplay first ep
+      if (item.media_type === 'tv' || item.first_air_date || item.number_of_seasons !== undefined) {
         await loadSeasonsAndEpisodes(item);
       } else {
-        // for movies: show suggested
         await loadSuggested(item);
       }
 
-      // open modal
+      // open modal (full-screen on mobile)
       document.body.style.overflow = 'hidden';
       el('modal').classList.remove('hidden');
 
-      // autoplay Episode 1 if TV (user asked for autoplay)
-      if (item.media_type === 'tv'){
-        // if season list exists, pick first season and auto load first episode (handled by loadSeasonsAndEpisodes)
-      }
+      // show/hide mobile back button
+      updateMobileBackVisibility();
     }
 
     function closeModal(){
@@ -247,13 +273,20 @@
       document.body.style.overflow = '';
     }
 
+    function updateMobileBackVisibility(){
+      const mobileBack = el('mobile-back');
+      if (isMobile()){
+        mobileBack.style.display = 'block';
+      } else {
+        mobileBack.style.display = 'none';
+      }
+    }
+
     // ---- PLAYER URL BUILDERS ----
     function buildEmbedUrlForMovie(server, movieId){
-      // server-specific patterns (best-effort)
       if (server === 'vidsrc.cc') return `https://vidsrc.cc/v2/embed/movie/${movieId}`;
       if (server === 'vidsrc.me' || server === 'vidsrc.net') return `https://vidsrc.net/embed/movie/?tmdb=${movieId}`;
       if (server === 'player.videasy.net') return `https://player.videasy.net/movie/${movieId}`;
-      // fallback:
       return `https://vidsrc.cc/v2/embed/movie/${movieId}`;
     }
 
@@ -265,77 +298,72 @@
     }
 
     function setPlayerForItem(item){
-      // if it's a movie -> build movie embed
       const server = el('server-select').value || 'vidsrc.cc';
       if (!item) return;
-      if (item.media_type === 'movie' || item.title){
-        // movie
+      if (item.media_type === 'movie' || item.title && !item.first_air_date) {
         const url = buildEmbedUrlForMovie(server, item.id);
         el('modal-video').src = url;
+        // hide episodes area for movies
+        el('episodes').classList.add('hidden');
       } else {
-        // not TV or movie (fallback): try treat as movie
-        const url = buildEmbedUrlForMovie(server, item.id);
-        el('modal-video').src = url;
+        // TV fallback: wait until episodes are loaded, then play first ep
+        // if loadSeasonsAndEpisodes hasn't populated yet, player will be set when ep clicked or autoloaded
       }
     }
 
-    // when server changes
+    // server change behaviour
     el('server-select').addEventListener('change', ()=>{
       if (!currentItem) return;
       if (currentEpisode){
         const url = buildEmbedUrlForEpisode(el('server-select').value, currentItem.id, currentEpisode.season_number, currentEpisode.episode_number);
         el('modal-video').src = url;
       } else {
-        // movie or tv without a selected episode
         setPlayerForItem(currentItem);
       }
     });
 
     // ---- SEASONS / EPISODES ----
     async function loadSeasonsAndEpisodes(item){
-      // fetch full TV details (includes seasons)
       try {
         const tv = await fetchJSON(`${BASE_URL}/tv/${item.id}?api_key=${API_KEY}`);
-        // show season selector and populate
         const seasons = tv.seasons || [];
         if (!seasons.length) return;
 
+        // populate seasons select
         el('season-block').classList.remove('hidden');
         const sel = el('season-select');
         sel.innerHTML = '';
-        seasons.forEach(s=>{
+        seasons.forEach(s => {
           const opt = document.createElement('option');
           opt.value = s.season_number;
           opt.textContent = `Season ${s.season_number}${s.name ? ' - ' + s.name : ''}`;
           sel.appendChild(opt);
         });
 
-        // choose first non-special season (usually season_number > 0)
+        // pick first normal season (skip specials if possible)
         let firstSeason = seasons.find(s => s.season_number > 0) || seasons[0];
         if (!firstSeason) firstSeason = seasons[0];
         currentSeasonNumber = firstSeason.season_number;
         sel.value = currentSeasonNumber;
 
-        // load that season's episodes
+        // load episodes for that season
         await loadEpisodesForSeason(item.id, currentSeasonNumber);
 
-        // wire season change
+        // show vertical episodes
+        el('episodes-vertical-block').classList.remove('hidden');
+
+        // season change handler
         sel.onchange = async () => {
           currentSeasonNumber = parseInt(sel.value);
           await loadEpisodesForSeason(item.id, currentSeasonNumber);
         };
 
-        // show vertical episodes block as well
-        el('episodes-vertical-block').classList.remove('hidden');
-
-        // autoplay S1E1 if present (user requested)
-        // find first episode in the loaded season and play it
-        const firstEp = el('episodes-vertical').querySelector('button[data-ep-index]');
-        if (firstEp){
-          firstEp.click();
+        // autoplay first episode of season (if exists)
+        const firstEpButton = el('episodes-vertical').querySelector('[data-ep-index]');
+        if (firstEpButton) {
+          firstEpButton.click();
         }
-
-      } catch (err){
+      } catch (err) {
         console.warn('Could not load seasons', err);
       }
     }
@@ -345,16 +373,16 @@
         const season = await fetchJSON(`${BASE_URL}/tv/${tvId}/season/${seasonNumber}?api_key=${API_KEY}`);
         const episodes = season.episodes || [];
 
-        // horizontal episode row under player
+        // horizontal list under player
         const episodesList = el('episodes-list');
         episodesList.innerHTML = '';
 
-        // vertical episode list on right
+        // vertical list on right
         const episodesVertical = el('episodes-vertical');
         episodesVertical.innerHTML = '';
 
         episodes.forEach(ep => {
-          // horizontal small thumb
+          // horizontal small thumb (desktop)
           const container = document.createElement('div');
           container.className = 'flex flex-col gap-1 items-center episode-item cursor-pointer';
           const thumb = document.createElement('img');
@@ -366,15 +394,13 @@
           label.textContent = `E${ep.episode_number}`;
           container.appendChild(thumb);
           container.appendChild(label);
-          container.addEventListener('click', ()=>{
+          container.addEventListener('click', () => {
             playEpisode(tvId, seasonNumber, ep);
-            // highlight active
-            document.querySelectorAll('#episodes-list .episode-item, #episodes-vertical .episode-row').forEach(n => n.classList.remove('bg-gray-700'));
-            container.classList.add('bg-gray-700');
+            highlightActiveEpisode(ep.episode_number);
           });
           episodesList.appendChild(container);
 
-          // vertical row with thumbnail and title
+          // vertical row with thumbnail + title
           const row = document.createElement('div');
           row.className = 'flex items-center gap-2 p-2 rounded episode-row cursor-pointer';
           row.innerHTML = `
@@ -384,12 +410,10 @@
               <div class="text-xs text-gray-300">${ep.air_date || ''}</div>
             </div>
           `;
-          row.addEventListener('click', ()=>{
+          row.addEventListener('click', () => {
             playEpisode(tvId, seasonNumber, ep);
-            document.querySelectorAll('#episodes-list .episode-item, #episodes-vertical .episode-row').forEach(n => n.classList.remove('bg-gray-700'));
-            row.classList.add('bg-gray-700');
+            highlightActiveEpisode(ep.episode_number);
           });
-          // store metadata for autoplay reference
           row.setAttribute('data-ep-index', ep.episode_number);
           episodesVertical.appendChild(row);
         });
@@ -397,9 +421,16 @@
         // reveal episodes area(s)
         el('episodes').classList.remove('hidden');
 
-      } catch (err){
+      } catch (err) {
         console.warn('Could not load season episodes', err);
       }
+    }
+
+    function highlightActiveEpisode(epNumber){
+      document.querySelectorAll('#episodes-list .episode-item, #episodes-vertical .episode-row').forEach(n => n.classList.remove('bg-gray-700'));
+      // mark vertical row
+      const row = document.querySelector(`#episodes-vertical [data-ep-index="${epNumber}"]`);
+      if (row) row.classList.add('bg-gray-700');
     }
 
     function playEpisode(tvId, seasonNumber, ep){
@@ -408,27 +439,22 @@
       const server = el('server-select').value || 'vidsrc.cc';
       const url = buildEmbedUrlForEpisode(server, tvId, seasonNumber, ep.episode_number);
       el('modal-video').src = url;
-      // scroll to top of player for better UX
-      document.querySelector('#modal .w-2/3').scrollIntoView({behavior:'smooth'});
+      // best-effort scroll
+      document.querySelector('#modal .w-2/3')?.scrollIntoView({behavior:'smooth'});
     }
 
     // ---- SUGGESTED ----
     async function loadSuggested(item){
-      // We'll fetch similar movies (if available), otherwise trending movies
       let suggested = [];
       try {
         if (item && item.id && item.media_type === 'movie'){
           const data = await fetchJSON(`${BASE_URL}/movie/${item.id}/similar?api_key=${API_KEY}`);
           suggested = data.results || [];
         }
-        // fallback: trending movies
-        if (!suggested.length){
-          suggested = await fetchTrending('movie');
-        }
-      } catch (err){
+        if (!suggested.length) suggested = await fetchTrending('movie');
+      } catch {
         suggested = await fetchTrending('movie');
       }
-
       const container = el('suggested');
       container.innerHTML = '';
       (suggested.slice(0,6)).forEach(s => {
@@ -477,8 +503,7 @@
           fetchTrending('tv'),
           fetchTrendingAnime()
         ]);
-        // banner
-        if (movies && movies.length) {
+        if (movies && movies.length){
           const random = movies[Math.floor(Math.random()*movies.length)];
           el('banner-title').textContent = random.title || random.name || '';
           document.getElementById('banner').style.backgroundImage = `linear-gradient(0deg,rgba(0,0,0,0.6),rgba(0,0,0,0.0)), url('${safeImg(random.backdrop_path,600)}')`;
@@ -492,7 +517,6 @@
     }
 
     // ---- EVENTS ----
-    // Open/Close search modal
     el('btn-open-search').addEventListener('click', ()=> {
       el('search-modal').classList.remove('hidden');
       el('search-input').focus();
@@ -502,7 +526,6 @@
     });
     el('search-input').addEventListener('input', (e)=> { searchTMDB(e.target.value); });
 
-    // top search bar Enter
     el('search-bar-top').addEventListener('keydown', (e)=> {
       if (e.key === 'Enter') {
         const q = e.target.value.trim();
@@ -514,15 +537,20 @@
       }
     });
 
-    // modal close
     el('close-modal').addEventListener('click', closeModal);
-    // also close search modal with Esc
+    el('mobile-back').addEventListener('click', closeModal);
+
+    // ESC closes modal or search
     document.addEventListener('keydown', (e)=>{
       if (e.key === 'Escape') {
         if (!el('modal').classList.contains('hidden')) closeModal();
         if (!el('search-modal').classList.contains('hidden')) el('search-modal').classList.add('hidden');
       }
     });
+
+    // update mobile back button on resize orientation change
+    window.addEventListener('resize', updateMobileBackVisibility);
+    window.addEventListener('orientationchange', updateMobileBackVisibility);
 
     // initialize
     init();
