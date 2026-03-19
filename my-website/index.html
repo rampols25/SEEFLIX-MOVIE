@@ -1,173 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Seeflix HD Movie</title>
-  <link rel="icon" href="https://via.placeholder.com/32x32.png?text=S" />
-
-  <!-- Open Graph -->
-  <meta property="og:site_name" content="Seeflix HD Movie">
-  <meta property="og:title" content="Watch Movies & TV Shows on Seeflix HD Movie">
-  <meta property="og:description" content="Stream trending movies, TV shows, and anime in HD.">
-  <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=Seeflix+HD+Movie">
-  <meta property="og:type" content="website">
-
-  <script src="https://cdn.tailwindcss.com"></script>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>See-Flix | Watch Movies & TV</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    :root{--bg:#070707;--panel:#0b1220;--muted:#9ca3af;--accent:#e50914}
-    body{margin:0;background:var(--bg);color:#fff;font-family:Inter,system-ui}
-    .section-grid{display:grid;gap:14px;grid-template-columns:repeat(5,1fr)}
-    @media(max-width:1100px){.section-grid{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:640px){.section-grid{grid-template-columns:repeat(2,1fr)}}
-    .card{border-radius:10px;overflow:hidden;cursor:pointer}
-    .card img{width:100%;height:320px;object-fit:cover}
-    #modal{position:fixed;inset:0;display:none;background:rgba(0,0,0,.9);z-index:80;align-items:center;justify-content:center}
-    .modal-inner{width:95%;max-width:1200px;height:88vh;background:#000;border-radius:10px;display:flex}
-    .player-iframe{width:100%;height:56vh;border:0}
-    #btn-close,#btn-back{position:fixed;top:16px;padding:8px;border-radius:999px;background:rgba(0,0,0,.6);z-index:90}
-    #btn-close{right:16px}#btn-back{left:16px}
+    /* BASIC STYLING */
+    body { background: #000; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; overflow-x: hidden; }
+    .navbar { display: flex; align-items: center; padding: 10px 5%; background: rgba(0,0,0,0.9); position: fixed; width: 100%; z-index: 1000; box-sizing: border-box; }
+    .navbar img { height: 35px; margin-right: 20px; }
+    .nav-links a { color: white; text-decoration: none; margin-right: 15px; font-weight: bold; }
+    .search-bar { padding: 8px; border-radius: 20px; border: 1px solid #444; background: #222; color: white; outline: none; }
+
+    /* BANNER */
+    .banner { 
+        height: 70vh; 
+        background-size: cover; 
+        background-position: center; 
+        display: flex; 
+        align-items: flex-end; 
+        padding: 5%;
+        position: relative;
+    }
+    .banner::after { content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 50%; background: linear-gradient(to top, #000, transparent); }
+    .banner-content { position: relative; z-index: 2; max-width: 600px; }
+    .banner-content h1 { font-size: 3rem; margin-bottom: 10px; }
+
+    /* MOVIE ROWS */
+    .row { padding: 20px 0 0 5%; }
+    .row h2 { font-size: 1.5rem; margin-bottom: 10px; color: #e5e5e5; }
+    .list { 
+        display: flex; 
+        overflow-x: auto; 
+        gap: 15px; 
+        padding: 10px 0;
+        scrollbar-width: none; 
+    }
+    .list::-webkit-scrollbar { display: none; }
+    .list img { 
+        width: 160px; 
+        border-radius: 5px; 
+        cursor: pointer; 
+        transition: transform 0.3s ease; 
+    }
+    .list img:hover { transform: scale(1.1); z-index: 10; border: 2px solid white; }
+
+    /* AD BUTTON */
+    .ad-btn {
+        display: inline-block;
+        background: #ff4c4c;
+        color: white;
+        padding: 12px 25px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        margin: 15px 0;
+        transition: 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+    .ad-btn:hover { background: #ff0000; transform: translateY(-2px); }
+
+    /* MODAL */
+    .modal { 
+        display: none; 
+        position: fixed; 
+        top: 0; left: 0; 
+        width: 100%; height: 100%; 
+        background: rgba(0,0,0,0.95); 
+        z-index: 2000; 
+        justify-content: center; 
+        overflow-y: auto;
+        padding-top: 50px;
+    }
+    .modal-content { width: 90%; max-width: 900px; color: white; padding-bottom: 50px; }
+    .close { position: fixed; top: 20px; right: 30px; font-size: 40px; cursor: pointer; color: white; z-index: 2100; }
+    
+    .video-container { position: relative; width: 100%; padding-top: 56.25%; background: #111; margin-top: 20px; }
+    #modal-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    
+    /* Invisible layer over video to trigger ad link on first play */
+    .video-ad-overlay {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: 10;
+        cursor: pointer;
+    }
+
+    .server-selector { margin: 20px 0; background: #222; padding: 10px; border-radius: 5px; }
+    select { padding: 5px; background: #444; color: white; border: none; }
+
+    /* SEARCH MODAL */
+    .search-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 3000; flex-direction: column; align-items: center; padding-top: 100px; }
+    #search-input { width: 70%; padding: 15px; font-size: 1.5rem; background: transparent; border: none; border-bottom: 2px solid white; color: white; outline: none; }
+    #search-results { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; padding: 40px; }
   </style>
 </head>
 
 <body>
 
-<header class="px-4 py-3 flex justify-between">
-  <div class="flex gap-3 items-center">
-    <img src="https://via.placeholder.com/40?text=S" class="h-10 rounded">
-    <div class="text-2xl font-bold text-red-500">Seeflix HD Movie</div>
-  </div>
-</header>
-
-<section class="max-w-7xl mx-auto px-4 py-6 space-y-8">
-  <div>
-    <h3 class="text-lg font-semibold mb-3">Trending Movies</h3>
-    <div id="movies-list" class="section-grid"></div>
-  </div>
-</section>
-
-<div class="ad-container my-4">
-  <script src="https://fpyf8.com/88/tag.min.js" data-zone="178939" async></script>
-</div>
-
-<!-- Modal -->
-<div id="modal">
-  <div class="modal-inner">
-    <div class="flex-1">
-      <iframe id="player" class="player-iframe" allowfullscreen></iframe>
+  <div class="navbar">
+    <img src="https://via.placeholder.com/150x50?text=SEE-FLIX" alt="Logo" />
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Movies</a>
+      <a href="#">TV Shows</a>
+      <input type="text" class="search-bar" placeholder="Search..." onfocus="openSearchModal()" />
     </div>
-    <div class="flex-1 p-4 overflow-auto">
-      <h3 id="modal-title" class="text-xl font-semibold"></h3>
-      <p id="modal-desc" class="text-sm text-gray-400 mt-2"></p>
+  </div>
 
-      <button id="watchlist-btn" class="mt-3 px-3 py-1 border rounded">☆ Watchlist</button>
+  <div class="banner" id="banner">
+    <div class="banner-content">
+        <h1 id="banner-title">Welcome</h1>
+        <p id="banner-desc"></p>
+        <!-- High Priority Ad Link -->
+        <a href="https://www.profitablecpmratenetwork.com/w3f5muus?key=76b37a7d6c57add1c591a599dc7bc96f" target="_blank" class="ad-btn">
+            <i class="fas fa-play"></i> Watch in HD Free
+        </a>
+    </div>
+  </div>
 
-      <!-- Share -->
-      <div class="mt-4">
-        <div class="text-xs text-gray-400">Share</div>
-        <div class="flex gap-2 mt-2 flex-wrap">
-          <button id="share-facebook" class="px-3 py-1 rounded bg-blue-600">Facebook</button>
-          <button id="share-twitter" class="px-3 py-1 rounded bg-sky-500">X</button>
-          <button id="share-whatsapp" class="px-3 py-1 rounded bg-green-500 text-black">WhatsApp</button>
-          <button id="share-telegram" class="px-3 py-1 rounded bg-cyan-500">Telegram</button>
-          <button id="share-copy" class="px-3 py-1 rounded border">Copy</button>
-        </div>
+  <div class="row">
+    <h2>Trending Movies</h2>
+    <div class="list" id="movies-list"></div>
+  </div>
+
+  <div class="row">
+    <h2>Trending TV Shows</h2>
+    <div class="list" id="tvshows-list"></div>
+  </div>
+
+  <div class="row">
+    <h2>Trending Anime</h2>
+    <div class="list" id="anime-list"></div>
+  </div>
+
+  <!-- Details Modal -->
+  <div class="modal" id="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div class="modal-content">
+      <h2 id="modal-title" style="font-size: 2.5rem; margin-bottom: 10px;"></h2>
+      <div id="modal-rating" style="color: gold; margin-bottom: 10px;"></div>
+      <p id="modal-description" style="line-height: 1.6; color: #ccc; max-width: 800px;"></p>
+      
+      <!-- Ad Link Button inside Modal -->
+      <a href="https://www.profitablecpmratenetwork.com/w3f5muus?key=76b37a7d6c57add1c591a599dc7bc96f" target="_blank" class="ad-btn">
+         <i class="fas fa-download"></i> High Speed Stream (Server 1)
+      </a>
+
+      <div class="server-selector">
+        <label>Select Server: </label>
+        <select id="server" onchange="changeServer()">
+          <option value="vidsrc.cc">Vidsrc.cc (Fast)</option>
+          <option value="vidsrc.me">Vidsrc.me</option>
+          <option value="player.videasy.net">Videasy</option>
+        </select>
+      </div>
+
+      <div class="video-container">
+        <!-- Invisible layer to capture click for ad link -->
+        <div class="video-ad-overlay" id="video-overlay" onclick="handleVideoClick()"></div>
+        <iframe id="modal-video" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
   </div>
-</div>
 
-<button id="btn-back">←</button>
-<button id="btn-close">✕</button>
+  <!-- Search Modal -->
+  <div class="search-modal" id="search-modal">
+    <span class="close" onclick="closeSearchModal()">&times;</span>
+    <input type="text" id="search-input" placeholder="Type movie or tv show name..." oninput="searchTMDB()" />
+    <div id="search-results"></div>
+  </div>
 
-<script>
-const API_KEY='169689830f09449f1d23896257d507db';
-const BASE='https://api.themoviedb.org/3';
-const IMG='https://image.tmdb.org/t/p/w500';
-const el=id=>document.getElementById(id);
-let current=null;
-let favorites=new Set(JSON.parse(localStorage.getItem('seeflix_watchlist')||'[]'));
+  <script>
+    const API_KEY = 'a1e72fd93ed59f56e6332813b9f8dcae';
+    const AD_LINK = 'https://www.profitablecpmratenetwork.com/w3f5muus?key=76b37a7d6c57add1c591a599dc7bc96f';
+    const BASE_URL = 'https://api.themoviedb.org/3';
+    const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+    let currentItem;
 
-function safeImg(p){return p?IMG+p:'https://via.placeholder.com/300x450'}
+    // --- AD LOGIC ---
+    // 1. Pop-under: Opens ad on first click anywhere on the page
+    document.addEventListener('click', function() {
+        if (!window.popDone) {
+            window.open(AD_LINK, '_blank');
+            window.popDone = true;
+        }
+    });
 
-async function fetchJSON(u){const r=await fetch(u);return r.json()}
+    // 2. Video Overlay Logic: User clicks "Play", ad opens, overlay disappears
+    function handleVideoClick() {
+        window.open(AD_LINK, '_blank');
+        document.getElementById('video-overlay').style.display = 'none';
+    }
 
-function setMovieHash(item){
-  const type=item.title?'movie':'tv';
-  history.replaceState(null,'',`#${type}=${item.id}`);
-}
+    // --- MOVIE DATA LOGIC ---
+    async function fetchTrending(type) {
+      const res = await fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
+      const data = await res.json();
+      return data.results.map(item => ({...item, media_type: type}));
+    }
 
-function clearMovieHash(){
-  history.replaceState(null,'',location.pathname);
-}
+    async function fetchTrendingAnime() {
+      const res = await fetch(`${BASE_URL}/discover/tv?api_key=${API_KEY}&with_original_language=ja&with_genres=16`);
+      const data = await res.json();
+      return data.results.map(item => ({...item, media_type: 'tv'}));
+    }
 
-function updateOG(item){
-  document.querySelector('meta[property="og:title"]').content=item.title||item.name;
-  document.querySelector('meta[property="og:description"]').content=item.overview||'Watch now';
-  if(item.poster_path){
-    document.querySelector('meta[property="og:image"]').content=IMG+item.poster_path;
-  }
-}
+    function displayBanner(item) {
+      document.getElementById('banner').style.backgroundImage = `url(https://image.tmdb.org/t/p/original${item.backdrop_path})`;
+      document.getElementById('banner-title').textContent = item.title || item.name;
+      document.getElementById('banner-desc').textContent = item.overview.substring(0, 150) + '...';
+    }
 
-function setupShareButtons(){
-  const url=encodeURIComponent(location.href);
-  const title=current.title||current.name;
-  const text=encodeURIComponent(`Watch "${title}" on Seeflix HD Movie`);
+    function displayList(items, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      items.forEach(item => {
+        if (!item.poster_path) return;
+        const img = document.createElement('img');
+        img.src = `${IMG_URL}${item.poster_path}`;
+        img.onclick = () => showDetails(item);
+        container.appendChild(img);
+      });
+    }
 
-  el('share-facebook').onclick=()=>open(`https://facebook.com/sharer/sharer.php?u=${url}`);
-  el('share-twitter').onclick=()=>open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`);
-  el('share-whatsapp').onclick=()=>open(`https://api.whatsapp.com/send?text=${text}%20${url}`);
-  el('share-telegram').onclick=()=>open(`https://t.me/share/url?url=${url}&text=${text}`);
-  el('share-copy').onclick=()=>navigator.clipboard.writeText(location.href).then(()=>alert('Link copied'));
-}
+    function showDetails(item) {
+      currentItem = item;
+      document.getElementById('modal-title').textContent = item.title || item.name;
+      document.getElementById('modal-description').textContent = item.overview;
+      document.getElementById('modal-rating').innerHTML = 'Rating: ★ ' + item.vote_average.toFixed(1);
+      
+      // Reset video overlay so ad shows again for new movie
+      document.getElementById('video-overlay').style.display = 'block';
+      
+      document.getElementById('modal').style.display = 'flex';
+      changeServer();
+    }
 
-function openModalFor(item){
-  current=item;
-  el('modal-title').textContent=item.title||item.name;
-  el('modal-desc').textContent=item.overview||'';
-  el('player').src=`https://vidsrc.cc/v2/embed/movie/${item.id}`;
-  el('modal').style.display='flex';
-  document.body.style.overflow='hidden';
-  setMovieHash(item);
-  updateOG(item);
-  setupShareButtons();
-}
+    function changeServer() {
+      if (!currentItem) return;
+      const server = document.getElementById('server').value;
+      const type = currentItem.media_type === "movie" ? "movie" : "tv";
+      let embedURL = "";
 
-function closeModal(){
-  el('modal').style.display='none';
-  el('player').src='';
-  document.body.style.overflow='';
-  clearMovieHash();
-}
+      if (server === "vidsrc.cc") {
+        embedURL = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
+      } else if (server === "vidsrc.me") {
+        embedURL = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
+      } else if (server === "player.videasy.net") {
+        embedURL = `https://player.videasy.net/${type}/${currentItem.id}`;
+      }
 
-async function openFromHash(){
-  if(!location.hash) return;
-  const [type,id]=location.hash.replace('#','').split('=');
-  const data=await fetchJSON(`${BASE}/${type}/${id}?api_key=${API_KEY}`);
-  data.media_type=type;
-  openModalFor(data);
-}
+      document.getElementById('modal-video').src = embedURL;
+    }
 
-async function loadMovies(){
-  const r=await fetchJSON(`${BASE}/trending/movie/week?api_key=${API_KEY}`);
-  r.results.forEach(m=>{
-    const d=document.createElement('div');
-    d.className='card';
-    d.innerHTML=`<img src="${safeImg(m.poster_path)}">`;
-    d.onclick=()=>openModalFor(m);
-    el('movies-list').appendChild(d);
-  });
-}
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+      document.getElementById('modal-video').src = '';
+    }
 
-el('btn-close').onclick=closeModal;
-el('btn-back').onclick=closeModal;
+    function openSearchModal() {
+      document.getElementById('search-modal').style.display = 'flex';
+      document.getElementById('search-input').focus();
+    }
 
-document.addEventListener('DOMContentLoaded',()=>{
-  loadMovies();
-  openFromHash();
-});
-</script>
+    function closeSearchModal() {
+      document.getElementById('search-modal').style.display = 'none';
+    }
 
+    async function searchTMDB() {
+      const query = document.getElementById('search-input').value;
+      if (query.length < 2) return;
+
+      const res = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${query}`);
+      const data = await res.json();
+
+      const container = document.getElementById('search-results');
+      container.innerHTML = '';
+      data.results.forEach(item => {
+        if (!item.poster_path) return;
+        const img = document.createElement('img');
+        img.src = `${IMG_URL}${item.poster_path}`;
+        img.style.width = "150px";
+        img.onclick = () => {
+          closeSearchModal();
+          showDetails(item);
+        };
+        container.appendChild(img);
+      });
+    }
+
+    async function init() {
+      const movies = await fetchTrending('movie');
+      const tvShows = await fetchTrending('tv');
+      const anime = await fetchTrendingAnime();
+
+      if(movies.length > 0) displayBanner(movies[0]);
+      displayList(movies, 'movies-list');
+      displayList(tvShows, 'tvshows-list');
+      displayList(anime, 'anime-list');
+    }
+
+    init();
+  </script>
 </body>
 </html>
