@@ -9,9 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  <!-- Adsterra Script -->
-  <script src="https://wringincriminate.com/fe/c0/14/fec01470f800ed7dfe264bf34c6db729.js"></script>
-
   <style>
     :root {
       --gold: #e8b86d;
@@ -68,8 +65,23 @@
       color: var(--gold);
       text-shadow: 0 0 30px rgba(232,184,109,0.4);
       text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     .logo span { color: var(--red); }
+    .logo-premium-tag {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.55rem;
+      letter-spacing: 2px;
+      font-weight: 600;
+      color: #000;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+      padding: 3px 7px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      transform: translateY(-8px);
+    }
 
     .nav-center {
       display: flex;
@@ -353,12 +365,13 @@
       position: relative;
       border-radius: 6px;
       overflow: hidden;
-      transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.35s;
       transform-origin: center bottom;
     }
     .card:hover {
       transform: scale(1.12) translateY(-6px);
       z-index: 20;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.6), 0 0 0 1px rgba(232,184,109,0.3);
     }
     .card img {
       width: 100%;
@@ -426,6 +439,23 @@
       letter-spacing: 0;
     }
 
+    /* Skeleton loaders */
+    @keyframes shimmer {
+      0% { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+    .skeleton {
+      background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 37%, var(--surface2) 63%);
+      background-size: 800px 100%;
+      animation: shimmer 1.6s linear infinite;
+    }
+    .card-skeleton {
+      flex: 0 0 auto;
+      width: 160px;
+      aspect-ratio: 2/3;
+      border-radius: 6px;
+    }
+
     .featured-strip {
       margin: 40px 5%;
       display: grid;
@@ -458,6 +488,36 @@
     }
     .strip-text h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 3px; }
     .strip-text p { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* Ad slot */
+    .ad-slot {
+      margin: 36px 5% 10px;
+      position: relative;
+    }
+    .ad-slot-label {
+      position: absolute;
+      top: -9px;
+      left: 16px;
+      background: var(--bg);
+      padding: 0 8px;
+      font-size: 0.62rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      z-index: 1;
+    }
+    .ad-slot-inner {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      width: 100%;
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface2);
+      overflow: hidden;
+    }
 
     .modal {
       display: none;
@@ -499,6 +559,9 @@
       height: 100%;
       border: none;
     }
+    #modal-video:fullscreen { width: 100vw; height: 100vh; }
+    #modal-video:-webkit-full-screen { width: 100vw; height: 100vh; }
+    #modal-video:-moz-full-screen { width: 100vw; height: 100vh; }
     .video-ad-overlay {
       position: absolute;
       inset: 0;
@@ -841,7 +904,7 @@
 
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
-    <a class="logo" href="#">SEE<span>-</span>FLIX</a>
+    <a class="logo" href="#">SEE<span>-</span>FLIX <span class="logo-premium-tag">Premium</span></a>
     <div class="nav-center">
       <a href="#">Home</a>
       <a href="#">Movies</a>
@@ -903,6 +966,15 @@
     </div>
   </div>
 
+  <!-- AD SLOT -->
+  <div class="ad-slot fade-in">
+    <span class="ad-slot-label">Sponsored</span>
+    <div class="ad-slot-inner">
+      <script async="async" data-cfasync="false" src="https://wringincriminate.com/27fd645ac88e6ad27b1433ab9f0f3264/invoke.js"></script>
+      <div id="container-27fd645ac88e6ad27b1433ab9f0f3264"></div>
+    </div>
+  </div>
+
   <!-- MOVIES ROW -->
   <section class="section fade-in">
     <div class="section-header">
@@ -957,7 +1029,7 @@
         <div class="video-ad-overlay" id="video-overlay" onclick="handleVideoClick()">
           <div class="play-pulse"><i class="fas fa-play"></i></div>
         </div>
-        <iframe id="modal-video" frameborder="0" allowfullscreen allow="autoplay; fullscreen"></iframe>
+        <iframe id="modal-video" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
       </div>
 
       <div class="modal-meta">
@@ -979,8 +1051,8 @@
         <p id="modal-description"></p>
 
         <div class="modal-cta-row">
-          <button class="btn-primary" onclick="handleStreamBoost()">
-            <i class="fas fa-bolt"></i> High Speed Stream
+          <button class="btn-primary" onclick="requestVideoFullscreen()">
+            <i class="fas fa-expand"></i> Watch Fullscreen
           </button>
         </div>
 
@@ -1025,51 +1097,43 @@
 
   <script>
     const API_KEY = 'a1e72fd93ed59f56e6332813b9f8dcae';
-    const AD_LINK = 'https://wringincriminate.com/k42m2hfvnc?key=03608ead3fdec14b4c04962bd4f3c1ed';
     const BASE_URL = 'https://api.themoviedb.org/3';
     const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
     let currentItem = null;
     let bannerItem = null;
-    let popDone = false;
-
-    // Safe ad opener
-    function openAdLink() {
-      if (!AD_LINK || AD_LINK === '#') return;
-      window.open(AD_LINK, '_blank', 'noopener,noreferrer');
-    }
 
     // Navbar scroll
     window.addEventListener('scroll', () => {
       document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // First-click pop
-    document.addEventListener('click', function () {
-      if (!popDone) {
-        openAdLink();
-        popDone = true;
-      }
-    }, { once: true });
-
     // Banner button
     function handleBannerWatch() {
-      openAdLink();
-      if (bannerItem) {
-        setTimeout(() => showDetails(bannerItem), 300);
-      }
+      if (bannerItem) showDetails(bannerItem);
     }
 
-    // Stream boost
-    function handleStreamBoost() {
-      openAdLink();
-      showToast('Opening stream access...');
-    }
-
-    // Video overlay
+    // Video overlay - reveal the player
     function handleVideoClick() {
-      openAdLink();
       document.getElementById('video-overlay').style.display = 'none';
+    }
+
+    // Fullscreen fix: explicitly request fullscreen on the video iframe,
+    // with vendor-prefixed fallbacks for older browsers.
+    function requestVideoFullscreen() {
+      const iframe = document.getElementById('modal-video');
+      if (!iframe || !iframe.src) {
+        showToast('Start the video first, then go fullscreen');
+        return;
+      }
+      document.getElementById('video-overlay').style.display = 'none';
+      const req = iframe.requestFullscreen || iframe.webkitRequestFullscreen ||
+                  iframe.mozRequestFullScreen || iframe.msRequestFullscreen;
+      if (req) {
+        req.call(iframe).catch(() => showToast('Fullscreen was blocked by your browser'));
+      } else {
+        showToast('Fullscreen is not supported on this browser');
+      }
     }
 
     // Banner
@@ -1100,6 +1164,17 @@
       ).join('');
     }
 
+    // Skeleton placeholders while TMDB loads
+    function renderSkeletonCards(containerId, count = 8) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.className = 'card-skeleton skeleton';
+        container.appendChild(el);
+      }
+    }
+
     // Cards
     function displayList(items, containerId) {
       const container = document.getElementById(containerId);
@@ -1123,7 +1198,7 @@
     }
 
     // Modal
-    function showDetails(item) {
+    function showDetails(item, updateHistory = true) {
       currentItem = item;
       document.getElementById('modal-title').textContent = item.title || item.name;
       document.getElementById('modal-description').textContent = item.overview || '';
@@ -1136,6 +1211,11 @@
       document.getElementById('modal').classList.add('open');
       document.body.style.overflow = 'hidden';
       changeServer();
+
+      if (updateHistory) {
+        const shareUrl = getShareUrl(item);
+        window.history.pushState({ id: item.id, type: item.media_type }, '', shareUrl);
+      }
     }
 
     function changeServer() {
@@ -1158,7 +1238,16 @@
       document.getElementById('modal').classList.remove('open');
       document.getElementById('modal-video').src = '';
       document.body.style.overflow = '';
+      window.history.pushState({}, '', window.location.pathname);
     }
+
+    // Keep back/forward navigation in sync with the modal
+    window.addEventListener('popstate', () => {
+      const modal = document.getElementById('modal');
+      if (modal.classList.contains('open')) {
+        closeModal();
+      }
+    });
 
     function toggleWishlist() {
       showToast('Added to Watchlist ✓');
@@ -1170,13 +1259,23 @@
       panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
     }
 
+    // Builds a shareable URL that points to this exact title (not just the homepage)
+    function getShareUrl(item) {
+      if (!item) return window.location.href;
+      const url = new URL(window.location.href);
+      url.search = '';
+      url.searchParams.set('id', item.id);
+      url.searchParams.set('type', item.media_type === 'tv' ? 'tv' : 'movie');
+      return url.toString();
+    }
+
     function getShareText() {
       const title = currentItem?.title || currentItem?.name || 'this title';
-      return `🎬 Watch "${title}" free on See-Flix! ${window.location.href}`;
+      return `🎬 Watch "${title}" free on See-Flix! ${getShareUrl(currentItem)}`;
     }
 
     function shareFacebook() {
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getShareUrl(currentItem))}`, '_blank');
     }
 
     function shareTwitter() {
@@ -1188,11 +1287,11 @@
     }
 
     function shareTelegram() {
-      window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent('Watch "' + (currentItem?.title || currentItem?.name) + '" on See-Flix!')}`, '_blank');
+      window.open(`https://t.me/share/url?url=${encodeURIComponent(getShareUrl(currentItem))}&text=${encodeURIComponent('Watch "' + (currentItem?.title || currentItem?.name) + '" on See-Flix!')}`, '_blank');
     }
 
     function copyLink() {
-      navigator.clipboard.writeText(window.location.href).then(() => {
+      navigator.clipboard.writeText(getShareUrl(currentItem)).then(() => {
         const btn = document.getElementById('copy-btn');
         btn.classList.add('copied');
         btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
@@ -1271,7 +1370,31 @@
       return data.results.map(item => ({ ...item, media_type: 'tv' }));
     }
 
+    async function fetchItemById(id, type) {
+      const res = await fetch(`${BASE_URL}/${type}/${id}?api_key=${API_KEY}`);
+      const data = await res.json();
+      return { ...data, media_type: type };
+    }
+
+    // Deep-link support: if the URL has ?id=...&type=..., open that title's modal on load
+    async function checkDeepLink() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      const type = params.get('type');
+      if (id && type) {
+        try {
+          const item = await fetchItemById(id, type === 'tv' ? 'tv' : 'movie');
+          showDetails(item, false);
+        } catch (error) {
+          console.error('Deep link load failed:', error);
+        }
+      }
+    }
+
     async function init() {
+      renderSkeletonCards('movies-list');
+      renderSkeletonCards('tvshows-list');
+      renderSkeletonCards('anime-list');
       try {
         const [movies, tvShows, anime] = await Promise.all([
           fetchTrending('movie'),
@@ -1284,6 +1407,8 @@
         displayList(movies, 'movies-list');
         displayList(tvShows, 'tvshows-list');
         displayList(anime, 'anime-list');
+
+        await checkDeepLink();
       } catch (error) {
         console.error('TMDB Load Error:', error);
         showToast('Failed to load movie data.');
