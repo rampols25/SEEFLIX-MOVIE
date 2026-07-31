@@ -641,6 +641,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-wrap: wrap;
     }
     .server-selector label {
       font-size: 0.8rem;
@@ -649,7 +650,7 @@
       letter-spacing: 1px;
       white-space: nowrap;
     }
-    #server {
+    #server, .modal-select {
       background: var(--surface3);
       border: 1px solid var(--border);
       color: white;
@@ -660,9 +661,10 @@
       outline: none;
       cursor: pointer;
       flex: 1;
+      min-width: 120px;
       transition: border-color 0.2s;
     }
-    #server:focus { border-color: var(--gold); }
+    #server:focus, .modal-select:focus { border-color: var(--gold); }
 
     .share-panel {
       background: var(--surface2);
@@ -881,6 +883,7 @@
       <a href="#">Movies</a>
       <a href="#">TV Shows</a>
       <a href="#">Anime</a>
+      <a href="#cdrama-section">C-Dramas</a>
     </div>
     <div class="nav-right">
       <div class="search-wrap">
@@ -959,6 +962,17 @@
     </div>
   </section>
 
+  <!-- CHINESE DRAMA ROW -->
+  <section class="section fade-in" id="cdrama-section">
+    <div class="section-header">
+      <h2 class="section-title">Trending Chinese Dramas</h2>
+      <a href="#" class="section-see-all">See All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="carousel-wrap">
+      <div class="list" id="cdrama-list"></div>
+    </div>
+  </section>
+
   <!-- ANIME ROW -->
   <section class="section fade-in">
     <div class="section-header">
@@ -1020,11 +1034,18 @@
 
         <div class="server-selector">
           <label><i class="fas fa-server"></i>&nbsp; Server</label>
-          <select id="server" onchange="changeServer()">
+          <select id="server" class="modal-select" onchange="changeServer()">
             <option value="vidsrc.cc">Vidsrc.cc (Fastest)</option>
             <option value="vidsrc.me">Vidsrc.me</option>
             <option value="player.videasy.net">Videasy</option>
           </select>
+        </div>
+
+        <div class="server-selector" id="episode-selector-wrap" style="display:none; margin-top: 12px;">
+          <label><i class="fas fa-list-ol"></i>&nbsp; Season</label>
+          <select id="season-select" class="modal-select" onchange="changeSeason()"></select>
+          <label><i class="fas fa-play-circle"></i>&nbsp; Episode</label>
+          <select id="episode-select" class="modal-select" onchange="changeServer()"></select>
         </div>
 
         <!-- SHARE PANEL -->
@@ -1160,7 +1181,7 @@
     }
 
     // Modal
-    function showDetails(item, updateHistory = true) {
+    async function showDetails(item, updateHistory = true) {
       currentItem = item;
       document.getElementById('modal-title').textContent = item.title || item.name;
       document.getElementById('modal-description').textContent = item.overview || '';
@@ -1172,6 +1193,20 @@
       document.getElementById('share-panel').style.display = 'none';
       document.getElementById('modal').classList.add('open');
       document.body.style.overflow = 'hidden';
+
+      const epWrap = document.getElementById('episode-selector-wrap');
+      if (item.media_type === 'tv') {
+        epWrap.style.display = 'flex';
+        try {
+          await loadSeasons(item.id);
+          await loadEpisodes(item.id, document.getElementById('season-select').value || 1);
+        } catch (err) {
+          console.error('Failed to load seasons/episodes:', err);
+        }
+      } else {
+        epWrap.style.display = 'none';
+      }
+
       changeServer();
 
       if (updateHistory) {
@@ -1180,18 +1215,64 @@
       }
     }
 
+    // Populate the Season dropdown for a TV title
+    async function loadSeasons(tvId) {
+      const res = await fetch(`${BASE_URL}/tv/${tvId}?api_key=${API_KEY}`);
+      const data = await res.json();
+      const seasons = (data.seasons || []).filter(s => s.season_number > 0);
+      const seasonSelect = document.getElementById('season-select');
+      seasonSelect.innerHTML = seasons
+        .map(s => `<option value="${s.season_number}">Season ${s.season_number}</option>`)
+        .join('') || '<option value="1">Season 1</option>';
+      return seasons;
+    }
+
+    // Populate the Episode dropdown for a given TV title + season
+    async function loadEpisodes(tvId, seasonNumber) {
+      const res = await fetch(`${BASE_URL}/tv/${tvId}/season/${seasonNumber}?api_key=${API_KEY}`);
+      const data = await res.json();
+      const episodeSelect = document.getElementById('episode-select');
+      episodeSelect.innerHTML = (data.episodes || [])
+        .map(e => `<option value="${e.episode_number}">Episode ${e.episode_number} - ${e.name || ''}</option>`)
+        .join('') || '<option value="1">Episode 1</option>';
+    }
+
+    // When the season changes, reload its episode list then refresh the player
+    async function changeSeason() {
+      if (!currentItem) return;
+      const season = document.getElementById('season-select').value;
+      try {
+        await loadEpisodes(currentItem.id, season);
+      } catch (err) {
+        console.error('Failed to load episodes:', err);
+      }
+      changeServer();
+    }
+
     function changeServer() {
       if (!currentItem) return;
       const server = document.getElementById('server').value;
       const type = currentItem.media_type === 'movie' ? 'movie' : 'tv';
       let url = '';
 
-      if (server === 'vidsrc.cc')
-        url = `https://vidsrc.cc/v2/embed/${type}/${currentItem.id}`;
-      else if (server === 'vidsrc.me')
-        url = `https://vidsrc.net/embed/${type}/?tmdb=${currentItem.id}`;
-      else if (server === 'player.videasy.net')
-        url = `https://player.videasy.net/${type}/${currentItem.id}`;
+      if (type === 'movie') {
+        if (server === 'vidsrc.cc')
+          url = `https://vidsrc.cc/v2/embed/movie/${currentItem.id}`;
+        else if (server === 'vidsrc.me')
+          url = `https://vidsrc.net/embed/movie/?tmdb=${currentItem.id}`;
+        else if (server === 'player.videasy.net')
+          url = `https://player.videasy.net/movie/${currentItem.id}`;
+      } else {
+        const season = document.getElementById('season-select').value || 1;
+        const episode = document.getElementById('episode-select').value || 1;
+
+        if (server === 'vidsrc.cc')
+          url = `https://vidsrc.cc/v2/embed/tv/${currentItem.id}/${season}/${episode}`;
+        else if (server === 'vidsrc.me')
+          url = `https://vidsrc.net/embed/tv/?tmdb=${currentItem.id}&season=${season}&episode=${episode}`;
+        else if (server === 'player.videasy.net')
+          url = `https://player.videasy.net/tv/${currentItem.id}/${season}/${episode}`;
+      }
 
       document.getElementById('modal-video').src = url;
     }
@@ -1332,6 +1413,13 @@
       return data.results.map(item => ({ ...item, media_type: 'tv' }));
     }
 
+    // Trending Chinese dramas: mainland/Chinese-origin TV series, excluding animation
+    async function fetchTrendingChineseDrama() {
+      const res = await fetch(`${BASE_URL}/discover/tv?api_key=${API_KEY}&with_origin_country=CN&with_original_language=zh&without_genres=16&sort_by=popularity.desc`);
+      const data = await res.json();
+      return data.results.map(item => ({ ...item, media_type: 'tv' }));
+    }
+
     async function fetchItemById(id, type) {
       const res = await fetch(`${BASE_URL}/${type}/${id}?api_key=${API_KEY}`);
       const data = await res.json();
@@ -1356,11 +1444,13 @@
     async function init() {
       renderSkeletonCards('movies-list');
       renderSkeletonCards('tvshows-list');
+      renderSkeletonCards('cdrama-list');
       renderSkeletonCards('anime-list');
       try {
-        const [movies, tvShows, anime] = await Promise.all([
+        const [movies, tvShows, cdramas, anime] = await Promise.all([
           fetchTrending('movie'),
           fetchTrending('tv'),
+          fetchTrendingChineseDrama(),
           fetchTrendingAnime()
         ]);
 
@@ -1368,6 +1458,7 @@
         buildTicker([...movies, ...tvShows]);
         displayList(movies, 'movies-list');
         displayList(tvShows, 'tvshows-list');
+        displayList(cdramas, 'cdrama-list');
         displayList(anime, 'anime-list');
 
         await checkDeepLink();
