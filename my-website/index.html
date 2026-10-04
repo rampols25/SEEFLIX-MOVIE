@@ -1077,11 +1077,9 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // Set window.BACKEND_URL before this script if your API is not on localhost.
-    // Example: window.BACKEND_URL = "https://api.example.com";
-    // Movie data now comes from your Python backend.
-    const BACKEND_URL = window.BACKEND_URL || 'http://localhost:8000';
-    const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+    const BASE_URL = 'https://movies-j-api-proxy.jayjovendinawanao2020.workers.dev'; 
+const TMDB_DIRECT_KEY = '1e86095039d9eb32cbcf1aa445b23d92';
+const IMG_URL = 'https://image.tmdb.org/t/p/w500';
     let currentItem;
 
 
