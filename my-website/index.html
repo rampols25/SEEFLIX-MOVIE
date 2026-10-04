@@ -1033,11 +1033,9 @@
         </div>
 
         <div class="server-selector">
-          <label><i class="fas fa-server"></i>&nbsp; Server</label>
+          <label><i class="fas fa-server"></i>&nbsp; Source</label>
           <select id="server" class="modal-select" onchange="changeServer()">
-            <option value="player.videasy.net">Videasy</option>
-            <option value="vidsrc.cc">Vidsrc.cc</option>
-            <option value="vidsrc.me">Vidsrc.me</option>
+            <option value="backend">Authorized backend source</option>
           </select>
         </div>
 
@@ -1079,9 +1077,11 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    const API_KEY = '169689830f09449f1d23896257d507db';
-const BASE_URL = 'https://api.themoviedb.org/3';
-const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+    // Set window.BACKEND_URL before this script if your API is not on localhost.
+    // Example: window.BACKEND_URL = "https://api.example.com";
+    // Movie data now comes from your Python backend.
+    const BACKEND_URL = window.BACKEND_URL || 'http://localhost:8000';
+    const IMG_URL = 'https://image.tmdb.org/t/p/w500';
     let currentItem;
 
 
@@ -1214,11 +1214,13 @@ const IMG_URL = 'https://image.tmdb.org/t/p/w500';
       }
     }
 
-    // Populate the Season dropdown for a TV title
+    // Movie/TV details and playback are supplied by your backend.
+    // The backend should only return streams/files you are authorized to serve.
     async function loadSeasons(tvId) {
-      const res = await fetch(`${BASE_URL}/tv/${tvId}?api_key=${API_KEY}`);
+      const res = await fetch(`${BACKEND_URL}/api/tv/${encodeURIComponent(tvId)}/seasons`);
+      if (!res.ok) throw new Error(`Season request failed: ${res.status}`);
       const data = await res.json();
-      const seasons = (data.seasons || []).filter(s => s.season_number > 0);
+      const seasons = data.seasons || [];
       const seasonSelect = document.getElementById('season-select');
       seasonSelect.innerHTML = seasons
         .map(s => `<option value="${s.season_number}">Season ${s.season_number}</option>`)
@@ -1226,9 +1228,11 @@ const IMG_URL = 'https://image.tmdb.org/t/p/w500';
       return seasons;
     }
 
-    // Populate the Episode dropdown for a given TV title + season
     async function loadEpisodes(tvId, seasonNumber) {
-      const res = await fetch(`${BASE_URL}/tv/${tvId}/season/${seasonNumber}?api_key=${API_KEY}`);
+      const res = await fetch(
+        `${BACKEND_URL}/api/tv/${encodeURIComponent(tvId)}/season/${encodeURIComponent(seasonNumber)}`
+      );
+      if (!res.ok) throw new Error(`Episode request failed: ${res.status}`);
       const data = await res.json();
       const episodeSelect = document.getElementById('episode-select');
       episodeSelect.innerHTML = (data.episodes || [])
@@ -1236,7 +1240,6 @@ const IMG_URL = 'https://image.tmdb.org/t/p/w500';
         .join('') || '<option value="1">Episode 1</option>';
     }
 
-    // When the season changes, reload its episode list then refresh the player
     async function changeSeason() {
       if (!currentItem) return;
       const season = document.getElementById('season-select').value;
@@ -1244,36 +1247,43 @@ const IMG_URL = 'https://image.tmdb.org/t/p/w500';
         await loadEpisodes(currentItem.id, season);
       } catch (err) {
         console.error('Failed to load episodes:', err);
+        showToast('Unable to load episodes.');
       }
       changeServer();
     }
 
-    function changeServer() {
+    async function changeServer() {
       if (!currentItem) return;
-      const server = document.getElementById('server').value;
+
       const type = currentItem.media_type === 'movie' ? 'movie' : 'tv';
-      let url = '';
+      const payload = {
+        id: currentItem.id,
+        type,
+        season: type === 'tv' ? Number(document.getElementById('season-select').value || 1) : null,
+        episode: type === 'tv' ? Number(document.getElementById('episode-select').value || 1) : null
+      };
 
-      if (type === 'movie') {
-        if (server === 'vidsrc.cc')
-          url = `https://vidsrc.cc/v2/embed/movie/${currentItem.id}`;
-        else if (server === 'vidsrc.me')
-          url = `https://vidsrc.net/embed/movie/?tmdb=${currentItem.id}`;
-        else if (server === 'player.videasy.net')
-          url = `https://player.videasy.net/movie/${currentItem.id}`;
-      } else {
-        const season = document.getElementById('season-select').value || 1;
-        const episode = document.getElementById('episode-select').value || 1;
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/play`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
 
-        if (server === 'vidsrc.cc')
-          url = `https://vidsrc.cc/v2/embed/tv/${currentItem.id}/${season}/${episode}`;
-        else if (server === 'vidsrc.me')
-          url = `https://vidsrc.net/embed/tv/?tmdb=${currentItem.id}&season=${season}&episode=${episode}`;
-        else if (server === 'player.videasy.net')
-          url = `https://player.videasy.net/tv/${currentItem.id}/${season}/${episode}`;
+        if (!res.ok) throw new Error(`Playback request failed: ${res.status}`);
+
+        const data = await res.json();
+
+        if (!data.url) {
+          throw new Error('Backend did not return a playable URL.');
+        }
+
+        document.getElementById('modal-video').src = data.url;
+      } catch (err) {
+        console.error('Playback error:', err);
+        document.getElementById('modal-video').src = '';
+        showToast('No authorized playback source is available.');
       }
-
-      document.getElementById('modal-video').src = url;
     }
 
     function closeModal() {
@@ -1356,28 +1366,42 @@ const IMG_URL = 'https://image.tmdb.org/t/p/w500';
     }
 
     async function searchTMDB() {
-      const query = document.getElementById('search-input').value;
+      const query = document.getElementById('search-input').value.trim();
+      const container = document.getElementById('search-results');
+
       if (query.length < 2) {
-        document.getElementById('search-results').innerHTML = '';
+        container.innerHTML = '';
         return;
       }
 
-      const res = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
-      const data = await res.json();
-      const container = document.getElementById('search-results');
-      container.innerHTML = '';
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/search?q=${encodeURIComponent(query)}`);
+        if (!res.ok) throw new Error(`Search failed: ${res.status}`);
+        const data = await res.json();
 
-      data.results.forEach(item => {
-        if (!item.poster_path) return;
-        const card = document.createElement('div');
-        card.className = 'search-card';
-        card.innerHTML = `<img src="${IMG_URL}${item.poster_path}" alt="${item.title || item.name}" loading="lazy" />`;
-        card.onclick = () => {
-          closeSearchModal();
-          showDetails(item);
-        };
-        container.appendChild(card);
-      });
+        container.innerHTML = '';
+
+        (data.results || []).forEach(item => {
+          if (!item.poster_path) return;
+          const card = document.createElement('div');
+          card.className = 'search-card';
+          card.innerHTML = `
+            <img src="${IMG_URL}${item.poster_path}" alt="${item.title || item.name}" loading="lazy" />
+          `;
+          card.onclick = () => {
+            closeSearchModal();
+            showDetails(item);
+          };
+          container.appendChild(card);
+        });
+
+        if (!container.children.length) {
+          container.innerHTML = '<p style="color:#888">No results found.</p>';
+        }
+      } catch (error) {
+        console.error('Backend search error:', error);
+        container.innerHTML = '<p style="color:#888">Search service unavailable.</p>';
+      }
     }
 
     // Toast
@@ -1399,37 +1423,28 @@ const IMG_URL = 'https://image.tmdb.org/t/p/w500';
       document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
     });
 
-    // Fetch data
-    async function fetchTrending(type) {
-      const res = await fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
+    // Fetch data from the Python backend.
+    async function fetchTrending(category) {
+      const res = await fetch(`${BACKEND_URL}/api/trending/${encodeURIComponent(category)}`);
+      if (!res.ok) throw new Error(`Trending request failed: ${res.status}`);
       const data = await res.json();
-      return data.results.map(item => ({ ...item, media_type: type }));
-    }
-
-    async function fetchTrendingAnime() {
-      const res = await fetch(`${BASE_URL}/discover/tv?api_key=${API_KEY}&with_original_language=ja&with_genres=16`);
-      const data = await res.json();
-      return data.results.map(item => ({ ...item, media_type: 'tv' }));
-    }
-
-    // Trending Chinese dramas: mainland/Chinese-origin TV series, excluding animation
-    async function fetchTrendingChineseDrama() {
-      const res = await fetch(`${BASE_URL}/discover/tv?api_key=${API_KEY}&with_origin_country=CN&with_original_language=zh&without_genres=16&sort_by=popularity.desc`);
-      const data = await res.json();
-      return data.results.map(item => ({ ...item, media_type: 'tv' }));
+      return data.results || [];
     }
 
     async function fetchItemById(id, type) {
-      const res = await fetch(`${BASE_URL}/${type}/${id}?api_key=${API_KEY}`);
+      const res = await fetch(
+        `${BACKEND_URL}/api/item/${encodeURIComponent(type)}/${encodeURIComponent(id)}`
+      );
+      if (!res.ok) throw new Error(`Item request failed: ${res.status}`);
       const data = await res.json();
       return { ...data, media_type: type };
     }
 
-    // Deep-link support: if the URL has ?id=...&type=..., open that title's modal on load
     async function checkDeepLink() {
       const params = new URLSearchParams(window.location.search);
       const id = params.get('id');
       const type = params.get('type');
+
       if (id && type) {
         try {
           const item = await fetchItemById(id, type === 'tv' ? 'tv' : 'movie');
@@ -1445,12 +1460,13 @@ const IMG_URL = 'https://image.tmdb.org/t/p/w500';
       renderSkeletonCards('tvshows-list');
       renderSkeletonCards('cdrama-list');
       renderSkeletonCards('anime-list');
+
       try {
         const [movies, tvShows, cdramas, anime] = await Promise.all([
-          fetchTrending('movie'),
+          fetchTrending('movies'),
           fetchTrending('tv'),
-          fetchTrendingChineseDrama(),
-          fetchTrendingAnime()
+          fetchTrending('cdrama'),
+          fetchTrending('anime')
         ]);
 
         if (movies.length) displayBanner(movies[0]);
@@ -1462,8 +1478,8 @@ const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
         await checkDeepLink();
       } catch (error) {
-        console.error('TMDB Load Error:', error);
-        showToast('Failed to load movie data.');
+        console.error('Backend Load Error:', error);
+        showToast('Failed to load movie data from the backend.');
       }
     }
 
@@ -1477,8 +1493,5 @@ const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
     init();
   </script>
-
-  <!-- Adsterra Social Bar -->
-  <script src="https://continuationseriously.com/fe/c0/14/fec01470f800ed7dfe264bf34c6db729.js"></script>
 </body>
 </html>
