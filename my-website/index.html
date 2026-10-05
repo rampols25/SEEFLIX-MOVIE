@@ -638,6 +638,35 @@
       display: block;
     }
 
+    /* Browser fullscreen for the player container */
+
+    .modal-hero:fullscreen {
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      aspect-ratio: auto;
+      border-radius: 0;
+      box-shadow: none;
+      background: #000;
+    }
+
+    .modal-hero:-webkit-full-screen {
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      aspect-ratio: auto;
+      border-radius: 0;
+      box-shadow: none;
+      background: #000;
+    }
+
+    .modal-hero:fullscreen #modal-video,
+    .modal-hero:-webkit-full-screen #modal-video {
+      width: 100%;
+      height: 100%;
+    }
+
+
     .video-ad-overlay {
       position: absolute;
       inset: 0;
@@ -750,7 +779,7 @@
     }
 
     /* =========================
-       CINESRC SERVER
+       MULTI-SERVER PLAYER
     ========================= */
 
     .server-selector {
@@ -758,9 +787,14 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 16px 20px;
+    }
+
+    .server-selector-head {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 12px;
+      margin-bottom: 12px;
       flex-wrap: wrap;
     }
 
@@ -771,31 +805,65 @@
       letter-spacing: 1px;
     }
 
-    #server,
-    .modal-select {
-      background: var(--surface3);
-      border: 1px solid var(--border);
-      color: white;
-      padding: 8px 14px;
-      border-radius: 6px;
-      font-family: 'DM Sans', sans-serif;
-      outline: none;
-      cursor: pointer;
-      flex: 1;
-      min-width: 150px;
+    .server-current {
+      font-size: .7rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    #server:focus,
-    .modal-select:focus {
-      border-color: var(--gold);
+    .server-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .server-btn {
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      color: rgba(240,236,228,.8);
+      padding: 10px 8px;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .server-btn:hover {
+      border-color: var(--gold-dim);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .server-btn.active {
+      background: linear-gradient(
+        135deg,
+        var(--red),
+        var(--red-dark)
+      );
+      border-color: var(--red);
+      color: white;
+      box-shadow: 0 5px 18px rgba(230,57,70,.25);
+    }
+
+    .server-btn.disabled {
+      opacity: .45;
     }
 
     .server-info {
       width: 100%;
-      margin-top: 2px;
+      margin-top: 12px;
       font-size: .7rem;
       color: var(--text-muted);
       line-height: 1.5;
+    }
+
+    @media(max-width:768px) {
+      .server-buttons {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     /* =========================
@@ -1461,8 +1529,8 @@
           HD
         </span>
 
-        <span class="pill">
-          CineSRC
+        <span class="pill" id="modal-player-pill">
+          Multi-Server
         </span>
 
       </div>
@@ -1492,31 +1560,35 @@
       </div>
 
 
-      <!-- CINESRC SERVER -->
+      <!-- MULTI-SERVER PLAYER -->
 
       <div class="server-selector">
 
-        <label>
-          <i class="fas fa-server"></i>
-          Player
-        </label>
+        <div class="server-selector-head">
 
-        <select
-          id="server"
-          class="modal-select"
-          onchange="changeServer()"
-        >
+          <label>
+            <i class="fas fa-server"></i>
+            Choose Server
+          </label>
 
-          <option value="cinesrc">
-            CineSRC
-          </option>
+          <span
+            class="server-current"
+            id="server-current"
+          >
+            Server 1 • CineSRC
+          </span>
 
-        </select>
+        </div>
+
+        <div
+          class="server-buttons"
+          id="server-buttons"
+        ></div>
 
         <div class="server-info">
-          Movie playback uses the TMDB movie ID.
-          TV playback uses the selected TMDB show ID,
-          season, and episode.
+          Choose another available player if the current
+          player does not work. Server URLs are configured
+          in the PLAYER_SERVERS section of this file.
         </div>
 
       </div>
@@ -1685,19 +1757,104 @@ const IMG_URL =
   'https://image.tmdb.org/t/p/w500';
 
 /*
-  CineSRC base URL.
+  =========================================================
+  PLAYER SERVERS
+  =========================================================
 
-  Movie:
+  Server 1 is configured for CineSRC.
+
+  Movie format:
   https://cinesrc.st/embed/movie/{TMDB_ID}
 
-  TV:
+  TV format:
   https://cinesrc.st/embed/tv/{TMDB_ID}?s={SEASON}&e={EPISODE}
+
+  Servers 2-7 are intentionally left unconfigured.
+  Add only player URLs/providers that you are authorized
+  to embed. Do not invent URLs here.
+
+  Each provider function receives:
+    id      = TMDB ID
+    season  = selected TV season
+    episode = selected TV episode
+
+  Return an empty string if that server is not configured.
 */
 
-const CINESRC_URL =
-  'https://cinesrc.st/embed';
+const PLAYER_SERVERS = [
 
+  {
+    id: 'server1',
+    name: 'Server 1',
+    label: 'CineSRC',
+    enabled: true,
 
+    movie: ({ id }) =>
+      `https://cinesrc.st/embed/movie/${id}`,
+
+    tv: ({ id, season, episode }) =>
+      `https://cinesrc.st/embed/tv/${id}` +
+      `?s=${encodeURIComponent(season)}` +
+      `&e=${encodeURIComponent(episode)}`
+  },
+
+  {
+    id: 'server2',
+    name: 'Server 2',
+    label: 'Not Configured',
+    enabled: false,
+    movie: () => '',
+    tv: () => ''
+  },
+
+  {
+    id: 'server3',
+    name: 'Server 3',
+    label: 'Not Configured',
+    enabled: false,
+    movie: () => '',
+    tv: () => ''
+  },
+
+  {
+    id: 'server4',
+    name: 'Server 4',
+    label: 'Not Configured',
+    enabled: false,
+    movie: () => '',
+    tv: () => ''
+  },
+
+  {
+    id: 'server5',
+    name: 'Server 5',
+    label: 'Not Configured',
+    enabled: false,
+    movie: () => '',
+    tv: () => ''
+  },
+
+  {
+    id: 'server6',
+    name: 'Server 6',
+    label: 'Not Configured',
+    enabled: false,
+    movie: () => '',
+    tv: () => ''
+  },
+
+  {
+    id: 'server7',
+    name: 'Server 7',
+    label: 'Not Configured',
+    enabled: false,
+    movie: () => '',
+    tv: () => ''
+  }
+
+];
+
+let selectedServer = 'server1';
 let currentItem = null;
 let bannerItem = null;
 
@@ -2243,8 +2400,171 @@ async function changeSeason() {
 
 
 /* =========================================================
-   CINESRC PLAYER
+   MULTI-SERVER PLAYER
 ========================================================= */
+
+function renderServerButtons() {
+
+  const container =
+    document.getElementById('server-buttons');
+
+  if (!container)
+    return;
+
+  container.innerHTML = '';
+
+  PLAYER_SERVERS.forEach(server => {
+
+    const button =
+      document.createElement('button');
+
+    button.type = 'button';
+    button.className =
+      'server-btn' +
+      (
+        server.id === selectedServer
+          ? ' active'
+          : ''
+      ) +
+      (
+        !server.enabled
+          ? ' disabled'
+          : ''
+      );
+
+    button.innerHTML =
+      `<i class="fas fa-server"></i>
+       ${escapeHtml(server.name)}`;
+
+    if (!server.enabled) {
+
+      button.title =
+        `${server.name} is not configured yet`;
+
+      button.onclick = () => {
+
+        showToast(
+          `${server.name} is not configured yet.`
+        );
+
+      };
+
+    } else {
+
+      button.title =
+        `Play using ${server.label}`;
+
+      button.onclick = () => {
+
+        selectedServer =
+          server.id;
+
+        changeServer();
+
+      };
+
+    }
+
+    container.appendChild(button);
+
+  });
+
+  updateServerUI();
+
+}
+
+
+function updateServerUI() {
+
+  const container =
+    document.getElementById(
+      'server-buttons'
+    );
+
+  if (container) {
+
+    container
+      .querySelectorAll('.server-btn')
+      .forEach(button => {
+
+        const server =
+          PLAYER_SERVERS.find(
+            s =>
+              s.name ===
+              button.textContent.trim()
+                .split(' ')
+                .slice(0,2)
+                .join(' ')
+          );
+
+      });
+
+  }
+
+  PLAYER_SERVERS.forEach(server => {
+
+    const buttons =
+      document.querySelectorAll(
+        '.server-btn'
+      );
+
+    buttons.forEach(button => {
+
+      const isSelected =
+        button.textContent
+          .includes(server.name);
+
+      button.classList.toggle(
+        'active',
+        server.id === selectedServer
+      );
+
+    });
+
+  });
+
+  const current =
+    PLAYER_SERVERS.find(
+      server =>
+        server.id === selectedServer
+    );
+
+  const currentLabel =
+    document.getElementById(
+      'server-current'
+    );
+
+  if (currentLabel && current) {
+
+    currentLabel.textContent =
+      `${current.name} • ${current.label}`;
+
+  }
+
+  const playerPill =
+    document.getElementById(
+      'modal-player-pill'
+    );
+
+  if (playerPill && current) {
+
+    playerPill.textContent =
+      current.label;
+
+  }
+
+}
+
+
+function getSelectedServer() {
+
+  return PLAYER_SERVERS.find(
+    server =>
+      server.id === selectedServer
+  ) || PLAYER_SERVERS[0];
+
+}
+
 
 function changeServer() {
 
@@ -2259,34 +2579,31 @@ function changeServer() {
   if (!iframe)
     return;
 
+  const server =
+    getSelectedServer();
+
+  if (!server || !server.enabled) {
+
+    showToast(
+      `${server?.name || 'Server'} is not configured yet.`
+    );
+
+    return;
+
+  }
+
   let url = '';
-
-  /*
-    MOVIE
-
-    Exact CineSRC URL:
-
-    https://cinesrc.st/embed/movie/{TMDB_ID}
-  */
 
   if (
     currentItem.media_type === 'movie'
   ) {
 
     url =
-      `${CINESRC_URL}/movie/${currentItem.id}`;
+      server.movie({
+        id: currentItem.id
+      });
 
-  }
-
-  /*
-    TV
-
-    Exact CineSRC URL:
-
-    https://cinesrc.st/embed/tv/{TMDB_ID}?s={season}&e={episode}
-  */
-
-  else {
+  } else {
 
     const season =
       document.getElementById(
@@ -2299,30 +2616,55 @@ function changeServer() {
       ).value || 1;
 
     url =
-      `${CINESRC_URL}/tv/${currentItem.id}` +
-      `?s=${encodeURIComponent(season)}` +
-      `&e=${encodeURIComponent(episode)}`;
+      server.tv({
+        id: currentItem.id,
+        season,
+        episode
+      });
+
+  }
+
+  if (!url) {
+
+    showToast(
+      `${server.name} does not support this title.`
+    );
+
+    return;
 
   }
 
   /*
-    IMPORTANT:
-    No additional CineSRC parameters are
-    appended here.
-
-    Movie example:
-    https://cinesrc.st/embed/movie/550
-
-    TV example:
-    https://cinesrc.st/embed/tv/1399?s=1&e=1
+    Keep the loading overlay visible while
+    a new server is being loaded.
   */
 
-  iframe.src = url;
+  const overlay =
+    document.getElementById(
+      'video-overlay'
+    );
 
-  console.log(
-    'CineSRC URL:',
-    url
-  );
+  if (overlay) {
+
+    overlay.style.display =
+      'flex';
+
+  }
+
+  iframe.src = '';
+
+  setTimeout(() => {
+
+    iframe.src = url;
+
+    console.log(
+      `${server.name} URL:`,
+      url
+    );
+
+  }, 50);
+
+  updateServerUI();
 
 }
 
@@ -2538,10 +2880,84 @@ async function requestVideoFullscreen() {
 
 
 /* =========================================================
+   FULLSCREEN UI
+========================================================= */
+
+function updateFullscreenButton() {
+
+  const button =
+    document.querySelector(
+      '.modal-cta-row .btn-primary'
+    );
+
+  if (!button)
+    return;
+
+  const player =
+    document.querySelector('.modal-hero');
+
+  const isFullscreen =
+    document.fullscreenElement === player ||
+    document.webkitFullscreenElement === player;
+
+  button.innerHTML =
+    isFullscreen
+      ? '<i class="fas fa-compress"></i> Exit Fullscreen'
+      : '<i class="fas fa-expand"></i> Fullscreen';
+
+}
+
+
+document.addEventListener(
+  'fullscreenchange',
+  updateFullscreenButton
+);
+
+document.addEventListener(
+  'webkitfullscreenchange',
+  updateFullscreenButton
+);
+
+
+/* =========================================================
    CLOSE MODAL
 ========================================================= */
 
-function closeModal() {
+async function exitPlayerFullscreen() {
+
+  try {
+
+    if (
+      document.fullscreenElement &&
+      document.exitFullscreen
+    ) {
+
+      await document.exitFullscreen();
+
+    } else if (
+      document.webkitFullscreenElement &&
+      document.webkitExitFullscreen
+    ) {
+
+      document.webkitExitFullscreen();
+
+    }
+
+  } catch (error) {
+
+    console.warn(
+      'Fullscreen exit error:',
+      error
+    );
+
+  }
+
+}
+
+
+async function closeModal() {
+
+  await exitPlayerFullscreen();
 
   document.getElementById(
     'modal'
@@ -2580,7 +2996,9 @@ function closeModal() {
 
 window.addEventListener(
   'popstate',
-  () => {
+  async () => {
+
+    await exitPlayerFullscreen();
 
     document.getElementById(
       'modal'
@@ -3300,6 +3718,7 @@ async function init() {
 }
 
 
+renderServerButtons();
 init();
 
 </script>
