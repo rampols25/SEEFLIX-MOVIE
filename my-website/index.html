@@ -2375,17 +2375,25 @@ function handleVideoClick() {
    FULLSCREEN
 ========================================================= */
 
-function requestVideoFullscreen() {
+async function requestVideoFullscreen() {
+
+  const player =
+    document.querySelector('.modal-hero');
 
   const iframe =
-    document.getElementById(
-      'modal-video'
+    document.getElementById('modal-video');
+
+  if (!player || !iframe) {
+
+    showToast(
+      'Video player not found.'
     );
 
-  if (
-    !iframe ||
-    !iframe.src
-  ) {
+    return;
+
+  }
+
+  if (!iframe.src) {
 
     showToast(
       'Start the player first.'
@@ -2395,55 +2403,133 @@ function requestVideoFullscreen() {
 
   }
 
-  document.getElementById(
-    'video-overlay'
-  ).style.display =
-    'none';
+  /*
+    If already fullscreen, exit fullscreen.
+  */
 
-  const request =
-    iframe.requestFullscreen ||
-    iframe.webkitRequestFullscreen ||
-    iframe.mozRequestFullScreen ||
-    iframe.msRequestFullscreen;
-
-  if (request) {
+  if (
+    document.fullscreenElement ||
+    document.webkitFullscreenElement
+  ) {
 
     try {
 
-      const result =
-        request.call(iframe);
-
       if (
-        result &&
-        result.catch
+        document.exitFullscreen
       ) {
 
-        result.catch(
-          () =>
-            showToast(
-              'Fullscreen was blocked by your browser.'
-            )
-        );
+        await document.exitFullscreen();
+
+      } else if (
+        document.webkitExitFullscreen
+      ) {
+
+        document.webkitExitFullscreen();
 
       }
 
     } catch (error) {
 
       console.error(
-        'Fullscreen error:',
+        'Exit fullscreen error:',
         error
-      );
-
-      showToast(
-        'Fullscreen is unavailable.'
       );
 
     }
 
-  } else {
+    return;
+
+  }
+
+  /*
+    Hide the See-Flix overlay before
+    entering fullscreen.
+  */
+
+  const overlay =
+    document.getElementById(
+      'video-overlay'
+    );
+
+  if (overlay) {
+
+    overlay.style.display =
+      'none';
+
+  }
+
+  /*
+    Use the PLAYER CONTAINER rather
+    than the cross-origin iframe.
+  */
+
+  try {
+
+    if (
+      player.requestFullscreen
+    ) {
+
+      await player.requestFullscreen();
+
+    }
+
+    else if (
+      player.webkitRequestFullscreen
+    ) {
+
+      player.webkitRequestFullscreen();
+
+    }
+
+    else if (
+      player.mozRequestFullScreen
+    ) {
+
+      player.mozRequestFullScreen();
+
+    }
+
+    else if (
+      player.msRequestFullscreen
+    ) {
+
+      player.msRequestFullscreen();
+
+    }
+
+    else {
+
+      /*
+        Fallback: try the iframe itself.
+      */
+
+      if (
+        iframe.requestFullscreen
+      ) {
+
+        await iframe.requestFullscreen();
+
+      }
+
+      else {
+
+        showToast(
+          'Fullscreen is not supported by this browser.'
+        );
+
+      }
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      'Fullscreen error:',
+      error
+    );
 
     showToast(
-      'Fullscreen is not supported.'
+      'Fullscreen was blocked by your browser.'
     );
 
   }
