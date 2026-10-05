@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>See-Flix | Watch Movies & TV</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
@@ -26,15 +25,8 @@
       --glow: rgba(232,184,109,0.15);
     }
 
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
@@ -44,18 +36,9 @@
       cursor: default;
     }
 
-    ::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #000;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--gold-dim);
-      border-radius: 2px;
-    }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #000; }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
 
     .navbar {
       display: flex;
@@ -69,7 +52,6 @@
       z-index: 1000;
       transition: background 0.4s;
     }
-
     .navbar.scrolled {
       background: rgba(8,8,8,0.97);
       backdrop-filter: blur(20px);
@@ -87,11 +69,7 @@
       align-items: center;
       gap: 8px;
     }
-
-    .logo span {
-      color: var(--red);
-    }
-
+    .logo span { color: var(--red); }
     .logo-premium-tag {
       font-family: 'DM Sans', sans-serif;
       font-size: 0.55rem;
@@ -109,7 +87,6 @@
       display: flex;
       gap: 30px;
     }
-
     .nav-center a {
       color: rgba(240,236,228,0.7);
       text-decoration: none;
@@ -119,10 +96,7 @@
       text-transform: uppercase;
       transition: color 0.2s;
     }
-
-    .nav-center a:hover {
-      color: var(--gold);
-    }
+    .nav-center a:hover { color: var(--gold); }
 
     .nav-right {
       display: flex;
@@ -135,7 +109,6 @@
       display: flex;
       align-items: center;
     }
-
     .search-wrap i {
       position: absolute;
       left: 12px;
@@ -143,7 +116,6 @@
       font-size: 0.85rem;
       pointer-events: none;
     }
-
     .search-bar {
       background: rgba(255,255,255,0.06);
       border: 1px solid var(--border);
@@ -157,16 +129,12 @@
       transition: all 0.3s;
       cursor: pointer;
     }
-
     .search-bar:focus {
       background: rgba(255,255,255,0.1);
       border-color: var(--gold-dim);
       width: 230px;
     }
-
-    .search-bar::placeholder {
-      color: var(--text-muted);
-    }
+    .search-bar::placeholder { color: var(--text-muted); }
 
     .banner {
       height: 92vh;
@@ -176,7 +144,6 @@
       display: flex;
       align-items: flex-end;
     }
-
     .banner-bg {
       position: absolute;
       inset: 0;
@@ -186,20 +153,17 @@
       transform: scale(1.05);
       animation: slow-zoom 20s ease-in-out infinite alternate;
     }
-
     @keyframes slow-zoom {
       from { transform: scale(1.05); }
       to { transform: scale(1.12); }
     }
-
     .banner-overlay {
       position: absolute;
       inset: 0;
-      background:
+      background: 
         linear-gradient(to right, rgba(8,8,8,0.9) 0%, rgba(8,8,8,0.3) 60%, transparent 100%),
         linear-gradient(to top, rgba(8,8,8,1) 0%, rgba(8,8,8,0.5) 30%, transparent 60%);
     }
-
     .banner-content {
       position: relative;
       z-index: 2;
@@ -207,16 +171,9 @@
       max-width: 680px;
       animation: fadeUp 1s ease both;
     }
-
     @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .banner-badge {
@@ -252,18 +209,11 @@
       font-size: 0.85rem;
       color: rgba(240,236,228,0.6);
     }
-
     .banner-meta .rating {
       color: var(--gold);
       font-weight: 600;
     }
-
-    .banner-meta .dot {
-      width: 3px;
-      height: 3px;
-      background: currentColor;
-      border-radius: 50%;
-    }
+    .banner-meta .dot { width: 3px; height: 3px; background: currentColor; border-radius: 50%; }
 
     .banner-desc {
       font-size: 1rem;
@@ -297,7 +247,6 @@
       box-shadow: 0 6px 30px rgba(230,57,70,0.4);
       letter-spacing: 0.5px;
     }
-
     .btn-primary:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 40px rgba(230,57,70,0.6);
@@ -321,7 +270,6 @@
       border: 1px solid rgba(255,255,255,0.15);
       transition: all 0.25s;
     }
-
     .btn-ghost:hover {
       background: rgba(255,255,255,0.18);
       border-color: rgba(255,255,255,0.3);
@@ -334,18 +282,15 @@
       overflow: hidden;
       padding: 10px 0;
     }
-
     .ticker {
       display: flex;
       animation: ticker-scroll 30s linear infinite;
       white-space: nowrap;
     }
-
     @keyframes ticker-scroll {
       from { transform: translateX(0); }
       to { transform: translateX(-50%); }
     }
-
     .ticker-item {
       display: inline-flex;
       align-items: center;
@@ -356,11 +301,7 @@
       letter-spacing: 1.5px;
       text-transform: uppercase;
     }
-
-    .ticker-item i {
-      color: var(--gold);
-      font-size: 0.65rem;
-    }
+    .ticker-item i { color: var(--gold); font-size: 0.65rem; }
 
     .section {
       padding: 40px 0 0;
@@ -373,7 +314,6 @@
       padding: 0 5%;
       margin-bottom: 18px;
     }
-
     .section-title {
       font-family: 'DM Serif Display', serif;
       font-size: 1.4rem;
@@ -382,7 +322,6 @@
       align-items: center;
       gap: 10px;
     }
-
     .section-title::before {
       content: '';
       width: 3px;
@@ -391,7 +330,6 @@
       border-radius: 2px;
       display: block;
     }
-
     .section-see-all {
       font-size: 0.75rem;
       color: var(--gold);
@@ -404,15 +342,11 @@
       gap: 4px;
       transition: gap 0.2s;
     }
-
-    .section-see-all:hover {
-      gap: 8px;
-    }
+    .section-see-all:hover { gap: 8px; }
 
     .carousel-wrap {
       position: relative;
     }
-
     .list {
       display: flex;
       overflow-x: auto;
@@ -421,10 +355,7 @@
       scrollbar-width: none;
       scroll-snap-type: x mandatory;
     }
-
-    .list::-webkit-scrollbar {
-      display: none;
-    }
+    .list::-webkit-scrollbar { display: none; }
 
     .card {
       flex: 0 0 auto;
@@ -434,27 +365,20 @@
       position: relative;
       border-radius: 6px;
       overflow: hidden;
-      transition:
-        transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94),
-        box-shadow 0.35s;
+      transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.35s;
       transform-origin: center bottom;
     }
-
     .card:hover {
       transform: scale(1.12) translateY(-6px);
       z-index: 20;
-      box-shadow:
-        0 20px 45px rgba(0,0,0,0.6),
-        0 0 0 1px rgba(232,184,109,0.3);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.6), 0 0 0 1px rgba(232,184,109,0.3);
     }
-
     .card img {
       width: 100%;
       aspect-ratio: 2/3;
       object-fit: cover;
       display: block;
     }
-
     .card-overlay {
       position: absolute;
       inset: 0;
@@ -466,23 +390,17 @@
       justify-content: flex-end;
       padding: 12px;
     }
-
-    .card:hover .card-overlay {
-      opacity: 1;
-    }
-
+    .card:hover .card-overlay { opacity: 1; }
     .card-name {
       font-size: 0.75rem;
       font-weight: 600;
       line-height: 1.3;
       margin-bottom: 4px;
     }
-
     .card-rating {
       font-size: 0.68rem;
       color: var(--gold);
     }
-
     .card-play {
       position: absolute;
       top: 50%;
@@ -499,7 +417,6 @@
       opacity: 0;
       transition: all 0.3s;
     }
-
     .card:hover .card-play {
       opacity: 1;
       transform: translate(-50%, -50%) scale(1);
@@ -522,23 +439,16 @@
       letter-spacing: 0;
     }
 
+    /* Skeleton loaders */
     @keyframes shimmer {
       0% { background-position: -400px 0; }
       100% { background-position: 400px 0; }
     }
-
     .skeleton {
-      background:
-        linear-gradient(
-          90deg,
-          var(--surface2) 25%,
-          var(--surface3) 37%,
-          var(--surface2) 63%
-        );
+      background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 37%, var(--surface2) 63%);
       background-size: 800px 100%;
       animation: shimmer 1.6s linear infinite;
     }
-
     .card-skeleton {
       flex: 0 0 auto;
       width: 160px;
@@ -555,7 +465,6 @@
       overflow: hidden;
       border: 1px solid var(--border);
     }
-
     .strip-item {
       background: var(--surface2);
       padding: 24px;
@@ -565,11 +474,7 @@
       transition: background 0.2s;
       cursor: pointer;
     }
-
-    .strip-item:hover {
-      background: var(--surface3);
-    }
-
+    .strip-item:hover { background: var(--surface3); }
     .strip-icon {
       width: 46px;
       height: 46px;
@@ -581,17 +486,9 @@
       font-size: 1.1rem;
       flex-shrink: 0;
     }
+    .strip-text h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 3px; }
+    .strip-text p { font-size: 0.75rem; color: var(--text-muted); }
 
-    .strip-text h3 {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 3px;
-    }
-
-    .strip-text p {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
 
     .modal {
       display: none;
@@ -603,29 +500,20 @@
       background: rgba(0,0,0,0);
       transition: background 0.3s;
     }
-
     .modal.open {
       display: flex;
       background: rgba(0,0,0,0.92);
       backdrop-filter: blur(8px);
     }
-
     .modal-inner {
       width: 92%;
       max-width: 950px;
       padding: 90px 0 60px;
       animation: modalIn 0.4s cubic-bezier(0.25,0.46,0.45,0.94) both;
     }
-
     @keyframes modalIn {
-      from {
-        opacity: 0;
-        transform: translateY(40px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .modal-hero {
@@ -637,31 +525,14 @@
       background: #000;
       box-shadow: 0 30px 80px rgba(0,0,0,0.8);
     }
-
     #modal-video {
       width: 100%;
       height: 100%;
-      display: block;
       border: none;
-      background: #000;
-      object-fit: contain;
     }
-
-    #modal-video:fullscreen {
-      width: 100vw;
-      height: 100vh;
-    }
-
-    #modal-video:-webkit-full-screen {
-      width: 100vw;
-      height: 100vh;
-    }
-
-    #modal-video:-moz-full-screen {
-      width: 100vw;
-      height: 100vh;
-    }
-
+    #modal-video:fullscreen { width: 100vw; height: 100vh; }
+    #modal-video:-webkit-full-screen { width: 100vw; height: 100vh; }
+    #modal-video:-moz-full-screen { width: 100vw; height: 100vh; }
     .video-ad-overlay {
       position: absolute;
       inset: 0;
@@ -671,7 +542,6 @@
       align-items: center;
       justify-content: center;
     }
-
     .play-pulse {
       width: 70px;
       height: 70px;
@@ -684,23 +554,15 @@
       animation: pulse 2s infinite;
       box-shadow: 0 0 0 0 rgba(230,57,70,0.4);
     }
-
     @keyframes pulse {
-      0% {
-        box-shadow: 0 0 0 0 rgba(230,57,70,0.5);
-      }
-      70% {
-        box-shadow: 0 0 0 20px rgba(230,57,70,0);
-      }
-      100% {
-        box-shadow: 0 0 0 0 rgba(230,57,70,0);
-      }
+      0% { box-shadow: 0 0 0 0 rgba(230,57,70,0.5); }
+      70% { box-shadow: 0 0 0 20px rgba(230,57,70,0); }
+      100% { box-shadow: 0 0 0 0 rgba(230,57,70,0); }
     }
 
     .modal-meta {
       padding: 28px 0 0;
     }
-
     .modal-top {
       display: flex;
       align-items: flex-start;
@@ -708,7 +570,6 @@
       gap: 20px;
       margin-bottom: 16px;
     }
-
     #modal-title {
       font-family: 'Bebas Neue', cursive;
       font-size: clamp(2rem, 5vw, 3.5rem);
@@ -716,7 +577,6 @@
       line-height: 1;
       color: #fff;
     }
-
     .modal-actions-right {
       display: flex;
       gap: 10px;
@@ -738,12 +598,7 @@
       font-size: 0.95rem;
       transition: all 0.2s;
     }
-
-    .icon-btn:hover {
-      background: var(--surface3);
-      border-color: var(--gold);
-      color: var(--gold);
-    }
+    .icon-btn:hover { background: var(--surface3); border-color: var(--gold); color: var(--gold); }
 
     .modal-pills {
       display: flex;
@@ -751,7 +606,6 @@
       gap: 8px;
       margin-bottom: 16px;
     }
-
     .pill {
       background: var(--surface2);
       border: 1px solid var(--border);
@@ -762,11 +616,7 @@
       padding: 5px 12px;
       border-radius: 30px;
     }
-
-    .pill.gold {
-      border-color: var(--gold);
-      color: var(--gold);
-    }
+    .pill.gold { border-color: var(--gold); color: var(--gold); }
 
     #modal-description {
       font-size: 0.95rem;
@@ -793,7 +643,6 @@
       gap: 12px;
       flex-wrap: wrap;
     }
-
     .server-selector label {
       font-size: 0.8rem;
       color: var(--text-muted);
@@ -801,9 +650,7 @@
       letter-spacing: 1px;
       white-space: nowrap;
     }
-
-    #server,
-    .modal-select {
+    #server, .modal-select {
       background: var(--surface3);
       border: 1px solid var(--border);
       color: white;
@@ -817,23 +664,7 @@
       min-width: 120px;
       transition: border-color 0.2s;
     }
-
-    #server:focus,
-    .modal-select:focus {
-      border-color: var(--gold);
-    }
-
-    .server-status {
-      width: 100%;
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      margin-top: 3px;
-    }
-
-    .server-status i {
-      color: var(--gold);
-      margin-right: 5px;
-    }
+    #server:focus, .modal-select:focus { border-color: var(--gold); }
 
     .share-panel {
       background: var(--surface2);
@@ -842,7 +673,6 @@
       padding: 20px;
       margin-top: 20px;
     }
-
     .share-title {
       font-size: 0.75rem;
       text-transform: uppercase;
@@ -853,20 +683,17 @@
       align-items: center;
       gap: 8px;
     }
-
     .share-title::after {
       content: '';
       flex: 1;
       height: 1px;
       background: var(--border);
     }
-
     .share-buttons {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
     }
-
     .share-btn {
       display: inline-flex;
       align-items: center;
@@ -882,43 +709,13 @@
       transition: all 0.2s;
       letter-spacing: 0.3px;
     }
-
-    .share-btn:hover {
-      transform: translateY(-2px);
-      opacity: 0.9;
-    }
-
-    .share-fb {
-      background: #1877F2;
-      color: white;
-    }
-
-    .share-tw {
-      background: #000;
-      color: white;
-      border: 1px solid #333;
-    }
-
-    .share-wa {
-      background: #25D366;
-      color: white;
-    }
-
-    .share-tg {
-      background: #229ED9;
-      color: white;
-    }
-
-    .share-copy {
-      background: var(--surface3);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    .share-copy.copied {
-      border-color: var(--gold);
-      color: var(--gold);
-    }
+    .share-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .share-fb { background: #1877F2; color: white; }
+    .share-tw { background: #000; color: white; border: 1px solid #333; }
+    .share-wa { background: #25D366; color: white; }
+    .share-tg { background: #229ED9; color: white; }
+    .share-copy { background: var(--surface3); color: var(--text); border: 1px solid var(--border); }
+    .share-copy.copied { border-color: var(--gold); color: var(--gold); }
 
     .close-btn {
       position: fixed;
@@ -938,11 +735,7 @@
       z-index: 2100;
       transition: all 0.2s;
     }
-
-    .close-btn:hover {
-      background: var(--red);
-      border-color: var(--red);
-    }
+    .close-btn:hover { background: var(--red); border-color: var(--red); }
 
     .search-modal {
       display: none;
@@ -954,21 +747,16 @@
       align-items: center;
       padding-top: 90px;
     }
-
-    .search-modal.open {
-      display: flex;
-    }
+    .search-modal.open { display: flex; }
 
     .search-modal-inner {
       width: 90%;
       max-width: 700px;
     }
-
     .search-field-wrap {
       position: relative;
       margin-bottom: 30px;
     }
-
     .search-field-wrap i {
       position: absolute;
       left: 0;
@@ -977,7 +765,6 @@
       font-size: 1.3rem;
       color: var(--text-muted);
     }
-
     #search-input {
       width: 100%;
       padding: 14px 0 14px 36px;
@@ -990,14 +777,8 @@
       font-family: 'DM Serif Display', serif;
       transition: border-color 0.3s;
     }
-
-    #search-input:focus {
-      border-bottom-color: var(--gold);
-    }
-
-    #search-input::placeholder {
-      color: var(--text-muted);
-    }
+    #search-input:focus { border-bottom-color: var(--gold); }
+    #search-input::placeholder { color: var(--text-muted); }
 
     #search-results {
       display: grid;
@@ -1006,24 +787,14 @@
       max-height: 60vh;
       overflow-y: auto;
     }
-
     .search-card {
       cursor: pointer;
       border-radius: 6px;
       overflow: hidden;
       transition: transform 0.2s;
     }
-
-    .search-card:hover {
-      transform: scale(1.05);
-    }
-
-    .search-card img {
-      width: 100%;
-      aspect-ratio: 2/3;
-      object-fit: cover;
-      display: block;
-    }
+    .search-card:hover { transform: scale(1.05); }
+    .search-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; }
 
     footer {
       margin-top: 60px;
@@ -1031,7 +802,6 @@
       padding: 40px 5%;
       text-align: center;
     }
-
     .footer-logo {
       font-family: 'Bebas Neue', cursive;
       font-size: 2rem;
@@ -1040,17 +810,12 @@
       display: inline-block;
       margin-bottom: 16px;
     }
-
-    .footer-logo span {
-      color: var(--red);
-    }
-
+    .footer-logo span { color: var(--red); }
     footer p {
       font-size: 0.78rem;
       color: var(--text-muted);
       line-height: 1.8;
     }
-
     .footer-links {
       display: flex;
       justify-content: center;
@@ -1058,7 +823,6 @@
       margin: 16px 0;
       flex-wrap: wrap;
     }
-
     .footer-links a {
       font-size: 0.75rem;
       color: var(--text-muted);
@@ -1067,10 +831,7 @@
       text-transform: uppercase;
       transition: color 0.2s;
     }
-
-    .footer-links a:hover {
-      color: var(--gold);
-    }
+    .footer-links a:hover { color: var(--gold); }
 
     .toast {
       position: fixed;
@@ -1089,7 +850,6 @@
       transition: all 0.3s;
       pointer-events: none;
     }
-
     .toast.show {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
@@ -1100,54 +860,24 @@
       transform: translateY(20px);
       transition: opacity 0.6s ease, transform 0.6s ease;
     }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: none;
-    }
+    .fade-in.visible { opacity: 1; transform: none; }
 
     @media (max-width: 768px) {
-      .nav-center {
-        display: none;
-      }
-
-      .featured-strip {
-        grid-template-columns: 1fr;
-      }
-
-      .banner-title {
-        font-size: 2.5rem;
-      }
-
-      .banner-desc {
-        display: none;
-      }
-
-      .modal-top {
-        flex-direction: column;
-      }
-
-      .share-buttons {
-        gap: 8px;
-      }
-
-      .share-btn {
-        padding: 9px 13px;
-        font-size: 0.78rem;
-      }
+      .nav-center { display: none; }
+      .featured-strip { grid-template-columns: 1fr; }
+      .banner-title { font-size: 2.5rem; }
+      .banner-desc { display: none; }
+      .modal-top { flex-direction: column; }
+      .share-buttons { gap: 8px; }
+      .share-btn { padding: 9px 13px; font-size: 0.78rem; }
     }
   </style>
 </head>
-
 <body>
 
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
-    <a class="logo" href="#">
-      SEE<span>-</span>FLIX
-      <span class="logo-premium-tag">Premium</span>
-    </a>
-
+    <a class="logo" href="#">SEE<span>-</span>FLIX <span class="logo-premium-tag">Premium</span></a>
     <div class="nav-center">
       <a href="#">Home</a>
       <a href="#">Movies</a>
@@ -1155,189 +885,108 @@
       <a href="#">Anime</a>
       <a href="#cdrama-section">C-Dramas</a>
     </div>
-
     <div class="nav-right">
       <div class="search-wrap">
         <i class="fas fa-search"></i>
-        <input
-          type="text"
-          class="search-bar"
-          placeholder="Search titles..."
-          onfocus="openSearchModal()"
-          readonly
-        />
+        <input type="text" class="search-bar" placeholder="Search titles..." onfocus="openSearchModal()" readonly />
       </div>
     </div>
   </nav>
-
 
   <!-- BANNER -->
   <section class="banner">
     <div class="banner-bg" id="banner-bg"></div>
     <div class="banner-overlay"></div>
-
     <div class="banner-content">
-      <div class="banner-badge">
-        <i class="fas fa-fire"></i> Trending Now
-      </div>
-
-      <h1 class="banner-title" id="banner-title">
-        Loading…
-      </h1>
-
+      <div class="banner-badge"><i class="fas fa-fire"></i> Trending Now</div>
+      <h1 class="banner-title" id="banner-title">Loading…</h1>
       <div class="banner-meta">
-        <span class="rating" id="banner-rating">
-          <i class="fas fa-star"></i> 8.5
-        </span>
-
+        <span class="rating" id="banner-rating"><i class="fas fa-star"></i> 8.5</span>
         <span class="dot"></span>
-
         <span id="banner-year">2024</span>
-
         <span class="dot"></span>
-
         <span>HD</span>
       </div>
-
       <p class="banner-desc" id="banner-desc"></p>
-
       <div class="banner-actions">
         <button class="btn-primary" onclick="handleBannerWatch()">
           <i class="fas fa-play"></i> Watch Now Free
         </button>
-
-        <button class="btn-ghost" onclick="bannerDetails()">
+        <button class="btn-ghost" id="banner-info-btn" onclick="bannerDetails()">
           <i class="fas fa-info-circle"></i> More Info
         </button>
       </div>
     </div>
   </section>
 
-
   <!-- TICKER -->
   <div class="ticker-wrap">
     <div class="ticker" id="ticker"></div>
   </div>
 
-
   <!-- FEATURED STRIP -->
   <div class="featured-strip fade-in">
-
     <div class="strip-item">
-      <div class="strip-icon">
-        <i class="fas fa-bolt"></i>
-      </div>
-
-      <div class="strip-text">
-        <h3>Instant Stream</h3>
-        <p>No signup needed. Watch instantly.</p>
-      </div>
+      <div class="strip-icon"><i class="fas fa-bolt"></i></div>
+      <div class="strip-text"><h3>Instant Stream</h3><p>No signup needed. Watch instantly.</p></div>
     </div>
-
     <div class="strip-item">
-      <div class="strip-icon">
-        <i class="fas fa-film"></i>
-      </div>
-
-      <div class="strip-text">
-        <h3>10,000+ Titles</h3>
-        <p>Movies, TV & Anime — all free.</p>
-      </div>
+      <div class="strip-icon"><i class="fas fa-film"></i></div>
+      <div class="strip-text"><h3>10,000+ Titles</h3><p>Movies, TV & Anime — all free.</p></div>
     </div>
-
     <div class="strip-item">
-      <div class="strip-icon">
-        <i class="fas fa-shield-alt"></i>
-      </div>
-
-      <div class="strip-text">
-        <h3>Always Updated</h3>
-        <p>Fresh titles added every week.</p>
-      </div>
+      <div class="strip-icon"><i class="fas fa-shield-alt"></i></div>
+      <div class="strip-text"><h3>Always Updated</h3><p>Fresh titles added every week.</p></div>
     </div>
-
   </div>
-
 
   <!-- MOVIES ROW -->
   <section class="section fade-in">
-
     <div class="section-header">
       <h2 class="section-title">Trending Movies</h2>
-
-      <a href="#" class="section-see-all">
-        See All <i class="fas fa-arrow-right"></i>
-      </a>
+      <a href="#" class="section-see-all">See All <i class="fas fa-arrow-right"></i></a>
     </div>
-
     <div class="carousel-wrap">
       <div class="list" id="movies-list"></div>
     </div>
-
   </section>
-
 
   <!-- TV SHOWS ROW -->
   <section class="section fade-in">
-
     <div class="section-header">
       <h2 class="section-title">Trending TV Shows</h2>
-
-      <a href="#" class="section-see-all">
-        See All <i class="fas fa-arrow-right"></i>
-      </a>
+      <a href="#" class="section-see-all">See All <i class="fas fa-arrow-right"></i></a>
     </div>
-
     <div class="carousel-wrap">
       <div class="list" id="tvshows-list"></div>
     </div>
-
   </section>
-
 
   <!-- CHINESE DRAMA ROW -->
   <section class="section fade-in" id="cdrama-section">
-
     <div class="section-header">
       <h2 class="section-title">Trending Chinese Dramas</h2>
-
-      <a href="#" class="section-see-all">
-        See All <i class="fas fa-arrow-right"></i>
-      </a>
+      <a href="#" class="section-see-all">See All <i class="fas fa-arrow-right"></i></a>
     </div>
-
     <div class="carousel-wrap">
       <div class="list" id="cdrama-list"></div>
     </div>
-
   </section>
-
 
   <!-- ANIME ROW -->
   <section class="section fade-in">
-
     <div class="section-header">
       <h2 class="section-title">Trending Anime</h2>
-
-      <a href="#" class="section-see-all">
-        See All <i class="fas fa-arrow-right"></i>
-      </a>
+      <a href="#" class="section-see-all">See All <i class="fas fa-arrow-right"></i></a>
     </div>
-
     <div class="carousel-wrap">
       <div class="list" id="anime-list"></div>
     </div>
-
   </section>
-
 
   <!-- FOOTER -->
   <footer>
-
-    <div class="footer-logo">
-      SEE<span>-</span>FLIX
-    </div>
-
+    <div class="footer-logo">SEE<span>-</span>FLIX</div>
     <div class="footer-links">
       <a href="#">Home</a>
       <a href="#">Movies</a>
@@ -1345,1899 +994,493 @@
       <a href="#">Anime</a>
       <a href="#">Contact</a>
     </div>
-
-    <p>
-      Stream thousands of movies and TV shows completely free.<br>
-      All content is provided via third-party servers for entertainment purposes.
-    </p>
-
+    <p>Stream thousands of movies and TV shows completely free.<br>All content is provided via third-party servers for entertainment purposes.</p>
   </footer>
-
 
   <!-- DETAILS MODAL -->
   <div class="modal" id="modal">
-
-    <span class="close-btn" onclick="closeModal()">
-      <i class="fas fa-times"></i>
-    </span>
-
+    <span class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></span>
     <div class="modal-inner">
-
       <div class="modal-hero">
-
-        <div
-          class="video-ad-overlay"
-          id="video-overlay"
-          onclick="handleVideoClick()"
-        >
-          <div class="play-pulse">
-            <i class="fas fa-play"></i>
-          </div>
+        <div class="video-ad-overlay" id="video-overlay" onclick="handleVideoClick()">
+          <div class="play-pulse"><i class="fas fa-play"></i></div>
         </div>
-
-        <video
-          id="modal-video"
-          controls
-          playsinline
-          preload="metadata"
-        >
-          Your browser does not support HTML5 video.
-        </video>
-
+        <iframe id="modal-video" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
       </div>
 
-
       <div class="modal-meta">
-
         <div class="modal-top">
-
           <h2 id="modal-title"></h2>
-
           <div class="modal-actions-right">
-
-            <button
-              class="icon-btn"
-              onclick="toggleWishlist()"
-              title="Watchlist"
-            >
-              <i class="fas fa-bookmark"></i>
-            </button>
-
-            <button
-              class="icon-btn"
-              onclick="openSharePanel()"
-              title="Share"
-            >
-              <i class="fas fa-share-alt"></i>
-            </button>
-
+            <button class="icon-btn" onclick="toggleWishlist()" title="Watchlist"><i class="fas fa-bookmark"></i></button>
+            <button class="icon-btn" onclick="openSharePanel()" title="Share"><i class="fas fa-share-alt"></i></button>
           </div>
-
         </div>
-
 
         <div class="modal-pills" id="modal-pills">
-
-          <span
-            class="pill gold"
-            id="modal-rating-pill"
-          ></span>
-
-          <span
-            class="pill"
-            id="modal-year-pill"
-          ></span>
-
+          <span class="pill gold" id="modal-rating-pill"></span>
+          <span class="pill" id="modal-year-pill"></span>
           <span class="pill">HD</span>
           <span class="pill">Free</span>
-
         </div>
-
 
         <p id="modal-description"></p>
 
-
         <div class="modal-cta-row">
-
-          <button
-            class="btn-primary"
-            onclick="requestVideoFullscreen()"
-          >
-            <i class="fas fa-expand"></i>
-            Watch Fullscreen
+          <button class="btn-primary" onclick="requestVideoFullscreen()">
+            <i class="fas fa-expand"></i> Watch Fullscreen
           </button>
-
         </div>
-
-
-        <!-- =====================================================
-             SERVER SELECTOR
-             ===================================================== -->
 
         <div class="server-selector">
-
-          <label for="server">
-            <i class="fas fa-server"></i>&nbsp; Server
-          </label>
-
-          <select
-            id="server"
-            class="modal-select"
-            onchange="changeServer()"
-          >
-
-            <!-- Direct MP4 test source for the HTML5 player -->
-            <option value="html5test">
-              HTML5 Test — MP4
-            </option>
-
-            <!-- Existing embed provider (not compatible with native <video>) -->
-            <option value="videasy">
-              Embed — Videasy (not HTML5)
-            </option>
-
-            <!-- Existing provider -->
-            <option value="vidsrc">
-              Server 2 — Vidsrc
-            </option>
-
-            <!-- Existing provider -->
-            <option value="vidsrcnet">
-              Server 3 — Vidsrc.net
-            </option>
-
-            <!-- Configure only if authorized -->
-            <option value="server4">
-              Server 4 — Custom
-            </option>
-
-            <option value="server5">
-              Server 5 — Custom
-            </option>
-
-            <option value="server6">
-              Server 6 — Custom
-            </option>
-
-            <option value="server7">
-              Server 7 — Custom
-            </option>
-
-            <option value="server8">
-              Server 8 — Custom
-            </option>
-
-            <option value="server9">
-              Server 9 — Custom
-            </option>
-
-            <option value="server10">
-              Server 10 — Custom
-            </option>
-
+          <label><i class="fas fa-server"></i>&nbsp; Server</label>
+          <select id="server" class="modal-select" onchange="changeServer()">
+            <option value="player.videasy.net">Videasy</option>
+            <option value="vidsrc.cc">Vidsrc.cc</option>
+            <option value="vidsrc.me">Vidsrc.me</option>
           </select>
-
-          <div
-            class="server-status"
-            id="server-status"
-          >
-            <i class="fas fa-circle-info"></i>
-            HTML5 test source is ready. Select a server to load the player.
-          </div>
-
         </div>
 
-
-        <!-- TV SEASON / EPISODE -->
-
-        <div
-          class="server-selector"
-          id="episode-selector-wrap"
-          style="display:none; margin-top:12px;"
-        >
-
-          <label for="season-select">
-            <i class="fas fa-list-ol"></i>&nbsp; Season
-          </label>
-
-          <select
-            id="season-select"
-            class="modal-select"
-            onchange="changeSeason()"
-          ></select>
-
-
-          <label for="episode-select">
-            <i class="fas fa-play-circle"></i>&nbsp; Episode
-          </label>
-
-          <select
-            id="episode-select"
-            class="modal-select"
-            onchange="changeServer()"
-          ></select>
-
+        <div class="server-selector" id="episode-selector-wrap" style="display:none; margin-top: 12px;">
+          <label><i class="fas fa-list-ol"></i>&nbsp; Season</label>
+          <select id="season-select" class="modal-select" onchange="changeSeason()"></select>
+          <label><i class="fas fa-play-circle"></i>&nbsp; Episode</label>
+          <select id="episode-select" class="modal-select" onchange="changeServer()"></select>
         </div>
-
 
         <!-- SHARE PANEL -->
-
-        <div
-          class="share-panel"
-          id="share-panel"
-          style="display:none"
-        >
-
-          <div class="share-title">
-            Share this title
-          </div>
-
+        <div class="share-panel" id="share-panel" style="display:none">
+          <div class="share-title">Share this title</div>
           <div class="share-buttons">
-
-            <button
-              class="share-btn share-fb"
-              onclick="shareFacebook()"
-            >
-              <i class="fab fa-facebook-f"></i>
-              Facebook
-            </button>
-
-            <button
-              class="share-btn share-tw"
-              onclick="shareTwitter()"
-            >
-              <i class="fab fa-x-twitter"></i>
-              Twitter / X
-            </button>
-
-            <button
-              class="share-btn share-wa"
-              onclick="shareWhatsApp()"
-            >
-              <i class="fab fa-whatsapp"></i>
-              WhatsApp
-            </button>
-
-            <button
-              class="share-btn share-tg"
-              onclick="shareTelegram()"
-            >
-              <i class="fab fa-telegram-plane"></i>
-              Telegram
-            </button>
-
-            <button
-              class="share-btn share-copy"
-              id="copy-btn"
-              onclick="copyLink()"
-            >
-              <i class="fas fa-link"></i>
-              Copy Link
-            </button>
-
+            <button class="share-btn share-fb" onclick="shareFacebook()"><i class="fab fa-facebook-f"></i> Facebook</button>
+            <button class="share-btn share-tw" onclick="shareTwitter()"><i class="fab fa-x-twitter"></i> Twitter / X</button>
+            <button class="share-btn share-wa" onclick="shareWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+            <button class="share-btn share-tg" onclick="shareTelegram()"><i class="fab fa-telegram-plane"></i> Telegram</button>
+            <button class="share-btn share-copy" id="copy-btn" onclick="copyLink()"><i class="fas fa-link"></i> Copy Link</button>
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 
   <!-- SEARCH MODAL -->
-
   <div class="search-modal" id="search-modal">
-
-    <span
-      class="close-btn"
-      onclick="closeSearchModal()"
-      style="position:fixed;top:20px;right:25px;"
-    >
-      <i class="fas fa-times"></i>
-    </span>
-
+    <span class="close-btn" onclick="closeSearchModal()" style="position:fixed;top:20px;right:25px;"><i class="fas fa-times"></i></span>
     <div class="search-modal-inner">
-
       <div class="search-field-wrap">
-
         <i class="fas fa-search"></i>
-
-        <input
-          type="text"
-          id="search-input"
-          placeholder="Search movies, shows…"
-          oninput="searchTMDB()"
-        />
-
+        <input type="text" id="search-input" placeholder="Search movies, shows…" oninput="searchTMDB()" />
       </div>
-
       <div id="search-results"></div>
-
     </div>
-
   </div>
-
 
   <!-- TOAST -->
   <div class="toast" id="toast"></div>
 
-
   <script>
-
-    // ============================================================
-    // TMDB CONFIGURATION
-    // ============================================================
-
-    const API_KEY =
-      '169689830f09449f1d23896257d507db';
-
-    const BASE_URL =
-      'https://api.themoviedb.org/3';
-
-    const IMG_URL =
-      'https://image.tmdb.org/t/p/w500';
-
-
-    // ============================================================
-    // GLOBAL STATE
-    // ============================================================
+    const API_KEY = '6e62f9e9731ceb92a84d1d1676354e23';
+    const BASE_URL = 'https://api.themoviedb.org/3';
+    const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
     let currentItem = null;
     let bannerItem = null;
 
-
-    // ============================================================
-    // SERVER CONFIGURATION
-    //
-    // Add your authorized embed providers here.
-    //
-    // Each provider supports:
-    // movie(tmdbId)
-    // tv(tmdbId, season, episode)
-    // ============================================================
-
-    const SERVERS = {
-
-      // ----------------------------------------------------------
-      // HTML5 TEST SERVER
-      // ----------------------------------------------------------
-      // Direct MP4 used only to verify the native HTML5 player.
-      // Replace with a source you own or are authorized to stream.
-      // ----------------------------------------------------------
-
-      html5test: {
-
-        name: 'HTML5 Test MP4',
-
-        movie: (tmdbId) =>
-          'https://www.w3schools.com/html5/movie.mp4',
-
-        tv: (tmdbId, season, episode) =>
-          'https://www.w3schools.com/html5/movie.mp4'
-
-      },
-
-
-      // ----------------------------------------------------------
-      // SERVER 1 — VIDEASY (EMBED URL - NOT NATIVE VIDEO)
-      // ----------------------------------------------------------
-
-      videasy: {
-
-        name: 'Videasy',
-
-        movie: (tmdbId) =>
-          `https://player.videasy.net/movie/${tmdbId}`,
-
-        tv: (tmdbId, season, episode) =>
-          `https://player.videasy.net/tv/${tmdbId}/${season}/${episode}`
-
-      },
-
-
-      // ----------------------------------------------------------
-      // SERVER 2 — VIDSRC
-      // ----------------------------------------------------------
-
-      vidsrc: {
-
-        name: 'Vidsrc',
-
-        movie: (tmdbId) =>
-          `https://vidsrc.cc/v2/embed/movie/${tmdbId}`,
-
-        tv: (tmdbId, season, episode) =>
-          `https://vidsrc.cc/v2/embed/tv/${tmdbId}/${season}/${episode}`
-
-      },
-
-
-      // ----------------------------------------------------------
-      // SERVER 3 — VIDSRC.NET
-      // ----------------------------------------------------------
-
-      vidsrcnet: {
-
-        name: 'Vidsrc.net',
-
-        movie: (tmdbId) =>
-          `https://vidsrc.net/embed/movie/?tmdb=${tmdbId}`,
-
-        tv: (tmdbId, season, episode) =>
-          `https://vidsrc.net/embed/tv/?tmdb=${tmdbId}&season=${season}&episode=${episode}`
-
-      },
-
-
-      // ----------------------------------------------------------
-      // SERVER 4
-      // ----------------------------------------------------------
-
-      server4: {
-
-        name: 'Custom Server 4',
-
-        movie: (tmdbId) =>
-          '',
-
-        tv: (tmdbId, season, episode) =>
-          ''
-
-      },
-
-
-      // ----------------------------------------------------------
-      // SERVER 5
-      // ----------------------------------------------------------
-
-      server5: {
-
-        name: 'Custom Server 5',
-
-        movie: (tmdbId) =>
-          '',
-
-        tv: (tmdbId, season, episode) =>
-          ''
-
-      },
-
-
-      // ----------------------------------------------------------
-      // SERVER 6
-      // ----------------------------------------------------------
-
-      server6: {
-
-        name: 'Custom Server 6',
-
-        movie: (tmdbId) =>
-          '',
-
-        tv: (tmdbId, season, episode) =>
-          ''
-
-      },
-
-
-      // ----------------------------------------------------------
-      // SERVER 7
-      // ----------------------------------------------------------
-
-      server7: {
-
-        name: 'Custom Server 7',
-
-        movie: (tmdbId) =>
-          '',
-
-        tv: (tmdbId, season, episode) =>
-          ''
-
-      },
-
-
-      // ----------------------------------------------------------
-      // SERVER 8
-      // ----------------------------------------------------------
-
-      server8: {
-
-        name: 'Custom Server 8',
-
-        movie: (tmdbId) =>
-          '',
-
-        tv: (tmdbId, season, episode) =>
-          ''
-
-      },
-
-
-      // ----------------------------------------------------------
-      // SERVER 9
-      // ----------------------------------------------------------
-
-      server9: {
-
-        name: 'Custom Server 9',
-
-        movie: (tmdbId) =>
-          '',
-
-        tv: (tmdbId, season, episode) =>
-          ''
-
-      },
-
-
-      // ----------------------------------------------------------
-      // SERVER 10
-      // ----------------------------------------------------------
-
-      server10: {
-
-        name: 'Custom Server 10',
-
-        movie: (tmdbId) =>
-          '',
-
-        tv: (tmdbId, season, episode) =>
-          ''
-
-      }
-
-    };
-
-
-    // ============================================================
-    // GET CURRENT SERVER SOURCE
-    // ============================================================
-
-    function getCurrentSource() {
-
-      if (!currentItem) {
-        return null;
-      }
-
-      const serverKey =
-        document.getElementById('server')?.value;
-
-      const server =
-        SERVERS[serverKey];
-
-      if (!server) {
-        return null;
-      }
-
-      if (currentItem.media_type === 'movie') {
-
-        return server.movie(currentItem.id);
-
-      }
-
-      const season =
-        document.getElementById('season-select')?.value || 1;
-
-      const episode =
-        document.getElementById('episode-select')?.value || 1;
-
-      return server.tv(
-        currentItem.id,
-        season,
-        episode
-      );
-
-    }
-
-
-    // ============================================================
-    // CHANGE SERVER
-    // ============================================================
-
-    function changeServer() {
-
-      if (!currentItem) {
-        return;
-      }
-
-      const serverSelect =
-        document.getElementById('server');
-
-      const videoFrame =
-        document.getElementById('modal-video');
-
-      const status =
-        document.getElementById('server-status');
-
-      if (!serverSelect || !videoFrame) {
-        return;
-      }
-
-      const serverKey =
-        serverSelect.value;
-
-      const server =
-        SERVERS[serverKey];
-
-      if (!server) {
-
-        videoFrame.removeAttribute('src');
-
-        if (status) {
-          status.innerHTML =
-            '<i class="fas fa-circle-exclamation"></i> Server configuration not found.';
-        }
-
-        return;
-      }
-
-
-      let url = '';
-
-
-      // ----------------------------------------------------------
-      // MOVIE
-      // ----------------------------------------------------------
-
-      if (currentItem.media_type === 'movie') {
-
-        url =
-          server.movie(currentItem.id);
-
-      }
-
-
-      // ----------------------------------------------------------
-      // TV
-      // ----------------------------------------------------------
-
-      else {
-
-        const season =
-          document.getElementById('season-select').value || 1;
-
-        const episode =
-          document.getElementById('episode-select').value || 1;
-
-        url =
-          server.tv(
-            currentItem.id,
-            season,
-            episode
-          );
-
-      }
-
-
-      // ----------------------------------------------------------
-      // EMPTY / UNCONFIGURED SERVER
-      // ----------------------------------------------------------
-
-      if (!url) {
-
-        videoFrame.removeAttribute('src');
-
-        if (status) {
-          status.innerHTML =
-            '<i class="fas fa-circle-exclamation"></i> This server has not been configured yet.';
-        }
-
-        return;
-      }
-
-
-      // ----------------------------------------------------------
-      // LOAD HTML5 VIDEO
-      // ----------------------------------------------------------
-
-      videoFrame.pause();
-      videoFrame.src = url;
-      videoFrame.load();
-
-      if (status) {
-
-        status.innerHTML =
-          `<i class="fas fa-circle-check"></i> ${server.name} loaded`;
-
-      }
-
-      videoFrame.onloadedmetadata = () => {
-        if (status) {
-          status.innerHTML =
-            `<i class="fas fa-circle-check"></i> ${server.name} ready`;
-        }
-      };
-
-      videoFrame.onerror = () => {
-        if (status) {
-          status.innerHTML =
-            `<i class="fas fa-circle-exclamation"></i> This source could not be played by the HTML5 video player.`;
-        }
-        console.error('HTML5 video error:', videoFrame.error);
-      };
-
-
-      console.log('================================');
-      console.log('SEE-FLIX PLAYER');
-      console.log('Server:', server.name);
-      console.log('TMDB ID:', currentItem.id);
-      console.log('Type:', currentItem.media_type);
-      console.log('Source:', url);
-      console.log('================================');
-
-    }
-
-
-    // ============================================================
-    // NAVBAR SCROLL
-    // ============================================================
-
+    // Navbar scroll
     window.addEventListener('scroll', () => {
-
-      document
-        .getElementById('navbar')
-        .classList
-        .toggle(
-          'scrolled',
-          window.scrollY > 50
-        );
-
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
     });
 
-
-    // ============================================================
-    // BANNER BUTTON
-    // ============================================================
-
+    // Banner button
     function handleBannerWatch() {
-
-      if (bannerItem) {
-        showDetails(bannerItem);
-      }
-
+      if (bannerItem) showDetails(bannerItem);
     }
 
-
-    // ============================================================
-    // VIDEO OVERLAY
-    // ============================================================
-
+    // Video overlay - reveal the player
     function handleVideoClick() {
-
-      document
-        .getElementById('video-overlay')
-        .style
-        .display = 'none';
-
+      document.getElementById('video-overlay').style.display = 'none';
     }
 
-
-    // ============================================================
-    // FULLSCREEN
-    // ============================================================
-
+    // Fullscreen fix: explicitly request fullscreen on the video iframe,
+    // with vendor-prefixed fallbacks for older browsers.
     function requestVideoFullscreen() {
-
-      const video =
-        document.getElementById('modal-video');
-
-      if (!video || !video.src) {
+      const iframe = document.getElementById('modal-video');
+      if (!iframe || !iframe.src) {
         showToast('Start the video first, then go fullscreen');
         return;
       }
-
       document.getElementById('video-overlay').style.display = 'none';
-
-      const req =
-        video.requestFullscreen ||
-        video.webkitRequestFullscreen ||
-        video.mozRequestFullScreen ||
-        video.msRequestFullscreen;
-
+      const req = iframe.requestFullscreen || iframe.webkitRequestFullscreen ||
+                  iframe.mozRequestFullScreen || iframe.msRequestFullscreen;
       if (req) {
-        Promise.resolve(req.call(video)).catch(() =>
-          showToast('Fullscreen was blocked by your browser')
-        );
+        req.call(iframe).catch(() => showToast('Fullscreen was blocked by your browser'));
       } else {
         showToast('Fullscreen is not supported on this browser');
       }
-
     }
 
-
-    // ============================================================
-    // BANNER
-    // ============================================================
-
+    // Banner
     function displayBanner(item) {
-
       bannerItem = item;
-
-      document
-        .getElementById('banner-bg')
-        .style
-        .backgroundImage =
+      document.getElementById('banner-bg').style.backgroundImage =
         `url(https://image.tmdb.org/t/p/original${item.backdrop_path})`;
-
-      document
-        .getElementById('banner-title')
-        .textContent =
-        item.title || item.name;
-
-      document
-        .getElementById('banner-desc')
-        .textContent =
+      document.getElementById('banner-title').textContent = item.title || item.name;
+      document.getElementById('banner-desc').textContent =
         (item.overview || '').substring(0, 180) + '…';
-
-      document
-        .getElementById('banner-rating')
-        .innerHTML =
+      document.getElementById('banner-rating').innerHTML =
         `<i class="fas fa-star"></i> ${item.vote_average?.toFixed(1) || 'N/A'}`;
-
-      const yr =
-        (
-          item.release_date ||
-          item.first_air_date ||
-          ''
-        ).slice(0, 4);
-
-      document
-        .getElementById('banner-year')
-        .textContent = yr;
-
+      const yr = (item.release_date || item.first_air_date || '').slice(0, 4);
+      document.getElementById('banner-year').textContent = yr;
     }
-
 
     function bannerDetails() {
-
-      if (bannerItem) {
-        showDetails(bannerItem);
-      }
-
+      if (bannerItem) showDetails(bannerItem);
     }
 
-
-    // ============================================================
-    // TICKER
-    // ============================================================
-
+    // Ticker
     function buildTicker(items) {
-
-      const ticker =
-        document.getElementById('ticker');
-
-      const texts =
-        items
-          .slice(0, 10)
-          .map(i => i.title || i.name);
-
-      const all =
-        [...texts, ...texts];
-
-      ticker.innerHTML =
-        all
-          .map(t =>
-            `<span class="ticker-item">
-              <i class="fas fa-circle"></i>${t}
-            </span>`
-          )
-          .join('');
-
+      const ticker = document.getElementById('ticker');
+      const texts = items.slice(0, 10).map(i => i.title || i.name);
+      const all = [...texts, ...texts];
+      ticker.innerHTML = all.map(t =>
+        `<span class="ticker-item"><i class="fas fa-circle"></i>${t}</span>`
+      ).join('');
     }
 
-
-    // ============================================================
-    // SKELETON
-    // ============================================================
-
-    function renderSkeletonCards(
-      containerId,
-      count = 8
-    ) {
-
-      const container =
-        document.getElementById(containerId);
-
+    // Skeleton placeholders while TMDB loads
+    function renderSkeletonCards(containerId, count = 8) {
+      const container = document.getElementById(containerId);
       container.innerHTML = '';
-
       for (let i = 0; i < count; i++) {
-
-        const el =
-          document.createElement('div');
-
-        el.className =
-          'card-skeleton skeleton';
-
+        const el = document.createElement('div');
+        el.className = 'card-skeleton skeleton';
         container.appendChild(el);
-
       }
-
     }
 
-
-    // ============================================================
-    // DISPLAY CARDS
-    // ============================================================
-
-    function displayList(
-      items,
-      containerId
-    ) {
-
-      const container =
-        document.getElementById(containerId);
-
+    // Cards
+    function displayList(items, containerId) {
+      const container = document.getElementById(containerId);
       container.innerHTML = '';
-
       items.forEach((item, idx) => {
-
-        if (!item.poster_path) {
-          return;
-        }
-
-        const card =
-          document.createElement('div');
-
-        card.className =
-          'card';
-
+        if (!item.poster_path) return;
+        const card = document.createElement('div');
+        card.className = 'card';
         card.innerHTML = `
-          <img
-            src="${IMG_URL}${item.poster_path}"
-            alt="${item.title || item.name}"
-            loading="lazy"
-          />
-
-          <div class="card-rank">
-            ${idx + 1}
-          </div>
-
+          <img src="${IMG_URL}${item.poster_path}" alt="${item.title || item.name}" loading="lazy" />
+          <div class="card-rank">${idx + 1}</div>
           <div class="card-overlay">
-
-            <div class="card-name">
-              ${item.title || item.name}
-            </div>
-
-            <div class="card-rating">
-              <i class="fas fa-star"></i>
-              ${item.vote_average?.toFixed(1) || '—'}
-            </div>
-
+            <div class="card-name">${item.title || item.name}</div>
+            <div class="card-rating"><i class="fas fa-star"></i> ${item.vote_average?.toFixed(1) || '—'}</div>
           </div>
-
-          <div class="card-play">
-            <i class="fas fa-play"></i>
-          </div>
+          <div class="card-play"><i class="fas fa-play"></i></div>
         `;
-
-        card.onclick =
-          () => showDetails(item);
-
+        card.onclick = () => showDetails(item);
         container.appendChild(card);
-
       });
-
     }
 
-
-    // ============================================================
-    // SHOW DETAILS
-    // ============================================================
-
-    async function showDetails(
-      item,
-      updateHistory = true
-    ) {
-
+    // Modal
+    async function showDetails(item, updateHistory = true) {
       currentItem = item;
-
-      document
-        .getElementById('modal-title')
-        .textContent =
-        item.title || item.name;
-
-      document
-        .getElementById('modal-description')
-        .textContent =
-        item.overview || '';
-
-      document
-        .getElementById('modal-rating-pill')
-        .innerHTML =
+      document.getElementById('modal-title').textContent = item.title || item.name;
+      document.getElementById('modal-description').textContent = item.overview || '';
+      document.getElementById('modal-rating-pill').innerHTML =
         `<i class="fas fa-star"></i> ${item.vote_average?.toFixed(1) || 'N/A'}`;
+      const yr = (item.release_date || item.first_air_date || '').slice(0, 4);
+      document.getElementById('modal-year-pill').textContent = yr || 'N/A';
+      document.getElementById('video-overlay').style.display = 'flex';
+      document.getElementById('share-panel').style.display = 'none';
+      document.getElementById('modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
 
-      const yr =
-        (
-          item.release_date ||
-          item.first_air_date ||
-          ''
-        ).slice(0, 4);
-
-      document
-        .getElementById('modal-year-pill')
-        .textContent =
-        yr || 'N/A';
-
-      document
-        .getElementById('video-overlay')
-        .style
-        .display = 'flex';
-
-      document
-        .getElementById('share-panel')
-        .style
-        .display = 'none';
-
-      document
-        .getElementById('modal')
-        .classList
-        .add('open');
-
-      document.body.style.overflow =
-        'hidden';
-
-
-      const epWrap =
-        document.getElementById(
-          'episode-selector-wrap'
-        );
-
-
-      // ----------------------------------------------------------
-      // TV
-      // ----------------------------------------------------------
-
+      const epWrap = document.getElementById('episode-selector-wrap');
       if (item.media_type === 'tv') {
-
-        epWrap.style.display =
-          'flex';
-
+        epWrap.style.display = 'flex';
         try {
-
           await loadSeasons(item.id);
-
-          await loadEpisodes(
-            item.id,
-            document
-              .getElementById('season-select')
-              .value || 1
-          );
-
+          await loadEpisodes(item.id, document.getElementById('season-select').value || 1);
         } catch (err) {
-
-          console.error(
-            'Failed to load seasons/episodes:',
-            err
-          );
-
+          console.error('Failed to load seasons/episodes:', err);
         }
-
+      } else {
+        epWrap.style.display = 'none';
       }
-
-      // ----------------------------------------------------------
-      // MOVIE
-      // ----------------------------------------------------------
-
-      else {
-
-        epWrap.style.display =
-          'none';
-
-      }
-
 
       changeServer();
-
 
       if (updateHistory) {
-
-        const shareUrl =
-          getShareUrl(item);
-
-        window.history.pushState(
-          {
-            id: item.id,
-            type: item.media_type
-          },
-          '',
-          shareUrl
-        );
-
+        const shareUrl = getShareUrl(item);
+        window.history.pushState({ id: item.id, type: item.media_type }, '', shareUrl);
       }
-
     }
 
-
-    // ============================================================
-    // LOAD SEASONS
-    // ============================================================
-
+    // Populate the Season dropdown for a TV title
     async function loadSeasons(tvId) {
-
-      const res =
-        await fetch(
-          `${BASE_URL}/tv/${tvId}?api_key=${API_KEY}`
-        );
-
-      const data =
-        await res.json();
-
-      const seasons =
-        (data.seasons || [])
-          .filter(
-            s => s.season_number > 0
-          );
-
-      const seasonSelect =
-        document.getElementById(
-          'season-select'
-        );
-
-      seasonSelect.innerHTML =
-        seasons
-          .map(
-            s =>
-              `<option value="${s.season_number}">
-                Season ${s.season_number}
-              </option>`
-          )
-          .join('') ||
-        '<option value="1">Season 1</option>';
-
+      const res = await fetch(`${BASE_URL}/tv/${tvId}?api_key=${API_KEY}`);
+      const data = await res.json();
+      const seasons = (data.seasons || []).filter(s => s.season_number > 0);
+      const seasonSelect = document.getElementById('season-select');
+      seasonSelect.innerHTML = seasons
+        .map(s => `<option value="${s.season_number}">Season ${s.season_number}</option>`)
+        .join('') || '<option value="1">Season 1</option>';
       return seasons;
-
     }
 
-
-    // ============================================================
-    // LOAD EPISODES
-    // ============================================================
-
-    async function loadEpisodes(
-      tvId,
-      seasonNumber
-    ) {
-
-      const res =
-        await fetch(
-          `${BASE_URL}/tv/${tvId}/season/${seasonNumber}?api_key=${API_KEY}`
-        );
-
-      const data =
-        await res.json();
-
-      const episodeSelect =
-        document.getElementById(
-          'episode-select'
-        );
-
-      episodeSelect.innerHTML =
-        (data.episodes || [])
-          .map(
-            e =>
-              `<option value="${e.episode_number}">
-                Episode ${e.episode_number} - ${e.name || ''}
-              </option>`
-          )
-          .join('') ||
-        '<option value="1">Episode 1</option>';
-
+    // Populate the Episode dropdown for a given TV title + season
+    async function loadEpisodes(tvId, seasonNumber) {
+      const res = await fetch(`${BASE_URL}/tv/${tvId}/season/${seasonNumber}?api_key=${API_KEY}`);
+      const data = await res.json();
+      const episodeSelect = document.getElementById('episode-select');
+      episodeSelect.innerHTML = (data.episodes || [])
+        .map(e => `<option value="${e.episode_number}">Episode ${e.episode_number} - ${e.name || ''}</option>`)
+        .join('') || '<option value="1">Episode 1</option>';
     }
 
-
-    // ============================================================
-    // CHANGE SEASON
-    // ============================================================
-
+    // When the season changes, reload its episode list then refresh the player
     async function changeSeason() {
-
-      if (!currentItem) {
-        return;
-      }
-
-      const season =
-        document.getElementById(
-          'season-select'
-        ).value;
-
+      if (!currentItem) return;
+      const season = document.getElementById('season-select').value;
       try {
-
-        await loadEpisodes(
-          currentItem.id,
-          season
-        );
-
+        await loadEpisodes(currentItem.id, season);
       } catch (err) {
-
-        console.error(
-          'Failed to load episodes:',
-          err
-        );
-
+        console.error('Failed to load episodes:', err);
       }
-
       changeServer();
-
     }
 
+    function changeServer() {
+      if (!currentItem) return;
+      const server = document.getElementById('server').value;
+      const type = currentItem.media_type === 'movie' ? 'movie' : 'tv';
+      let url = '';
 
-    // ============================================================
-    // CLOSE MODAL
-    // ============================================================
+      if (type === 'movie') {
+        if (server === 'vidsrc.cc')
+          url = `https://vidsrc.cc/v2/embed/movie/${currentItem.id}`;
+        else if (server === 'vidsrc.me')
+          url = `https://vidsrc.net/embed/movie/?tmdb=${currentItem.id}`;
+        else if (server === 'player.videasy.net')
+          url = `https://player.videasy.net/movie/${currentItem.id}`;
+      } else {
+        const season = document.getElementById('season-select').value || 1;
+        const episode = document.getElementById('episode-select').value || 1;
+
+        if (server === 'vidsrc.cc')
+          url = `https://vidsrc.cc/v2/embed/tv/${currentItem.id}/${season}/${episode}`;
+        else if (server === 'vidsrc.me')
+          url = `https://vidsrc.net/embed/tv/?tmdb=${currentItem.id}&season=${season}&episode=${episode}`;
+        else if (server === 'player.videasy.net')
+          url = `https://player.videasy.net/tv/${currentItem.id}/${season}/${episode}`;
+      }
+
+      document.getElementById('modal-video').src = url;
+    }
 
     function closeModal() {
-
-      document
-        .getElementById('modal')
-        .classList
-        .remove('open');
-
-      const video =
-        document.getElementById('modal-video');
-
-      video.pause();
-      video.removeAttribute('src');
-      video.load();
-
+      document.getElementById('modal').classList.remove('open');
+      document.getElementById('modal-video').src = '';
       document.body.style.overflow = '';
-
-      window.history.pushState(
-        {},
-        '',
-        window.location.pathname
-      );
-
+      window.history.pushState({}, '', window.location.pathname);
     }
 
-
-    // ============================================================
-    // BROWSER HISTORY
-    // ============================================================
-
-    window.addEventListener(
-      'popstate',
-      () => {
-
-        const modal =
-          document.getElementById('modal');
-
-        if (
-          modal.classList.contains('open')
-        ) {
-
-          document
-            .getElementById('modal')
-            .classList
-            .remove('open');
-
-          const video =
-        document.getElementById('modal-video');
-
-      video.pause();
-      video.removeAttribute('src');
-      video.load();
-
-          document.body.style.overflow =
-            '';
-
-        }
-
+    // Keep back/forward navigation in sync with the modal
+    window.addEventListener('popstate', () => {
+      const modal = document.getElementById('modal');
+      if (modal.classList.contains('open')) {
+        closeModal();
       }
-    );
-
-
-    // ============================================================
-    // WATCHLIST
-    // ============================================================
+    });
 
     function toggleWishlist() {
-
-      showToast(
-        'Added to Watchlist ✓'
-      );
-
+      showToast('Added to Watchlist ✓');
     }
 
-
-    // ============================================================
-    // SHARE PANEL
-    // ============================================================
-
+    // Share
     function openSharePanel() {
-
-      const panel =
-        document.getElementById(
-          'share-panel'
-        );
-
-      panel.style.display =
-        panel.style.display === 'none'
-          ? 'block'
-          : 'none';
-
+      const panel = document.getElementById('share-panel');
+      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
     }
 
-
-    // ============================================================
-    // SHARE URL
-    // ============================================================
-
+    // Builds a shareable URL that points to this exact title (not just the homepage)
     function getShareUrl(item) {
-
-      if (!item) {
-        return window.location.href;
-      }
-
-      const url =
-        new URL(
-          window.location.href
-        );
-
+      if (!item) return window.location.href;
+      const url = new URL(window.location.href);
       url.search = '';
-
-      url.searchParams.set(
-        'id',
-        item.id
-      );
-
-      url.searchParams.set(
-        'type',
-        item.media_type === 'tv'
-          ? 'tv'
-          : 'movie'
-      );
-
+      url.searchParams.set('id', item.id);
+      url.searchParams.set('type', item.media_type === 'tv' ? 'tv' : 'movie');
       return url.toString();
-
     }
-
 
     function getShareText() {
-
-      const title =
-        currentItem?.title ||
-        currentItem?.name ||
-        'this title';
-
+      const title = currentItem?.title || currentItem?.name || 'this title';
       return `🎬 Watch "${title}" free on See-Flix! ${getShareUrl(currentItem)}`;
-
     }
-
 
     function shareFacebook() {
-
-      window.open(
-        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getShareUrl(currentItem))}`,
-        '_blank'
-      );
-
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getShareUrl(currentItem))}`, '_blank');
     }
-
 
     function shareTwitter() {
-
-      window.open(
-        `https://twitter.com/intent/tweet?text=${encodeURIComponent(getShareText())}`,
-        '_blank'
-      );
-
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(getShareText())}`, '_blank');
     }
-
 
     function shareWhatsApp() {
-
-      window.open(
-        `https://wa.me/?text=${encodeURIComponent(getShareText())}`,
-        '_blank'
-      );
-
+      window.open(`https://wa.me/?text=${encodeURIComponent(getShareText())}`, '_blank');
     }
-
 
     function shareTelegram() {
-
-      window.open(
-        `https://t.me/share/url?url=${encodeURIComponent(getShareUrl(currentItem))}&text=${encodeURIComponent('Watch "' + (currentItem?.title || currentItem?.name) + '" on See-Flix!')}`,
-        '_blank'
-      );
-
+      window.open(`https://t.me/share/url?url=${encodeURIComponent(getShareUrl(currentItem))}&text=${encodeURIComponent('Watch "' + (currentItem?.title || currentItem?.name) + '" on See-Flix!')}`, '_blank');
     }
-
 
     function copyLink() {
-
-      navigator.clipboard
-        .writeText(
-          getShareUrl(currentItem)
-        )
-        .then(() => {
-
-          const btn =
-            document.getElementById(
-              'copy-btn'
-            );
-
-          btn.classList.add(
-            'copied'
-          );
-
-          btn.innerHTML =
-            '<i class="fas fa-check"></i> Copied!';
-
-          setTimeout(() => {
-
-            btn.classList.remove(
-              'copied'
-            );
-
-            btn.innerHTML =
-              '<i class="fas fa-link"></i> Copy Link';
-
-          }, 2500);
-
-          showToast(
-            'Link copied to clipboard!'
-          );
-
-        });
-
+      navigator.clipboard.writeText(getShareUrl(currentItem)).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.classList.add('copied');
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = '<i class="fas fa-link"></i> Copy Link';
+        }, 2500);
+        showToast('Link copied to clipboard!');
+      });
     }
 
-
-    // ============================================================
-    // SEARCH MODAL
-    // ============================================================
-
+    // Search
     function openSearchModal() {
-
-      document
-        .getElementById('search-modal')
-        .classList
-        .add('open');
-
-      setTimeout(
-        () =>
-          document
-            .getElementById('search-input')
-            .focus(),
-        100
-      );
-
+      document.getElementById('search-modal').classList.add('open');
+      setTimeout(() => document.getElementById('search-input').focus(), 100);
     }
-
 
     function closeSearchModal() {
-
-      document
-        .getElementById('search-modal')
-        .classList
-        .remove('open');
-
+      document.getElementById('search-modal').classList.remove('open');
     }
-
-
-    // ============================================================
-    // SEARCH TMDB
-    // ============================================================
 
     async function searchTMDB() {
-
-      const query =
-        document
-          .getElementById('search-input')
-          .value;
-
+      const query = document.getElementById('search-input').value;
       if (query.length < 2) {
-
-        document
-          .getElementById('search-results')
-          .innerHTML = '';
-
+        document.getElementById('search-results').innerHTML = '';
         return;
-
       }
 
-      try {
+      const res = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+      const data = await res.json();
+      const container = document.getElementById('search-results');
+      container.innerHTML = '';
 
-        const res =
-          await fetch(
-            `${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(query)}`
-          );
-
-        const data =
-          await res.json();
-
-        const container =
-          document.getElementById(
-            'search-results'
-          );
-
-        container.innerHTML = '';
-
-        data.results.forEach(item => {
-
-          if (!item.poster_path) {
-            return;
-          }
-
-          const card =
-            document.createElement('div');
-
-          card.className =
-            'search-card';
-
-          card.innerHTML =
-            `<img
-              src="${IMG_URL}${item.poster_path}"
-              alt="${item.title || item.name}"
-              loading="lazy"
-            />`;
-
-          card.onclick = () => {
-
-            closeSearchModal();
-
-            showDetails(item);
-
-          };
-
-          container.appendChild(card);
-
-        });
-
-      } catch (error) {
-
-        console.error(
-          'Search error:',
-          error
-        );
-
-      }
-
+      data.results.forEach(item => {
+        if (!item.poster_path) return;
+        const card = document.createElement('div');
+        card.className = 'search-card';
+        card.innerHTML = `<img src="${IMG_URL}${item.poster_path}" alt="${item.title || item.name}" loading="lazy" />`;
+        card.onclick = () => {
+          closeSearchModal();
+          showDetails(item);
+        };
+        container.appendChild(card);
+      });
     }
 
-
-    // ============================================================
-    // TOAST
-    // ============================================================
-
+    // Toast
     function showToast(msg) {
-
-      const t =
-        document.getElementById('toast');
-
+      const t = document.getElementById('toast');
       t.textContent = msg;
-
       t.classList.add('show');
-
-      setTimeout(
-        () =>
-          t.classList.remove('show'),
-        2800
-      );
-
+      setTimeout(() => t.classList.remove('show'), 2800);
     }
 
+    // Scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
 
-    // ============================================================
-    // SCROLL ANIMATIONS
-    // ============================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    });
 
-    const observer =
-      new IntersectionObserver(
-        (entries) => {
-
-          entries.forEach(e => {
-
-            if (e.isIntersecting) {
-
-              e.target.classList.add(
-                'visible'
-              );
-
-            }
-
-          });
-
-        },
-        {
-          threshold: 0.1
-        }
-      );
-
-
-    window.addEventListener(
-      'DOMContentLoaded',
-      () => {
-
-        document
-          .querySelectorAll('.fade-in')
-          .forEach(
-            el => observer.observe(el)
-          );
-
-      }
-    );
-
-
-    // ============================================================
-    // TMDB TRENDING
-    // ============================================================
-
+    // Fetch data
     async function fetchTrending(type) {
-
-      const res =
-        await fetch(
-          `${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`
-        );
-
-      const data =
-        await res.json();
-
-      return data.results.map(
-        item => ({
-          ...item,
-          media_type: type
-        })
-      );
-
+      const res = await fetch(`${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`);
+      const data = await res.json();
+      return data.results.map(item => ({ ...item, media_type: type }));
     }
-
-
-    // ============================================================
-    // ANIME
-    // ============================================================
 
     async function fetchTrendingAnime() {
-
-      const res =
-        await fetch(
-          `${BASE_URL}/discover/tv?api_key=${API_KEY}&with_original_language=ja&with_genres=16`
-        );
-
-      const data =
-        await res.json();
-
-      return data.results.map(
-        item => ({
-          ...item,
-          media_type: 'tv'
-        })
-      );
-
+      const res = await fetch(`${BASE_URL}/discover/tv?api_key=${API_KEY}&with_original_language=ja&with_genres=16`);
+      const data = await res.json();
+      return data.results.map(item => ({ ...item, media_type: 'tv' }));
     }
 
-
-    // ============================================================
-    // CHINESE DRAMA
-    // ============================================================
-
+    // Trending Chinese dramas: mainland/Chinese-origin TV series, excluding animation
     async function fetchTrendingChineseDrama() {
-
-      const res =
-        await fetch(
-          `${BASE_URL}/discover/tv?api_key=${API_KEY}&with_origin_country=CN&with_original_language=zh&without_genres=16&sort_by=popularity.desc`
-        );
-
-      const data =
-        await res.json();
-
-      return data.results.map(
-        item => ({
-          ...item,
-          media_type: 'tv'
-        })
-      );
-
+      const res = await fetch(`${BASE_URL}/discover/tv?api_key=${API_KEY}&with_origin_country=CN&with_original_language=zh&without_genres=16&sort_by=popularity.desc`);
+      const data = await res.json();
+      return data.results.map(item => ({ ...item, media_type: 'tv' }));
     }
 
-
-    // ============================================================
-    // FETCH ITEM BY ID
-    // ============================================================
-
-    async function fetchItemById(
-      id,
-      type
-    ) {
-
-      const res =
-        await fetch(
-          `${BASE_URL}/${type}/${id}?api_key=${API_KEY}`
-        );
-
-      const data =
-        await res.json();
-
-      return {
-        ...data,
-        media_type: type
-      };
-
+    async function fetchItemById(id, type) {
+      const res = await fetch(`${BASE_URL}/${type}/${id}?api_key=${API_KEY}`);
+      const data = await res.json();
+      return { ...data, media_type: type };
     }
 
-
-    // ============================================================
-    // DEEP LINK
-    // ============================================================
-
+    // Deep-link support: if the URL has ?id=...&type=..., open that title's modal on load
     async function checkDeepLink() {
-
-      const params =
-        new URLSearchParams(
-          window.location.search
-        );
-
-      const id =
-        params.get('id');
-
-      const type =
-        params.get('type');
-
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      const type = params.get('type');
       if (id && type) {
-
         try {
-
-          const item =
-            await fetchItemById(
-              id,
-              type === 'tv'
-                ? 'tv'
-                : 'movie'
-            );
-
-          showDetails(
-            item,
-            false
-          );
-
+          const item = await fetchItemById(id, type === 'tv' ? 'tv' : 'movie');
+          showDetails(item, false);
         } catch (error) {
-
-          console.error(
-            'Deep link load failed:',
-            error
-          );
-
+          console.error('Deep link load failed:', error);
         }
-
       }
-
     }
-
-
-    // ============================================================
-    // INITIALIZE
-    // ============================================================
 
     async function init() {
-
-      renderSkeletonCards(
-        'movies-list'
-      );
-
-      renderSkeletonCards(
-        'tvshows-list'
-      );
-
-      renderSkeletonCards(
-        'cdrama-list'
-      );
-
-      renderSkeletonCards(
-        'anime-list'
-      );
-
-
+      renderSkeletonCards('movies-list');
+      renderSkeletonCards('tvshows-list');
+      renderSkeletonCards('cdrama-list');
+      renderSkeletonCards('anime-list');
       try {
-
-        const [
-          movies,
-          tvShows,
-          cdramas,
-          anime
-        ] =
-          await Promise.all([
-
-            fetchTrending('movie'),
-
-            fetchTrending('tv'),
-
-            fetchTrendingChineseDrama(),
-
-            fetchTrendingAnime()
-
-          ]);
-
-
-        if (movies.length) {
-
-          displayBanner(
-            movies[0]
-          );
-
-        }
-
-
-        buildTicker([
-          ...movies,
-          ...tvShows
+        const [movies, tvShows, cdramas, anime] = await Promise.all([
+          fetchTrending('movie'),
+          fetchTrending('tv'),
+          fetchTrendingChineseDrama(),
+          fetchTrendingAnime()
         ]);
 
-
-        displayList(
-          movies,
-          'movies-list'
-        );
-
-        displayList(
-          tvShows,
-          'tvshows-list'
-        );
-
-        displayList(
-          cdramas,
-          'cdrama-list'
-        );
-
-        displayList(
-          anime,
-          'anime-list'
-        );
-
+        if (movies.length) displayBanner(movies[0]);
+        buildTicker([...movies, ...tvShows]);
+        displayList(movies, 'movies-list');
+        displayList(tvShows, 'tvshows-list');
+        displayList(cdramas, 'cdrama-list');
+        displayList(anime, 'anime-list');
 
         await checkDeepLink();
-
-
       } catch (error) {
-
-        console.error(
-          'TMDB Load Error:',
-          error
-        );
-
-        showToast(
-          'Failed to load movie data.'
-        );
-
+        console.error('TMDB Load Error:', error);
+        showToast('Failed to load movie data.');
       }
-
     }
 
-
-    // ============================================================
-    // KEYBOARD SHORTCUTS
-    // ============================================================
-
-    document.addEventListener(
-      'keydown',
-      e => {
-
-        if (e.key === 'Escape') {
-
-          closeModal();
-
-          closeSearchModal();
-
-        }
-
+    // Keyboard shortcuts
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeSearchModal();
       }
-    );
-
-
-    // ============================================================
-    // START
-    // ============================================================
+    });
 
     init();
-
   </script>
 
-
   <!-- Adsterra Social Bar -->
+  <script src="https://boringreek.com/fe/c0/14/fec01470f800ed7dfe264bf34c6db729.js"></script>
   <script src="https://continuationseriously.com/fe/c0/14/fec01470f800ed7dfe264bf34c6db729.js"></script>
-
 </body>
 </html>
