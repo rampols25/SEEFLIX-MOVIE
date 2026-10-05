@@ -9,8 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  >
 
   <style>
     :root {
@@ -194,6 +196,7 @@
       from {
         transform: scale(1.05);
       }
+
       to {
         transform: scale(1.12);
       }
@@ -348,6 +351,7 @@
       from {
         transform: translateX(0);
       }
+
       to {
         transform: translateX(-50%);
       }
@@ -567,6 +571,7 @@
       0% {
         background-position: -400px 0;
       }
+
       100% {
         background-position: 400px 0;
       }
@@ -660,9 +665,11 @@
       0% {
         box-shadow: 0 0 0 0 rgba(230,57,70,.5);
       }
+
       70% {
         box-shadow: 0 0 0 20px rgba(230,57,70,0);
       }
+
       100% {
         box-shadow: 0 0 0 0 rgba(230,57,70,0);
       }
@@ -784,7 +791,8 @@
     }
 
     .server-info {
-      margin-top: 10px;
+      width: 100%;
+      margin-top: 2px;
       font-size: .7rem;
       color: var(--text-muted);
       line-height: 1.5;
@@ -1062,6 +1070,14 @@
       .share-btn {
         padding: 9px 13px;
       }
+
+      .search-bar {
+        width: 140px;
+      }
+
+      .search-bar:focus {
+        width: 160px;
+      }
     }
   </style>
 </head>
@@ -1090,6 +1106,7 @@
   <div class="nav-right">
     <div class="search-wrap">
       <i class="fas fa-search"></i>
+
       <input
         type="text"
         class="search-bar"
@@ -1097,6 +1114,7 @@
         readonly
         onclick="openSearchModal()"
       />
+
     </div>
   </div>
 
@@ -1387,8 +1405,9 @@
 
       <iframe
         id="modal-video"
+        title="See-Flix Video Player"
         frameborder="0"
-        allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+        allow="autoplay; fullscreen; picture-in-picture"
         allowfullscreen
         webkitallowfullscreen
         mozallowfullscreen
@@ -1495,9 +1514,9 @@
         </select>
 
         <div class="server-info">
-          CineSRC uses the TMDB ID of the selected movie or
-          TV show. TV episodes use the selected season and
-          episode.
+          Movie playback uses the TMDB movie ID.
+          TV playback uses the selected TMDB show ID,
+          season, and episode.
         </div>
 
       </div>
@@ -1665,6 +1684,16 @@ const BASE_URL =
 const IMG_URL =
   'https://image.tmdb.org/t/p/w500';
 
+/*
+  CineSRC base URL.
+
+  Movie:
+  https://cinesrc.st/embed/movie/{TMDB_ID}
+
+  TV:
+  https://cinesrc.st/embed/tv/{TMDB_ID}?s={SEASON}&e={EPISODE}
+*/
+
 const CINESRC_URL =
   'https://cinesrc.st/embed';
 
@@ -1701,6 +1730,7 @@ function handleBannerWatch() {
 
 }
 
+
 function bannerDetails() {
 
   if (bannerItem) {
@@ -1727,7 +1757,9 @@ function displayBanner(item) {
   document.getElementById(
     'banner-title'
   ).textContent =
-    item.title || item.name || 'Untitled';
+    item.title ||
+    item.name ||
+    'Untitled';
 
   document.getElementById(
     'banner-desc'
@@ -1736,15 +1768,15 @@ function displayBanner(item) {
       ? item.overview.substring(0, 180) + '…'
       : '';
 
-
   document.getElementById(
     'banner-rating'
   ).innerHTML =
     `<i class="fas fa-star"></i>
-     ${item.vote_average
-       ? item.vote_average.toFixed(1)
-       : 'N/A'}`;
-
+     ${
+       item.vote_average
+         ? item.vote_average.toFixed(1)
+         : 'N/A'
+     }`;
 
   const year =
     (
@@ -1868,7 +1900,8 @@ function displayList(
     const card =
       document.createElement('div');
 
-    card.className = 'card';
+    card.className =
+      'card';
 
     const title =
       item.title ||
@@ -1938,13 +1971,13 @@ async function showDetails(
 
   document.getElementById(
     'modal-title'
-  ).textContent = title;
+  ).textContent =
+    title;
 
   document.getElementById(
     'modal-description'
   ).textContent =
     item.overview || '';
-
 
   document.getElementById(
     'modal-rating-pill'
@@ -1955,7 +1988,6 @@ async function showDetails(
          ? item.vote_average.toFixed(1)
          : 'N/A'
      }`;
-
 
   const year =
     (
@@ -1969,31 +2001,32 @@ async function showDetails(
   ).textContent =
     year || 'N/A';
 
-
   document.getElementById(
     'video-overlay'
-  ).style.display = 'flex';
-
+  ).style.display =
+    'flex';
 
   document.getElementById(
     'share-panel'
-  ).style.display = 'none';
-
+  ).style.display =
+    'none';
 
   document.getElementById(
     'modal'
   ).classList.add('open');
 
-
   document.body.style.overflow =
     'hidden';
-
 
   const episodeWrap =
     document.getElementById(
       'episode-selector-wrap'
     );
 
+  /*
+    Determine whether the selected title
+    is a TV show or movie.
+  */
 
   if (
     item.media_type === 'tv' ||
@@ -2026,6 +2059,10 @@ async function showDetails(
         error
       );
 
+      showToast(
+        'Unable to load TV episodes.'
+      );
+
     }
 
   } else {
@@ -2037,9 +2074,12 @@ async function showDetails(
 
   }
 
+  /*
+    Load the CineSRC player after
+    determining movie/TV type.
+  */
 
   changeServer();
-
 
   if (updateHistory) {
 
@@ -2085,7 +2125,6 @@ async function loadSeasons(tvId) {
         s => s.season_number > 0
       );
 
-
   const select =
     document.getElementById(
       'season-select'
@@ -2100,7 +2139,6 @@ async function loadSeasons(tvId) {
            </option>`
       )
       .join('');
-
 
   if (!select.value) {
 
@@ -2141,10 +2179,8 @@ async function loadEpisodes(
       'episode-select'
     );
 
-
   const episodes =
     data.episodes || [];
-
 
   select.innerHTML =
     episodes
@@ -2156,7 +2192,6 @@ async function loadEpisodes(
            </option>`
       )
       .join('');
-
 
   if (!select.value) {
 
@@ -2182,7 +2217,6 @@ async function changeSeason() {
       'season-select'
     ).value;
 
-
   try {
 
     await loadEpisodes(
@@ -2193,11 +2227,15 @@ async function changeSeason() {
   } catch (error) {
 
     console.error(
+      'Episode loading error:',
       error
     );
 
-  }
+    showToast(
+      'Unable to load episodes.'
+    );
 
+  }
 
   changeServer();
 
@@ -2213,31 +2251,42 @@ function changeServer() {
   if (!currentItem)
     return;
 
-
   const iframe =
     document.getElementById(
       'modal-video'
     );
 
+  if (!iframe)
+    return;
 
   let url = '';
 
+  /*
+    MOVIE
+
+    Exact CineSRC URL:
+
+    https://cinesrc.st/embed/movie/{TMDB_ID}
+  */
 
   if (
     currentItem.media_type === 'movie'
   ) {
 
-    /*
-      CineSRC Movie:
-
-      https://cinesrc.st/embed/movie/{TMDB_ID}
-    */
-
     url =
       `${CINESRC_URL}/movie/${currentItem.id}`;
 
+  }
 
-  } else {
+  /*
+    TV
+
+    Exact CineSRC URL:
+
+    https://cinesrc.st/embed/tv/{TMDB_ID}?s={season}&e={episode}
+  */
+
+  else {
 
     const season =
       document.getElementById(
@@ -2249,42 +2298,31 @@ function changeServer() {
         'episode-select'
       ).value || 1;
 
-
-    /*
-      CineSRC TV:
-
-      https://cinesrc.st/embed/tv/{TMDB_ID}?s={season}&e={episode}
-    */
-
     url =
       `${CINESRC_URL}/tv/${currentItem.id}` +
       `?s=${encodeURIComponent(season)}` +
-      `&e=${encodeURIComponent(episode)}` +
-      `&autoplay=true` +
-      `&color=%23e63946` +
-      `&autonext=true`;
+      `&e=${encodeURIComponent(episode)}`;
 
   }
-
 
   /*
-    Movie customization parameters
-    can also be used.
+    IMPORTANT:
+    No additional CineSRC parameters are
+    appended here.
+
+    Movie example:
+    https://cinesrc.st/embed/movie/550
+
+    TV example:
+    https://cinesrc.st/embed/tv/1399?s=1&e=1
   */
 
-  if (
-    currentItem.media_type === 'movie'
-  ) {
-
-    url +=
-      '?autoplay=true' +
-      '&color=%23e63946' +
-      '&quality=1080';
-
-  }
-
-
   iframe.src = url;
+
+  console.log(
+    'CineSRC URL:',
+    url
+  );
 
 }
 
@@ -2303,15 +2341,16 @@ function reloadPlayer() {
       'modal-video'
     );
 
+  document.getElementById(
+    'video-overlay'
+  ).style.display =
+    'flex';
+
   iframe.src = '';
 
   setTimeout(() => {
 
     changeServer();
-
-    document.getElementById(
-      'video-overlay'
-    ).style.display = 'flex';
 
   }, 150);
 
@@ -2326,7 +2365,8 @@ function handleVideoClick() {
 
   document.getElementById(
     'video-overlay'
-  ).style.display = 'none';
+  ).style.display =
+    'none';
 
 }
 
@@ -2342,7 +2382,6 @@ function requestVideoFullscreen() {
       'modal-video'
     );
 
-
   if (
     !iframe ||
     !iframe.src
@@ -2356,18 +2395,16 @@ function requestVideoFullscreen() {
 
   }
 
-
   document.getElementById(
     'video-overlay'
-  ).style.display = 'none';
-
+  ).style.display =
+    'none';
 
   const request =
     iframe.requestFullscreen ||
     iframe.webkitRequestFullscreen ||
     iframe.mozRequestFullScreen ||
     iframe.msRequestFullscreen;
-
 
   if (request) {
 
@@ -2391,6 +2428,11 @@ function requestVideoFullscreen() {
       }
 
     } catch (error) {
+
+      console.error(
+        'Fullscreen error:',
+        error
+      );
 
       showToast(
         'Fullscreen is unavailable.'
@@ -2419,21 +2461,17 @@ function closeModal() {
     'modal'
   ).classList.remove('open');
 
-
   document.getElementById(
     'modal-video'
   ).src = '';
 
-
   document.body.style.overflow =
     '';
-
 
   const params =
     new URLSearchParams(
       window.location.search
     );
-
 
   if (
     params.has('id')
@@ -2497,7 +2535,6 @@ function openSharePanel() {
       'share-panel'
     );
 
-
   panel.style.display =
     panel.style.display === 'none'
       ? 'block'
@@ -2515,21 +2552,17 @@ function getShareUrl(item) {
   if (!item)
     return window.location.href;
 
-
   const url =
     new URL(
       window.location.href
     );
 
-
   url.search = '';
-
 
   url.searchParams.set(
     'id',
     item.id
   );
-
 
   url.searchParams.set(
     'type',
@@ -2537,7 +2570,6 @@ function getShareUrl(item) {
       ? 'tv'
       : 'movie'
   );
-
 
   return url.toString();
 
@@ -2550,7 +2582,6 @@ function getShareText() {
     currentItem?.title ||
     currentItem?.name ||
     'this title';
-
 
   return `Watch "${title}" on See-Flix! ${getShareUrl(currentItem)}`;
 
@@ -2602,7 +2633,8 @@ function shareTelegram() {
       'Watch "' +
       (
         currentItem?.title ||
-        currentItem?.name
+        currentItem?.name ||
+        'this title'
       ) +
       '" on See-Flix!'
     )}`,
@@ -2620,16 +2652,13 @@ async function copyLink() {
       getShareUrl(currentItem)
     );
 
-
     const button =
       document.getElementById(
         'copy-btn'
       );
 
-
     button.innerHTML =
       '<i class="fas fa-check"></i> Copied!';
-
 
     setTimeout(() => {
 
@@ -2638,12 +2667,16 @@ async function copyLink() {
 
     },2500);
 
-
     showToast(
       'Link copied!'
     );
 
   } catch (error) {
+
+    console.error(
+      'Copy error:',
+      error
+    );
 
     showToast(
       'Unable to copy link.'
@@ -2663,7 +2696,6 @@ function openSearchModal() {
   document.getElementById(
     'search-modal'
   ).classList.add('open');
-
 
   setTimeout(() => {
 
@@ -2695,11 +2727,9 @@ async function searchTMDB() {
       'search-input'
     ).value.trim();
 
-
   clearTimeout(
     searchTimeout
   );
-
 
   if (query.length < 2) {
 
@@ -2710,7 +2740,6 @@ async function searchTMDB() {
     return;
 
   }
-
 
   searchTimeout =
     setTimeout(
@@ -2723,25 +2752,20 @@ async function searchTMDB() {
               `${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(query)}`
             );
 
-
           if (!res.ok)
             throw new Error(
               'Search failed'
             );
 
-
           const data =
             await res.json();
-
 
           const container =
             document.getElementById(
               'search-results'
             );
 
-
           container.innerHTML = '';
-
 
           (data.results || [])
             .forEach(item => {
@@ -2755,25 +2779,23 @@ async function searchTMDB() {
               )
                 return;
 
-
               const card =
                 document.createElement('div');
-
 
               card.className =
                 'search-card';
 
+              const title =
+                item.title ||
+                item.name ||
+                'Untitled';
 
               card.innerHTML =
                 `<img
                   src="${IMG_URL}${item.poster_path}"
-                  alt="${escapeHtml(
-                    item.title ||
-                    item.name
-                  )}"
+                  alt="${escapeHtml(title)}"
                   loading="lazy"
                 />`;
-
 
               card.onclick =
                 () => {
@@ -2784,13 +2806,11 @@ async function searchTMDB() {
 
                 };
 
-
               container.appendChild(
                 card
               );
 
             });
-
 
         } catch (error) {
 
@@ -2819,15 +2839,12 @@ function showToast(message) {
       'toast'
     );
 
-
   toast.textContent =
     message;
-
 
   toast.classList.add(
     'show'
   );
-
 
   setTimeout(
     () =>
@@ -2853,16 +2870,13 @@ async function fetchTrending(
       `${BASE_URL}/trending/${type}/week?api_key=${API_KEY}`
     );
 
-
   if (!res.ok)
     throw new Error(
       `Failed to load ${type}`
     );
 
-
   const data =
     await res.json();
-
 
   return (data.results || [])
     .map(
@@ -2885,16 +2899,13 @@ async function fetchTrendingAnime() {
       `&sort_by=popularity.desc`
     );
 
-
   if (!res.ok)
     throw new Error(
       'Failed to load anime'
     );
 
-
   const data =
     await res.json();
-
 
   return (data.results || [])
     .map(
@@ -2918,16 +2929,13 @@ async function fetchTrendingChineseDrama() {
       `&sort_by=popularity.desc`
     );
 
-
   if (!res.ok)
     throw new Error(
       'Failed to load Chinese dramas'
     );
 
-
   const data =
     await res.json();
-
 
   return (data.results || [])
     .map(
@@ -2954,16 +2962,13 @@ async function fetchItemById(
       `${BASE_URL}/${type}/${id}?api_key=${API_KEY}`
     );
 
-
   if (!res.ok)
     throw new Error(
       'Title not found'
     );
 
-
   const data =
     await res.json();
-
 
   return {
     ...data,
@@ -2984,17 +2989,14 @@ async function checkDeepLink() {
       window.location.search
     );
 
-
   const id =
     params.get('id');
 
   const type =
     params.get('type');
 
-
   if (!id || !type)
     return;
-
 
   try {
 
@@ -3005,7 +3007,6 @@ async function checkDeepLink() {
           ? 'tv'
           : 'movie'
       );
-
 
     await showDetails(
       item,
@@ -3033,10 +3034,7 @@ window.addEventListener(
   event => {
 
     /*
-      CineSRC documents its player
-      messages as coming from:
-
-      https://cinesrc.st
+      Only accept messages from CineSRC.
     */
 
     if (
@@ -3045,10 +3043,8 @@ window.addEventListener(
     )
       return;
 
-
     const data =
       event.data || {};
-
 
     if (
       data.type ===
@@ -3061,10 +3057,10 @@ window.addEventListener(
 
       document.getElementById(
         'video-overlay'
-      ).style.display = 'none';
+      ).style.display =
+        'none';
 
     }
-
 
     if (
       data.type ===
@@ -3082,7 +3078,6 @@ window.addEventListener(
 
     }
 
-
     if (
       data.type ===
       'cinesrc:play'
@@ -3090,29 +3085,10 @@ window.addEventListener(
 
       document.getElementById(
         'video-overlay'
-      ).style.display = 'none';
+      ).style.display =
+        'none';
 
     }
-
-  }
-);
-
-
-/* =========================================================
-   DEEP LINK HISTORY
-========================================================= */
-
-window.addEventListener(
-  'DOMContentLoaded',
-  () => {
-
-    document
-      .querySelectorAll(
-        '.fade-in'
-      )
-      .forEach(
-        el => {}
-      );
 
   }
 );
@@ -3162,7 +3138,6 @@ async function init() {
     'anime-list'
   );
 
-
   try {
 
     const [
@@ -3186,7 +3161,6 @@ async function init() {
 
     ]);
 
-
     if (
       movies.length
     ) {
@@ -3197,39 +3171,32 @@ async function init() {
 
     }
 
-
     buildTicker([
       ...movies,
       ...tvShows
     ]);
-
 
     displayList(
       movies,
       'movies-list'
     );
 
-
     displayList(
       tvShows,
       'tvshows-list'
     );
-
 
     displayList(
       cdramas,
       'cdrama-list'
     );
 
-
     displayList(
       anime,
       'anime-list'
     );
 
-
     await checkDeepLink();
-
 
   } catch (error) {
 
@@ -3237,7 +3204,6 @@ async function init() {
       'TMDB Load Error:',
       error
     );
-
 
     showToast(
       'Failed to load movie data.'
