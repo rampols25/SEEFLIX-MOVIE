@@ -641,7 +641,10 @@
     #modal-video {
       width: 100%;
       height: 100%;
+      display: block;
       border: none;
+      background: #000;
+      object-fit: contain;
     }
 
     #modal-video:fullscreen {
@@ -1372,14 +1375,14 @@
           </div>
         </div>
 
-        <iframe
+        <video
           id="modal-video"
-          frameborder="0"
-          allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-          allowfullscreen
-          webkitallowfullscreen
-          mozallowfullscreen
-        ></iframe>
+          controls
+          playsinline
+          preload="metadata"
+        >
+          Your browser does not support HTML5 video.
+        </video>
 
       </div>
 
@@ -1463,9 +1466,14 @@
             onchange="changeServer()"
           >
 
-            <!-- Existing provider -->
+            <!-- Direct MP4 test source for the HTML5 player -->
+            <option value="html5test">
+              HTML5 Test — MP4
+            </option>
+
+            <!-- Existing embed provider (not compatible with native <video>) -->
             <option value="videasy">
-              Server 1 — Videasy
+              Embed — Videasy (not HTML5)
             </option>
 
             <!-- Existing provider -->
@@ -1514,7 +1522,7 @@
             id="server-status"
           >
             <i class="fas fa-circle-info"></i>
-            Select a server to load the player.
+            HTML5 test source is ready. Select a server to load the player.
           </div>
 
         </div>
@@ -1693,7 +1701,27 @@
     const SERVERS = {
 
       // ----------------------------------------------------------
-      // SERVER 1 — VIDEASY
+      // HTML5 TEST SERVER
+      // ----------------------------------------------------------
+      // Direct MP4 used only to verify the native HTML5 player.
+      // Replace with a source you own or are authorized to stream.
+      // ----------------------------------------------------------
+
+      html5test: {
+
+        name: 'HTML5 Test MP4',
+
+        movie: (tmdbId) =>
+          'https://www.w3schools.com/html5/movie.mp4',
+
+        tv: (tmdbId, season, episode) =>
+          'https://www.w3schools.com/html5/movie.mp4'
+
+      },
+
+
+      // ----------------------------------------------------------
+      // SERVER 1 — VIDEASY (EMBED URL - NOT NATIVE VIDEO)
       // ----------------------------------------------------------
 
       videasy: {
@@ -2002,18 +2030,34 @@
 
 
       // ----------------------------------------------------------
-      // LOAD EMBED
+      // LOAD HTML5 VIDEO
       // ----------------------------------------------------------
 
+      videoFrame.pause();
       videoFrame.src = url;
-
+      videoFrame.load();
 
       if (status) {
 
         status.innerHTML =
-          `<i class="fas fa-circle-check"></i> ${server.name} selected`;
+          `<i class="fas fa-circle-check"></i> ${server.name} loaded`;
 
       }
+
+      videoFrame.onloadedmetadata = () => {
+        if (status) {
+          status.innerHTML =
+            `<i class="fas fa-circle-check"></i> ${server.name} ready`;
+        }
+      };
+
+      videoFrame.onerror = () => {
+        if (status) {
+          status.innerHTML =
+            `<i class="fas fa-circle-exclamation"></i> This source could not be played by the HTML5 video player.`;
+        }
+        console.error('HTML5 video error:', videoFrame.error);
+      };
 
 
       console.log('================================');
@@ -2077,45 +2121,28 @@
 
     function requestVideoFullscreen() {
 
-      const iframe =
+      const video =
         document.getElementById('modal-video');
 
-      if (!iframe || !iframe.src) {
-
-        showToast(
-          'Start the video first, then go fullscreen'
-        );
-
+      if (!video || !video.src) {
+        showToast('Start the video first, then go fullscreen');
         return;
       }
 
-      document
-        .getElementById('video-overlay')
-        .style
-        .display = 'none';
+      document.getElementById('video-overlay').style.display = 'none';
 
       const req =
-        iframe.requestFullscreen ||
-        iframe.webkitRequestFullscreen ||
-        iframe.mozRequestFullScreen ||
-        iframe.msRequestFullscreen;
+        video.requestFullscreen ||
+        video.webkitRequestFullscreen ||
+        video.mozRequestFullScreen ||
+        video.msRequestFullscreen;
 
       if (req) {
-
-        req
-          .call(iframe)
-          .catch(() =>
-            showToast(
-              'Fullscreen was blocked by your browser'
-            )
-          );
-
-      } else {
-
-        showToast(
-          'Fullscreen is not supported on this browser'
+        Promise.resolve(req.call(video)).catch(() =>
+          showToast('Fullscreen was blocked by your browser')
         );
-
+      } else {
+        showToast('Fullscreen is not supported on this browser');
       }
 
     }
@@ -2548,9 +2575,12 @@
         .classList
         .remove('open');
 
-      document
-        .getElementById('modal-video')
-        .src = '';
+      const video =
+        document.getElementById('modal-video');
+
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
 
       document.body.style.overflow = '';
 
@@ -2583,9 +2613,12 @@
             .classList
             .remove('open');
 
-          document
-            .getElementById('modal-video')
-            .src = '';
+          const video =
+        document.getElementById('modal-video');
+
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
 
           document.body.style.overflow =
             '';
